@@ -66,6 +66,9 @@ public class LekarzView extends Application {
         stage.setScene(scene);
         stage.show();
         patientsListView.setOnMouseClicked(mouseEvent -> {
+            if (patientsListView.getSelectionModel().getSelectedItems() == null) {
+                return;
+            }
             Person patient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));
             Dialog d = new Dialog();
             d.setResizable(true);
@@ -97,7 +100,7 @@ public class LekarzView extends Application {
         surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
             patientsToShow.clear();
             patientsToShow.addAll(patients.keySet().stream().filter(s1 -> {
-                if(s1.contains(" "+surnameTextField.getCharacters())){
+                if (s1.contains(" " + surnameTextField.getCharacters())) {
                     return true;
                 }
                 return false;
@@ -116,7 +119,7 @@ public class LekarzView extends Application {
         });
     }
 
-    public void fillPatients(Set<String> list){
+    public void fillPatients(Set<String> list) {
         patientsToShow.clear();
         patientsToShow.addAll(list);
     }

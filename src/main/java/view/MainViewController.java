@@ -85,7 +85,7 @@ public class MainViewController extends Application {
                 view = new PielegniarkaView(names.get(name), name);
                 break;
             case RECEPCJONISTKA_TA:
-                view = new RecepcjonistkaView(names.get(name), name);
+                view = new RecepcjonistkaView(names.get(name), name, db);
                 break;
         }
         try {

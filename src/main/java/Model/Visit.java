@@ -1,12 +1,12 @@
 package Model;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class Visit {
     Person patient;
     Person doctor;
-    Date date;
+    Timestamp start;
+    Timestamp end;
     Integer room;
     boolean takenPlace;
     String note;
@@ -27,12 +27,20 @@ public class Visit {
         this.doctor = doctor;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setStart(Timestamp start) {
+        this.start = start;
+    }
+
+    public Timestamp getEnd() {
+        return end;
+    }
+
+    public void setEnd(Timestamp end) {
+        this.end = end;
     }
 
     public Integer getRoom() {
@@ -61,6 +69,6 @@ public class Visit {
 
     @Override
     public String toString() {
-        return "Pacjent: "+patient.getName()+" "+patient.getLastName()+" "+"\nLekarz: "+doctor.getName()+" "+doctor.getLastName()+"\nData: "+date+"\nGabinet: "+room+"\nOdbył się: "+takenPlace+"\nNotatka: "+note;
+        return "Pacjent: "+patient.getName()+" "+patient.getLastName()+" "+"\nLekarz: "+doctor.getName()+" "+doctor.getLastName()+"\nData: "+start+"\nGabinet: "+room+"\nOdbył się: "+takenPlace+"\nNotatka: "+note;
     }
 }
