@@ -16,6 +16,7 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,7 +77,7 @@ public class RecepcjonistkaWizytaView extends Application {
         patients = db.getPatients();
         patientsToShow = FXCollections.observableArrayList();
         patientsToShow.addAll(patients.keySet());
-        visitDatePicker.setValue(LocalDate.now());
+        visitDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
         specializationListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecializations()));
         patientsListView.setItems(patientsToShow);
     }
@@ -132,6 +133,22 @@ public class RecepcjonistkaWizytaView extends Application {
                 date1 = date1.plus(1, ChronoUnit.HOURS);
                 date2 = date2.plus(hour2.getTime(), ChronoUnit.MILLIS);
                 date2 = date2.plus(1, ChronoUnit.HOURS);
+                if(date1.isBefore(LocalDateTime.now())){
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("czasu nie cofniesz");
+                    d.show();
+                    return;
+                }
+                if(!date1.isBefore(date2)){
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("wizyta nie może się skończyć zanim się zacznie deklu");
+                    d.show();
+                    return;
+                }
                 if (currentSpecialization != null) {
                     doctorsListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecialistsAtTime(currentSpecialization.getId(), date1, date2)));
                 } else {

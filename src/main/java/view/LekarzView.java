@@ -15,6 +15,7 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -54,7 +55,12 @@ public class LekarzView extends Application {
         fillPatients(patients.keySet());
         patientsListView.setItems(patientsToShow);
         datePicker.setValue(LocalDate.now());
-        futureVisits.setItems(FXCollections.observableArrayList(db.getFutureVisits(id)));
+        futureVisits.setItems(FXCollections.observableArrayList(db.getFutureVisits(id)).sorted((visit, t1) -> {
+            if (t1.getStart().getTime() < visit.getStart().getTime()) {
+                return 1;
+            }
+            return 0;
+        }));
     }
 
     @Override
@@ -115,7 +121,23 @@ public class LekarzView extends Application {
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
             d.setContentText(String.valueOf(futureVisits.getSelectionModel().getSelectedItems().get(0)));
-            d.show();
+            ButtonType editButtontype = new ButtonType("Edytuj", ButtonBar.ButtonData.APPLY);
+            d.getDialogPane().getButtonTypes().addAll(editButtontype);
+            d.setResultConverter(new Callback<ButtonType, Boolean>() {
+                @Override
+                public Boolean call(ButtonType buttonType) {
+                    if (buttonType == editButtontype) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            Optional<Boolean> result = d.showAndWait();
+            if(result.isPresent()){
+                System.out.println("I want to edit!");
+            }else{
+                System.out.println("I don't want to edit!");
+            }
         });
     }
 

@@ -139,7 +139,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public List<Visit> getFutureVisits(Integer doctorId) {
         List<Visit> toReturn = new ArrayList<>();
-        String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
+        //String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
+        String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND lekarz=" + doctorId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
