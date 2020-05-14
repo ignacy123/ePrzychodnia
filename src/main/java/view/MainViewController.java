@@ -47,6 +47,9 @@ public class MainViewController extends Application {
         nameListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if(nameListView.getSelectionModel().getSelectedItems().size()==0){
+                    return;
+                }
                 System.out.println("clicked: "+nameListView.getSelectionModel().getSelectedItems());
                 logInto((String) nameListView.getSelectionModel().getSelectedItems().get(0));
             }

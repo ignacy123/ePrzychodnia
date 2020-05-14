@@ -1,5 +1,6 @@
 package db;
 
+import Model.Disease;
 import Model.Person;
 import Model.Specialization;
 import Model.Visit;
@@ -205,5 +206,21 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         return toRet;
 
+    }
+
+    @Override
+    public Map<String, String> getAllDiseases() {
+        Map<String, String> toRet = new HashMap<>();
+        String sql = "SELECT * FROM dolegliwosci;";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                toRet.put(resultSet.getString(2), resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
     }
 }

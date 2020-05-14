@@ -1,5 +1,6 @@
 package db;
 
+import Model.Disease;
 import Model.Person;
 import Model.Specialization;
 import Model.Visit;
@@ -20,4 +21,5 @@ public interface DatabaseService {
     List<Visit> getFutureVisits(Integer doctorId);
     List<Specialization> getAvailableSpecializations();
     List<Person> getAvailableSpecialistsAtTime(int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
+    Map<String, String> getAllDiseases();
 }

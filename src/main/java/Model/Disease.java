@@ -1,15 +1,15 @@
 package Model;
 
-public class Specialization {
-    int id;
+public class Disease {
+    String icd10Code;
     String prettyName;
 
-    public int getId() {
-        return id;
+    public String getIcd10Code() {
+        return icd10Code;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIcd10Code(String icd10Code) {
+        this.icd10Code = icd10Code;
     }
 
     public String getPrettyName() {

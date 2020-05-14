@@ -12,7 +12,7 @@
       <ListView fx:id="patientsListView" layoutX="14.0" layoutY="88.0" prefHeight="659.0" prefWidth="200.0" />
       <DatePicker fx:id="datePicker" layoutX="874.0" layoutY="64.0" />
       <ListView fx:id="dateVisits" layoutX="874.0" layoutY="134.0" prefHeight="349.0" prefWidth="200.0" />
-      <ListView fx:id="futureVisits" layoutX="524.0" layoutY="134.0" prefHeight="349.0" prefWidth="225.0" />
+      <ListView fx:id="futureVisits" layoutX="524.0" layoutY="134.0" prefHeight="349.0" prefWidth="276.0" />
       <TextField fx:id="surnameTextField" layoutX="14.0" layoutY="50.0" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska" />
    </children>
 </Pane>

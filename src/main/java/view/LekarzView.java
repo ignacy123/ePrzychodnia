@@ -40,6 +40,8 @@ public class LekarzView extends Application {
     DatabaseService db;
     Map<String, Integer> patients;
     ObservableList patientsToShow;
+    Stage mainStage;
+    Visit currentVisit = null;
 
     LekarzView(int id, String name, DatabaseService db) {
         this.id = id;
@@ -71,6 +73,7 @@ public class LekarzView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        mainStage = stage;
         patientsListView.setOnMouseClicked(mouseEvent -> {
             if (patientsListView.getSelectionModel().getSelectedItems() == null) {
                 return;
@@ -120,7 +123,11 @@ public class LekarzView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText(String.valueOf(futureVisits.getSelectionModel().getSelectedItems().get(0)));
+            if(futureVisits.getSelectionModel().getSelectedItems().size()==0){
+                return;
+            }
+            currentVisit = (Visit) futureVisits.getSelectionModel().getSelectedItems().get(0);
+            d.setContentText(String.valueOf(currentVisit));
             ButtonType editButtontype = new ButtonType("Edytuj", ButtonBar.ButtonData.APPLY);
             d.getDialogPane().getButtonTypes().addAll(editButtontype);
             d.setResultConverter(new Callback<ButtonType, Boolean>() {
@@ -135,6 +142,12 @@ public class LekarzView extends Application {
             Optional<Boolean> result = d.showAndWait();
             if(result.isPresent()){
                 System.out.println("I want to edit!");
+                Application view = new VisitEditView(id, name, db, currentVisit);
+                try {
+                    view.start(mainStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }else{
                 System.out.println("I don't want to edit!");
             }
