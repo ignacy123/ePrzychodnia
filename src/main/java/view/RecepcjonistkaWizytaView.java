@@ -125,6 +125,14 @@ public class RecepcjonistkaWizytaView extends Application {
         });
         findDoctorsButton.setOnAction(actionEvent -> {
             try {
+                if(currentPatient==null){
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("dodaj pacjenta to się posortuje hehe");
+                    d.show();
+                    return;
+                }
                 Date hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(startTextField.getCharacters()));
                 Date hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(endTextField.getCharacters()));
                 date1 = visitDatePicker.getValue().atStartOfDay();
@@ -150,7 +158,7 @@ public class RecepcjonistkaWizytaView extends Application {
                     return;
                 }
                 if (currentSpecialization != null) {
-                    doctorsListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecialistsAtTime(currentSpecialization.getId(), date1, date2)));
+                    doctorsListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecialistsAtTimeSortedByPatient(currentPatient.getId(), currentSpecialization.getId(), date1, date2)));
                 } else {
                     System.out.println("a specjalizacja?");
                 }

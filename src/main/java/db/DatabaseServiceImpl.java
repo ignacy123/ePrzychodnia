@@ -99,6 +99,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
+                toReturn.setId(resultSet.getInt(1));
                 toReturn.setName(resultSet.getString(2));
                 toReturn.setLastName(resultSet.getString(3));
                 toReturn.setPesel(resultSet.getString(4));
@@ -168,7 +169,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Specialization specialization = new Specialization();
                 specialization.setId(resultSet.getInt(1));
                 specialization.setPrettyName(resultSet.getString(2));
@@ -186,13 +187,14 @@ public class DatabaseServiceImpl implements DatabaseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
-        String sql = "SELECT * FROM dane_osob WHERE id IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = "+specializationId+") AND " +
-                "id NOT IN (SELECT lekarz FROM wizyty WHERE termin_wizyty>= '"+from+"' AND koniec_wizyty<='"+to+"');";
+        String sql = "SELECT * FROM dane_osob WHERE id IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") AND " +
+                "id NOT IN (SELECT lekarz FROM wizyty WHERE termin_wizyty>= '" + from + "' AND koniec_wizyty<='" + to + "');";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Person person = new Person();
+                person.setId(resultSet.getInt(1));
                 person.setName(resultSet.getString(2));
                 person.setLastName(resultSet.getString(3));
                 person.setPesel(resultSet.getString(4));
@@ -209,13 +211,33 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public List<Person> getAvailableSpecialistsAtTimeSortedByPatient(int patientId, int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo) {
+        List<Person> toRet = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String from = freeFrom.format(formatter);
+        String to = freeTo.format(formatter);
+        String sql = "SELECT id_pracownika, COALESCE(count, 0) FROM pracownicy LEFT OUTER JOIN (SELECT lekarz, count(id_wizyty) FROM wizyty WHERE pacjent=" + patientId + " AND lekarz IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") GROUP BY lekarz) AS s1 ON s1.lekarz = pracownicy.id_pracownika WHERE id_pracownika IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE termin_wizyty>= '" + from + "' AND koniec_wizyty<='" + to + "') ORDER BY 2 DESC;";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Person person = getPerson(resultSet.getInt(1));
+                toRet.add(person);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
     public Map<String, String> getAllDiseases() {
         Map<String, String> toRet = new HashMap<>();
         String sql = "SELECT * FROM dolegliwosci;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 toRet.put(resultSet.getString(2), resultSet.getString(1));
             }
         } catch (SQLException e) {
