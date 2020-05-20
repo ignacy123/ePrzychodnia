@@ -23,4 +23,7 @@ public interface DatabaseService {
     List<Person> getAvailableSpecialistsAtTime(int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
     List<Person> getAvailableSpecialistsAtTimeSortedByPatient(int patientId, int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
     Map<String, String> getAllDiseases();
+    Disease getDisease(String code);
+    Specialization getSpecialization(Integer specializationId);
+    void updateVisit(Visit visit);
 }

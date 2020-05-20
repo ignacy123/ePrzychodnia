@@ -5,15 +5,13 @@ import Model.Person;
 import Model.Specialization;
 import Model.Visit;
 import enums.Roles;
+import javafx.util.StringConverter;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseServiceImpl implements DatabaseService {
     Connection c = null;
@@ -116,20 +114,44 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public List<Visit> getDayVisitsFromDoctor(Integer doctorId, LocalDate date) {
         List<Visit> toReturn = new ArrayList<>();
-        String sql = "SELECT * FROM wizyty WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' AND lekarz=" + doctorId;
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' AND lekarz=" + doctorId;
         ;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                //TODO koniec wizyty
                 Visit visit = new Visit();
+                visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
                 visit.setDoctor(getPerson(resultSet.getInt(3)));
                 visit.setStart(resultSet.getTimestamp(4));
+                visit.setEnd(resultSet.getTimestamp(5));
                 visit.setRoom(resultSet.getInt(6));
                 visit.setTakenPlace(resultSet.getBoolean(7));
                 visit.setNote(resultSet.getString(8));
+                Array array = resultSet.getArray(9);
+                if(array!=null){
+                    List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
+                    visit.setDiseases(diseasesCode);
+                }
+                visit.setHasSkierowanie(resultSet.getBoolean(10));
+                visit.setSpecializationId(resultSet.getInt(11));
+                visit.setSkierowanieNote(resultSet.getString(12));
+                visit.setHasZwolnienie(resultSet.getBoolean(13));
+                visit.setZwolnienieStart(resultSet.getTimestamp(14));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(15));
+                visit.setHasRecepta(resultSet.getBoolean(16));
+                array = resultSet.getArray(17);
+                if(array!=null){
+                    List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
+                    visit.setMedicineId(medicine);
+                }
+                array = resultSet.getArray(18);
+                if(array!=null){
+                    List<String> instructions = Arrays.asList((String[]) array.getArray());
+                    visit.setInstructions(instructions);
+                }
+
                 toReturn.add(visit);
             }
         } catch (SQLException e) {
@@ -142,18 +164,43 @@ public class DatabaseServiceImpl implements DatabaseService {
     public List<Visit> getFutureVisits(Integer doctorId) {
         List<Visit> toReturn = new ArrayList<>();
         //String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
-        String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND lekarz=" + doctorId;
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty > CURRENT_DATE AND lekarz=" + doctorId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 Visit visit = new Visit();
+                visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
                 visit.setDoctor(getPerson(resultSet.getInt(3)));
                 visit.setStart(resultSet.getTimestamp(4));
+                visit.setEnd(resultSet.getTimestamp(5));
                 visit.setRoom(resultSet.getInt(6));
                 visit.setTakenPlace(resultSet.getBoolean(7));
                 visit.setNote(resultSet.getString(8));
+                Array array = resultSet.getArray(9);
+                if(array!=null){
+                    List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
+                    visit.setDiseases(diseasesCode);
+                }
+                visit.setHasSkierowanie(resultSet.getBoolean(10));
+                visit.setSpecializationId(resultSet.getInt(11));
+                visit.setSkierowanieNote(resultSet.getString(12));
+                visit.setHasZwolnienie(resultSet.getBoolean(13));
+                visit.setZwolnienieStart(resultSet.getTimestamp(14));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(15));
+                visit.setHasRecepta(resultSet.getBoolean(16));
+                array = resultSet.getArray(17);
+                if(array!=null){
+                    List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
+                    visit.setMedicineId(medicine);
+                }
+                array = resultSet.getArray(18);
+                if(array!=null){
+                    List<String> instructions = Arrays.asList((String[]) array.getArray());
+                    visit.setInstructions(instructions);
+                }
+
                 toReturn.add(visit);
             }
         } catch (SQLException e) {
@@ -244,5 +291,90 @@ public class DatabaseServiceImpl implements DatabaseService {
             e.printStackTrace();
         }
         return toRet;
+    }
+
+    @Override
+    public Disease getDisease(String code) {
+        Disease toReturn = new Disease();
+        String sql = "SELECT * FROM dolegliwosci WHERE kod_icd10='" + code+"';";
+        ;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toReturn.setIcd10Code(resultSet.getString(1));
+                toReturn.setPrettyName(resultSet.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public Specialization getSpecialization(Integer specializationId) {
+       Specialization toReturn = new Specialization();
+        String sql = "SELECT * FROM specjalizacje WHERE id_specjalizacji=" + specializationId;
+        ;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toReturn.setId(resultSet.getInt(1));
+                toReturn.setPrettyName(resultSet.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public void updateVisit(Visit visit) {
+        //SELECT insert_wizyta(1, true, 'test', array['A00', 'A01', 'A02'], true, 1, 'gupi jest', true, CURRENT_DATE, '2020-05-20', true, array[1, 2, 3], array['ulotka', 'ulotka', 'ulotka']);
+        String choroby = "null";
+        String lekiId = "null";
+        String instructions = "null";
+        if(visit.getDiseases()!=null && visit.getDiseases().size()!=0){
+            choroby = "array[";
+            for(String s: visit.getDiseases()){
+                choroby += "'"+s+"'"+", ";
+            }
+            choroby = choroby.substring(0, choroby.length()-2);
+            choroby += "]";
+        }
+        if(visit.hasRecepta() && visit.getMedicineId().size()!=0){
+            lekiId = "array[";
+            for(Integer s: visit.getMedicineId()){
+                lekiId += s+", ";
+            }
+            lekiId = choroby.substring(choroby.length()-2);
+            lekiId += "]";
+        }
+        if(visit.hasRecepta() && visit.getMedicineId().size()!=0){
+            instructions = "array[";
+            for(String s: visit.getInstructions()){
+                instructions += "'"+s+"'"+", ";
+            }
+            instructions = choroby.substring(choroby.length()-2);
+            instructions += "]";
+        }
+        if(visit.getSkierowanieNote()==null){
+            visit.setSkierowanieNote("");
+        }
+        if(visit.getZwolnienieStart()==null){
+            visit.setZwolnienieStart(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+        }
+        if(visit.getZwolnienieEnd()==null){
+            visit.setZwolnienieEnd(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+        }
+        String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+visit.getSpecializationId()+", '"+visit.getSkierowanieNote()+"', "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -22,8 +22,11 @@ import javafx.stage.Window;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -93,12 +96,25 @@ public class VisitEditView extends Application implements Initializable {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
-        zwolnienieLabel.setVisible(false);
-        zwolnienieDatePicker.setVisible(false);
-        skierowanieLabel.setVisible(false);
-        skierowanieText.setVisible(false);
-        skierowanieListView.setVisible(false);
-        zwolnienieDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
+        hasSkierowanie = visit.hasSkierowanie();
+        hasZwolnienie = visit.hasZwolnienie();
+        zwolnienieLabel.setVisible(hasZwolnienie);
+        zwolnienieDatePicker.setVisible(hasZwolnienie);
+        skierowanieLabel.setVisible(hasSkierowanie);
+        skierowanieText.setVisible(hasSkierowanie);
+        skierowanieListView.setVisible(visit.hasSkierowanie());
+        notatkaTextArea.setText(visit.getNote());
+        if (hasSkierowanie) {
+            currentSpecialization = db.getSpecialization(visit.getSpecializationId());
+            skierowanieText.setText(currentSpecialization.getPrettyName());
+        }
+        if (visit.hasZwolnienie()) {
+            zwolnienieDatePicker.setValue(visit.getZwolnienieEnd().toLocalDateTime().toLocalDate());
+        } else {
+            zwolnienieDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
+        }
+        zwolnienieCheckBox.setSelected(hasZwolnienie);
+        skierowanieCheckBox.setSelected(hasSkierowanie);
         zwolnienieCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
                 zwolnienieDatePicker.setVisible(true);
@@ -112,25 +128,31 @@ public class VisitEditView extends Application implements Initializable {
         });
         skierowanieListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecializations()));
         skierowanieListView.setOnMouseClicked(mouseEvent -> {
-            if(skierowanieListView.getSelectionModel().getSelectedItems().size()==0){
+            if (skierowanieListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             currentSpecialization = (Specialization) skierowanieListView.getSelectionModel().getSelectedItems().get(0);
             skierowanieText.setText(String.valueOf(currentSpecialization));
         });
         skierowanieCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(t1){
+            if (t1) {
                 skierowanieListView.setVisible(true);
                 skierowanieText.setVisible(true);
                 skierowanieLabel.setVisible(true);
                 hasSkierowanie = true;
-            }else{
+            } else {
                 skierowanieListView.setVisible(false);
                 skierowanieText.setVisible(false);
                 skierowanieLabel.setVisible(false);
                 hasSkierowanie = false;
             }
         });
+
+        if (visit.getDiseases() != null) {
+            for (String s : visit.getDiseases()) {
+                selectedDiseases.add(db.getDisease(s));
+            }
+        }
         diseaseListView.setItems(selectedDiseases);
         diseaseListView.setCellFactory(listView -> {
             TextFieldListCell<Disease> cell = new TextFieldListCell<>();
@@ -174,7 +196,7 @@ public class VisitEditView extends Application implements Initializable {
         });
         mainStage = stage;
         saveAndExitButton.setOnAction(actionEvent -> {
-            if(hasSkierowanie && currentSpecialization==null){
+            if (hasSkierowanie && currentSpecialization == null) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -190,14 +212,26 @@ public class VisitEditView extends Application implements Initializable {
             System.out.println("Notatka: " + visit.getNote());
             System.out.println("Choroby: " + selectedDiseases);
             System.out.println("Zwolnienie: " + hasZwolnienie);
+            ArrayList<String> diseases = new ArrayList<>();
+            for(Disease disease: selectedDiseases){
+                diseases.add(disease.getIcd10Code());
+            }
+            visit.setDiseases(diseases);
+            visit.setHasZwolnienie(hasZwolnienie);
             if (hasZwolnienie) {
                 System.out.println("Do: " + zwolnienieDate);
+                visit.setZwolnienieStart(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+                visit.setZwolnienieEnd(Timestamp.valueOf(zwolnienieDate.atStartOfDay()));
             }
-            System.out.println("Skierowanie: "+hasSkierowanie);
-            if(hasSkierowanie){
-                System.out.println("Do: "+currentSpecialization);
+            System.out.println("Skierowanie: " + hasSkierowanie);
+            visit.setHasSkierowanie(hasSkierowanie);
+            if (hasSkierowanie) {
+                visit.setSpecializationId(currentSpecialization.getId());
+                visit.setSkierowanieNote("TODO");
+                System.out.println("Do: " + currentSpecialization);
             }
-            visit.setNote(notatkaTextArea.getText());
+            visit.setHasRecepta(false);
+            db.updateVisit(visit);
             Application view = new LekarzView(doctorId, name, db);
             try {
                 view.start(mainStage);
@@ -214,6 +248,7 @@ public class VisitEditView extends Application implements Initializable {
                 e.printStackTrace();
             }
         });
+
     }
 
     @Override
