@@ -21,8 +21,8 @@ public class DatabaseServiceImpl implements DatabaseService {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/ignacy",
-                            "ignacy", "root");
+                    .getConnection("jdbc:postgresql://localhost:5432/djajesniak",
+                            "djajesniak", "root");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
