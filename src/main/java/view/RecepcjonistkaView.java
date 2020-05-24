@@ -66,6 +66,7 @@ public class RecepcjonistkaView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("ePrzychodnia - recepcjonistka");
         mainStage = stage;
         newVisitButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaWizytaView(id, name, db);

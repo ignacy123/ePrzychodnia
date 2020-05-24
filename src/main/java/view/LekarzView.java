@@ -83,6 +83,7 @@ public class LekarzView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("ePrzychodnia - lekarz");
         mainStage = stage;
         patientsListView.setOnMouseClicked(mouseEvent -> {
             if (patientsListView.getSelectionModel().getSelectedItems() == null) {

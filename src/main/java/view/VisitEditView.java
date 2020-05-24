@@ -94,6 +94,7 @@ public class VisitEditView extends Application implements Initializable {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("ePrzychodnia - edytowanie wizyty");
         hasSkierowanie = visit.hasSkierowanie();
         hasZwolnienie = visit.hasZwolnienie();
         zwolnienieLabel.setVisible(hasZwolnienie);
