@@ -29,5 +29,7 @@
       <ListView fx:id="skierowanieListView" layoutX="423.0" layoutY="66.0" prefHeight="494.0" prefWidth="200.0" />
       <Label fx:id="skierowanieLabel" layoutX="423.0" layoutY="571.0" text="Wybrana specjalizacja:" />
       <Text fx:id="skierowanieText" layoutX="423.0" layoutY="603.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label layoutX="236.0" layoutY="57.0" text="Typ wizyty:" />
+      <Text fx:id="typWizytyText" layoutX="151.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="235.13000106811523" />
     </children>
 </Pane>

@@ -62,6 +62,8 @@ public class VisitEditView extends Application implements Initializable {
     private Label skierowanieLabel;
     @FXML
     private Text skierowanieText;
+    @FXML
+    private Text typWizytyText;
 
     String name;
     int doctorId;
@@ -83,10 +85,6 @@ public class VisitEditView extends Application implements Initializable {
         diseases = db.getAllDiseases();
     }
 
-    @FXML
-    void initialize() {
-        nameLabel.setText(name);
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -213,7 +211,7 @@ public class VisitEditView extends Application implements Initializable {
             System.out.println("Choroby: " + selectedDiseases);
             System.out.println("Zwolnienie: " + hasZwolnienie);
             ArrayList<String> diseases = new ArrayList<>();
-            for(Disease disease: selectedDiseases){
+            for (Disease disease : selectedDiseases) {
                 diseases.add(disease.getIcd10Code());
             }
             visit.setDiseases(diseases);
@@ -253,6 +251,8 @@ public class VisitEditView extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        nameLabel.setText(name);
+        typWizytyText.setText(visit.getSpecialization().getPrettyName());
         TextFields.bindAutoCompletion(diseaseTextField, diseases.keySet());
     }
 }

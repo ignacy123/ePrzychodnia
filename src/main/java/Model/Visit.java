@@ -1,5 +1,7 @@
 package Model;
 
+import converters.OfficeConverter;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +10,10 @@ public class Visit {
     Integer id;
     Person patient;
     Person doctor;
+    Specialization specialization;
     Timestamp start;
     Timestamp end;
-    Integer room;
+    Office office;
     boolean takenPlace;
     String note;
     List<String> diseases;
@@ -40,6 +43,14 @@ public class Visit {
         this.patient = patient;
     }
 
+    public Specialization getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+    }
+
     public Person getDoctor() {
         return doctor;
     }
@@ -64,12 +75,12 @@ public class Visit {
         this.end = end;
     }
 
-    public Integer getRoom() {
-        return room;
+    public Office getOffice() {
+        return office;
     }
 
-    public void setRoom(Integer room) {
-        this.room = room;
+    public void setOffice(Office office) {
+        this.office = office;
     }
 
     public boolean hasTakenPlace() {
@@ -185,6 +196,6 @@ public class Visit {
 
     @Override
     public String toString() {
-        return "Pacjent: " + patient.getName() + " " + patient.getLastName() + " " + "\nLekarz: " + doctor.getName() + " " + doctor.getLastName() + "\nData: " + start + "\nGabinet: " + room + "\nOdbył się: " + takenPlace + "\nNotatka: " + note;
+        return "Pacjent: " + patient.getName() + " " + patient.getLastName() + " " + "\nLekarz: " + doctor.getName() + " " + doctor.getLastName() + "\nData: " + start + "\nGabinet: " + new OfficeConverter().toString(office) + "\nOdbył się: " + takenPlace + "\nNotatka: " + note;
     }
 }

@@ -1,9 +1,6 @@
 package db;
 
-import Model.Disease;
-import Model.Person;
-import Model.Specialization;
-import Model.Visit;
+import Model.*;
 import enums.Roles;
 import javafx.util.StringConverter;
 
@@ -21,8 +18,8 @@ public class DatabaseServiceImpl implements DatabaseService {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/djajesniak",
-                            "djajesniak", "root");
+                    .getConnection("jdbc:postgresql://localhost:5432/ignacy",
+                            "ignacy", "root");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -123,10 +120,11 @@ public class DatabaseServiceImpl implements DatabaseService {
                 Visit visit = new Visit();
                 visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
+                visit.setSpecialization(getSpecialization(resultSet.getInt(3)));
                 visit.setDoctor(getPerson(resultSet.getInt(4)));
                 visit.setStart(resultSet.getTimestamp(5));
                 visit.setEnd(resultSet.getTimestamp(6));
-                visit.setRoom(resultSet.getInt(7));
+                visit.setOffice(getOffice(resultSet.getInt(7)));
                 visit.setTakenPlace(resultSet.getBoolean(8));
                 visit.setNote(resultSet.getString(9));
                 Array array = resultSet.getArray(10);
@@ -171,10 +169,11 @@ public class DatabaseServiceImpl implements DatabaseService {
                 Visit visit = new Visit();
                 visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
+                visit.setSpecialization(getSpecialization(resultSet.getInt(3)));
                 visit.setDoctor(getPerson(resultSet.getInt(4)));
                 visit.setStart(resultSet.getTimestamp(5));
                 visit.setEnd(resultSet.getTimestamp(6));
-                visit.setRoom(resultSet.getInt(7));
+                visit.setOffice(getOffice(resultSet.getInt(7)));
                 visit.setTakenPlace(resultSet.getBoolean(8));
                 visit.setNote(resultSet.getString(9));
                 Array array = resultSet.getArray(10);
@@ -234,7 +233,12 @@ public class DatabaseServiceImpl implements DatabaseService {
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
         String sql = "SELECT * FROM dane_osob WHERE id IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") AND " +
-                "id NOT IN (SELECT lekarz FROM wizyty WHERE termin_wizyty>= '" + from + "' AND koniec_wizyty<='" + to + "');";
+                "id NOT IN (SELECT lekarz FROM wizyty WHERE ("+from +"<= termin_wizyty AND "+to+" > termin.wizyty) OR "+from+" > termin_wizyty AND "+from+" < koniec_wizyty)" + "');";
+        //SELECT lekarz FROM wizyty WHERE termin_wizyty>= '2020-05-25 12:30:00' AND koniec_wizyty<='2020-05-25 13:30:00'
+        //(NEW.termin_wizyty <= termin_wizyty AND NEW.koniec_wizyty > termin_wizyty) OR
+        //		(NEW.termin_wizyty > termin_wizyty AND NEW.termin_wizyty < koniec_wizyty)
+        //		)
+        //(from <= termin_wizyty AND to > termin.wizyty) OR from > termin_wizyty AND from < koniec_wizyty)
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -262,13 +266,64 @@ public class DatabaseServiceImpl implements DatabaseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
-        String sql = "SELECT id_pracownika, COALESCE(count, 0) FROM pracownicy LEFT OUTER JOIN (SELECT lekarz, count(id_wizyty) FROM wizyty WHERE pacjent=" + patientId + " AND lekarz IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") GROUP BY lekarz) AS s1 ON s1.lekarz = pracownicy.id_pracownika WHERE id_pracownika IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE termin_wizyty>= '" + from + "' AND koniec_wizyty<='" + to + "') ORDER BY 2 DESC;";
+        String sql = "SELECT id_pracownika, COALESCE(count, 0) FROM pracownicy LEFT OUTER JOIN (SELECT lekarz, count(id_wizyty) FROM wizyty WHERE pacjent=" + patientId +
+                " AND lekarz IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId +
+                ") GROUP BY lekarz) AS s1 ON s1.lekarz = pracownicy.id_pracownika WHERE id_pracownika IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " +
+                specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE ('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty))" + " ORDER BY 2 DESC;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 Person person = getPerson(resultSet.getInt(1));
                 toRet.add(person);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public List<Office> getAvailableOfficesAtTime(LocalDateTime freeFrom, LocalDateTime freeTo) {
+        //SELECT lekarz FROM wizyty WHERE ('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR '"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty
+        List<Office> toRet = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String from = freeFrom.format(formatter);
+        String to = freeTo.format(formatter);
+        String sql = "SELECT * FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty));";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Office office = new Office();
+                office.setId(resultSet.getInt(1));
+                office.setType(resultSet.getString(2));
+                toRet.add(office);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo) {
+        //SELECT gabinety_typy.gabinet, COALESCE(s.count, 0) FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_wizyty) AS count FROM wizyty WHERE lekarz=4 GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinet IN();
+        List<Office> toRet = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String from = freeFrom.format(formatter);
+        String to = freeTo.format(formatter);
+        String sql = "SELECT gabinety_typy.gabinet, COALESCE(s.count, 0), gabinety_typy.typ FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_wizyty) AS count FROM wizyty WHERE lekarz="+doctorId+" GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinety_typy.gabinet IN"+
+                "(SELECT gabinet FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty))) ORDER BY 2 DESC;";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Office office = new Office();
+                office.setId(resultSet.getInt(1));
+                office.setType(resultSet.getString(3));
+                toRet.add(office);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -314,13 +369,29 @@ public class DatabaseServiceImpl implements DatabaseService {
     public Specialization getSpecialization(Integer specializationId) {
        Specialization toReturn = new Specialization();
         String sql = "SELECT * FROM specjalizacje WHERE id_specjalizacji=" + specializationId;
-        ;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 toReturn.setId(resultSet.getInt(1));
                 toReturn.setPrettyName(resultSet.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public Office getOffice(Integer officeId) {
+        Office toReturn = new Office();
+        String sql = "SELECT * FROM gabinety_typy WHERE gabinet=" + officeId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toReturn.setId(resultSet.getInt(1));
+                toReturn.setType(resultSet.getString(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -368,6 +439,18 @@ public class DatabaseServiceImpl implements DatabaseService {
             visit.setZwolnienieEnd(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
         }
         String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+visit.getSpecializationId()+", '"+visit.getSkierowanieNote()+"', "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void newVisit(Visit visit) {
+        String sql = "SELECT new_wizyta("+visit.getPatient().getId()+", "+visit.getDoctor().getId()+", '"+visit.getStart()+"', '"+visit.getEnd()+"', "+visit.getOffice().getId()+", "+visit.getSpecialization().getId()+");";
         System.out.println(sql);
         try {
             statement = c.createStatement();

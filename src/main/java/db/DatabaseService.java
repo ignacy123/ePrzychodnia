@@ -1,9 +1,6 @@
 package db;
 
-import Model.Disease;
-import Model.Person;
-import Model.Specialization;
-import Model.Visit;
+import Model.*;
 import enums.Roles;
 
 import java.time.LocalDate;
@@ -22,8 +19,12 @@ public interface DatabaseService {
     List<Specialization> getAvailableSpecializations();
     List<Person> getAvailableSpecialistsAtTime(int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
     List<Person> getAvailableSpecialistsAtTimeSortedByPatient(int patientId, int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
+    List<Office> getAvailableOfficesAtTime(LocalDateTime freeFrom, LocalDateTime freeTo);
+    List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo);
     Map<String, String> getAllDiseases();
     Disease getDisease(String code);
     Specialization getSpecialization(Integer specializationId);
+    Office getOffice(Integer officeId);
     void updateVisit(Visit visit);
+    void newVisit(Visit visit);
 }
