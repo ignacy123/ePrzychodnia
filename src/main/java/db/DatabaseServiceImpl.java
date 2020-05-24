@@ -123,35 +123,34 @@ public class DatabaseServiceImpl implements DatabaseService {
                 Visit visit = new Visit();
                 visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
-                visit.setDoctor(getPerson(resultSet.getInt(3)));
-                visit.setStart(resultSet.getTimestamp(4));
-                visit.setEnd(resultSet.getTimestamp(5));
-                visit.setRoom(resultSet.getInt(6));
-                visit.setTakenPlace(resultSet.getBoolean(7));
-                visit.setNote(resultSet.getString(8));
-                Array array = resultSet.getArray(9);
+                visit.setDoctor(getPerson(resultSet.getInt(4)));
+                visit.setStart(resultSet.getTimestamp(5));
+                visit.setEnd(resultSet.getTimestamp(6));
+                visit.setRoom(resultSet.getInt(7));
+                visit.setTakenPlace(resultSet.getBoolean(8));
+                visit.setNote(resultSet.getString(9));
+                Array array = resultSet.getArray(10);
                 if(array!=null){
                     List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
                     visit.setDiseases(diseasesCode);
                 }
-                visit.setHasSkierowanie(resultSet.getBoolean(10));
-                visit.setSpecializationId(resultSet.getInt(11));
-                visit.setSkierowanieNote(resultSet.getString(12));
-                visit.setHasZwolnienie(resultSet.getBoolean(13));
-                visit.setZwolnienieStart(resultSet.getTimestamp(14));
-                visit.setZwolnienieEnd(resultSet.getTimestamp(15));
-                visit.setHasRecepta(resultSet.getBoolean(16));
-                array = resultSet.getArray(17);
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                visit.setSpecializationId(resultSet.getInt(12));
+                visit.setSkierowanieNote(resultSet.getString(13));
+                visit.setHasZwolnienie(resultSet.getBoolean(14));
+                visit.setZwolnienieStart(resultSet.getTimestamp(15));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(16));
+                visit.setHasRecepta(resultSet.getBoolean(17));
+                array = resultSet.getArray(18);
                 if(array!=null){
                     List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
                     visit.setMedicineId(medicine);
                 }
-                array = resultSet.getArray(18);
+                array = resultSet.getArray(19);
                 if(array!=null){
                     List<String> instructions = Arrays.asList((String[]) array.getArray());
                     visit.setInstructions(instructions);
                 }
-
                 toReturn.add(visit);
             }
         } catch (SQLException e) {
@@ -172,30 +171,30 @@ public class DatabaseServiceImpl implements DatabaseService {
                 Visit visit = new Visit();
                 visit.setId(resultSet.getInt(1));
                 visit.setPatient(getPerson(resultSet.getInt(2)));
-                visit.setDoctor(getPerson(resultSet.getInt(3)));
-                visit.setStart(resultSet.getTimestamp(4));
-                visit.setEnd(resultSet.getTimestamp(5));
-                visit.setRoom(resultSet.getInt(6));
-                visit.setTakenPlace(resultSet.getBoolean(7));
-                visit.setNote(resultSet.getString(8));
-                Array array = resultSet.getArray(9);
+                visit.setDoctor(getPerson(resultSet.getInt(4)));
+                visit.setStart(resultSet.getTimestamp(5));
+                visit.setEnd(resultSet.getTimestamp(6));
+                visit.setRoom(resultSet.getInt(7));
+                visit.setTakenPlace(resultSet.getBoolean(8));
+                visit.setNote(resultSet.getString(9));
+                Array array = resultSet.getArray(10);
                 if(array!=null){
                     List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
                     visit.setDiseases(diseasesCode);
                 }
-                visit.setHasSkierowanie(resultSet.getBoolean(10));
-                visit.setSpecializationId(resultSet.getInt(11));
-                visit.setSkierowanieNote(resultSet.getString(12));
-                visit.setHasZwolnienie(resultSet.getBoolean(13));
-                visit.setZwolnienieStart(resultSet.getTimestamp(14));
-                visit.setZwolnienieEnd(resultSet.getTimestamp(15));
-                visit.setHasRecepta(resultSet.getBoolean(16));
-                array = resultSet.getArray(17);
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                visit.setSpecializationId(resultSet.getInt(12));
+                visit.setSkierowanieNote(resultSet.getString(13));
+                visit.setHasZwolnienie(resultSet.getBoolean(14));
+                visit.setZwolnienieStart(resultSet.getTimestamp(15));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(16));
+                visit.setHasRecepta(resultSet.getBoolean(17));
+                array = resultSet.getArray(18);
                 if(array!=null){
                     List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
                     visit.setMedicineId(medicine);
                 }
-                array = resultSet.getArray(18);
+                array = resultSet.getArray(19);
                 if(array!=null){
                     List<String> instructions = Arrays.asList((String[]) array.getArray());
                     visit.setInstructions(instructions);
