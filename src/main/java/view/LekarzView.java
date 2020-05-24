@@ -34,6 +34,8 @@ public class LekarzView extends Application {
     private ListView futureVisits;
     @FXML
     private TextField surnameTextField;
+    @FXML
+    private Button logOutButton;
 
     Integer id;
     String name;
@@ -63,6 +65,14 @@ public class LekarzView extends Application {
             }
             return 0;
         }));
+        logOutButton.setOnAction(actionEvent -> {
+            Application view = new MainViewController();
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -11,9 +12,12 @@ import javafx.stage.Stage;
 public class AdministracjaView extends Application {
     @FXML
     private Label nameLabel;
+    @FXML
+    private Button logOutButton;
 
     Integer id;
     String name;
+    Stage mainStage;
 
     AdministracjaView(int id, String name) {
         this.id = id;
@@ -23,6 +27,14 @@ public class AdministracjaView extends Application {
     @FXML
     void initialize() {
         nameLabel.setText(name);
+        logOutButton.setOnAction(actionEvent -> {
+            Application view = new MainViewController();
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -33,5 +45,6 @@ public class AdministracjaView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        mainStage = stage;
     }
 }

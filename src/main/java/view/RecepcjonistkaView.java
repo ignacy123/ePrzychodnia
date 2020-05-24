@@ -31,10 +31,13 @@ public class RecepcjonistkaView extends Application {
     private Label nameLabel;
     @FXML
     private Button newVisitButton;
+    @FXML
+    private Button logOutButton;
 
     Integer id;
     String name;
     DatabaseService db;
+    Stage mainStage;
 
     RecepcjonistkaView(int id, String name, DatabaseService db) {
         this.id = id;
@@ -45,6 +48,14 @@ public class RecepcjonistkaView extends Application {
     @FXML
     void initialize() {
         nameLabel.setText(name);
+        logOutButton.setOnAction(actionEvent -> {
+            Application view = new MainViewController();
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -55,6 +66,7 @@ public class RecepcjonistkaView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+        mainStage = stage;
         newVisitButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaWizytaView(id, name, db);
             try {
