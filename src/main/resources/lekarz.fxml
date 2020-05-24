@@ -5,14 +5,37 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0" prefWidth="1123.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="nameLabel" layoutX="14.0" layoutY="14.0" />
-      <ListView fx:id="patientsListView" layoutX="14.0" layoutY="88.0" prefHeight="659.0" prefWidth="200.0" />
-      <DatePicker fx:id="datePicker" layoutX="874.0" layoutY="64.0" />
-      <ListView fx:id="dateVisits" layoutX="874.0" layoutY="134.0" prefHeight="349.0" prefWidth="200.0" />
-      <ListView fx:id="futureVisits" layoutX="524.0" layoutY="134.0" prefHeight="349.0" prefWidth="276.0" />
-      <TextField fx:id="surnameTextField" layoutX="14.0" layoutY="50.0" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska" />
+      <ListView fx:id="patientsListView" layoutX="14.0" layoutY="134.0" prefHeight="602.0" prefWidth="200.0" />
+      <DatePicker fx:id="datePicker" layoutX="913.0" layoutY="104.0" />
+      <ListView fx:id="dateVisits" layoutX="716.0" layoutY="134.0" prefHeight="602.0" prefWidth="393.0" />
+      <ListView fx:id="futureVisits" layoutX="279.0" layoutY="344.0" prefHeight="392.0" prefWidth="393.0" />
+      <TextField fx:id="surnameTextField" layoutX="14.0" layoutY="94.0" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text layoutX="279.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kolejne wizyty:">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="716.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wizyty umówione na:">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wyszukaj pacjenta:">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="279.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Następna wizyta:">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
    </children>
 </Pane>
