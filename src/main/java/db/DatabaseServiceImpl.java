@@ -140,15 +140,24 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setZwolnienieEnd(resultSet.getTimestamp(16));
                 visit.setHasRecepta(resultSet.getBoolean(17));
                 array = resultSet.getArray(18);
+                List<Integer> medicines = null;
+                List<String> instructions = null;
+                List<Medicine> med = new ArrayList<>();
                 if(array!=null){
-                    List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
-                    visit.setMedicineId(medicine);
+                    medicines = Arrays.asList((Integer[]) array.getArray());
                 }
                 array = resultSet.getArray(19);
                 if(array!=null){
-                    List<String> instructions = Arrays.asList((String[]) array.getArray());
-                    visit.setInstructions(instructions);
+                    instructions = Arrays.asList((String[]) array.getArray());
                 }
+                if(medicines!=null){
+                    for(int i = 0; i<medicines.size(); i++){
+                        Medicine medicine = getMedicine(medicines.get(i));
+                        medicine.setInstruction(instructions.get(i));
+                        med.add(medicine);
+                    }
+                }
+                visit.setMedicines(med);
                 toReturn.add(visit);
             }
         } catch (SQLException e) {
@@ -189,15 +198,24 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setZwolnienieEnd(resultSet.getTimestamp(16));
                 visit.setHasRecepta(resultSet.getBoolean(17));
                 array = resultSet.getArray(18);
+                List<Integer> medicines = null;
+                List<String> instructions = null;
+                List<Medicine> med = new ArrayList<>();
                 if(array!=null){
-                    List<Integer> medicine = Arrays.asList((Integer[]) array.getArray());
-                    visit.setMedicineId(medicine);
+                    medicines = Arrays.asList((Integer[]) array.getArray());
                 }
                 array = resultSet.getArray(19);
                 if(array!=null){
-                    List<String> instructions = Arrays.asList((String[]) array.getArray());
-                    visit.setInstructions(instructions);
+                    instructions = Arrays.asList((String[]) array.getArray());
                 }
+                if(medicines!=null){
+                    for(int i = 0; i<medicines.size(); i++){
+                        Medicine medicine = getMedicine(medicines.get(i));
+                        medicine.setInstruction(instructions.get(i));
+                        med.add(medicine);
+                    }
+                }
+                visit.setMedicines(med);
 
                 toReturn.add(visit);
             }
@@ -348,6 +366,61 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public Visit getNextVisit(Integer doctorId) {
+        Visit  visit = new Visit();
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty > CURRENT_DATE AND lekarz="+doctorId+" ORDER BY 5 LIMIT 1;\n";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                visit.setId(resultSet.getInt(1));
+                visit.setPatient(getPerson(resultSet.getInt(2)));
+                visit.setSpecialization(getSpecialization(resultSet.getInt(3)));
+                visit.setDoctor(getPerson(resultSet.getInt(4)));
+                visit.setStart(resultSet.getTimestamp(5));
+                visit.setEnd(resultSet.getTimestamp(6));
+                visit.setOffice(getOffice(resultSet.getInt(7)));
+                visit.setTakenPlace(resultSet.getBoolean(8));
+                visit.setNote(resultSet.getString(9));
+                Array array = resultSet.getArray(10);
+                if(array!=null){
+                    List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
+                    visit.setDiseases(diseasesCode);
+                }
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                visit.setSpecializationId(resultSet.getInt(12));
+                visit.setSkierowanieNote(resultSet.getString(13));
+                visit.setHasZwolnienie(resultSet.getBoolean(14));
+                visit.setZwolnienieStart(resultSet.getTimestamp(15));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(16));
+                visit.setHasRecepta(resultSet.getBoolean(17));
+                array = resultSet.getArray(18);
+                List<Integer> medicines = null;
+                List<String> instructions = null;
+                List<Medicine> med = new ArrayList<>();
+                if(array!=null){
+                    medicines = Arrays.asList((Integer[]) array.getArray());
+                }
+                array = resultSet.getArray(19);
+                if(array!=null){
+                    instructions = Arrays.asList((String[]) array.getArray());
+                }
+                if(medicines!=null){
+                    for(int i = 0; i<medicines.size(); i++){
+                        Medicine medicine = getMedicine(medicines.get(i));
+                        medicine.setInstruction(instructions.get(i));
+                        med.add(medicine);
+                    }
+                }
+                visit.setMedicines(med);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return visit;
+    }
+
+    @Override
     public Disease getDisease(String code) {
         Disease toReturn = new Disease();
         String sql = "SELECT * FROM dolegliwosci WHERE kod_icd10='" + code+"';";
@@ -375,6 +448,23 @@ public class DatabaseServiceImpl implements DatabaseService {
             while (resultSet.next()) {
                 toReturn.setId(resultSet.getInt(1));
                 toReturn.setPrettyName(resultSet.getString(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public Medicine getMedicine(Integer medicineId) {
+        Medicine toReturn = new Medicine();
+        String sql = "SELECT * FROM produkty WHERE id_produktu=" + medicineId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toReturn.setId(resultSet.getInt(1));
+                toReturn.setName(resultSet.getString(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -413,20 +503,20 @@ public class DatabaseServiceImpl implements DatabaseService {
             choroby = choroby.substring(0, choroby.length()-2);
             choroby += "]";
         }
-        if(visit.hasRecepta() && visit.getMedicineId().size()!=0){
+        if(visit.hasRecepta() && visit.getMedicines().size()!=0){
             lekiId = "array[";
-            for(Integer s: visit.getMedicineId()){
-                lekiId += s+", ";
+            for(Medicine s: visit.getMedicines()){
+                lekiId += s.getId()+", ";
             }
-            lekiId = choroby.substring(choroby.length()-2);
+            lekiId = lekiId.substring(0, lekiId.length()-2);
             lekiId += "]";
         }
-        if(visit.hasRecepta() && visit.getMedicineId().size()!=0){
+        if(visit.hasRecepta() && visit.getMedicines().size()!=0){
             instructions = "array[";
-            for(String s: visit.getInstructions()){
-                instructions += "'"+s+"'"+", ";
+            for(Medicine s: visit.getMedicines()){
+                instructions += "'"+s.getInstruction()+"'"+", ";
             }
-            instructions = choroby.substring(choroby.length()-2);
+            instructions = instructions.substring(0, instructions.length()-2);
             instructions += "]";
         }
         if(visit.getSkierowanieNote()==null){
@@ -437,6 +527,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         if(visit.getZwolnienieEnd()==null){
             visit.setZwolnienieEnd(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
+        }
+        if(visit.getNote()==null){
+            visit.setNote("");
         }
         String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+visit.getSpecializationId()+", '"+visit.getSkierowanieNote()+"', "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
         System.out.println(sql);
@@ -458,5 +551,21 @@ public class DatabaseServiceImpl implements DatabaseService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Map<String, Integer> getAllMedicines() {
+        Map<String, Integer> toRet = new HashMap<>();
+        String sql = "SELECT * FROM produkty;";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet.put(resultSet.getString(2), resultSet.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
     }
 }

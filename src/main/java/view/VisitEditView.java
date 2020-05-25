@@ -1,9 +1,11 @@
 package view;
 
 import Model.Disease;
+import Model.Medicine;
 import Model.Specialization;
 import Model.Visit;
 import converters.DiseaseConverter;
+import converters.MedicineConverter;
 import db.DatabaseService;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -15,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,12 +25,12 @@ import javafx.stage.Window;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class VisitEditView extends Application implements Initializable {
@@ -64,6 +67,12 @@ public class VisitEditView extends Application implements Initializable {
     private Text skierowanieText;
     @FXML
     private Text typWizytyText;
+    @FXML
+    private CheckBox receptaCheckBox;
+    @FXML
+    private TextField medicineTextField;
+    @FXML
+    private ListView medicineListView;
 
     String name;
     int doctorId;
@@ -71,11 +80,14 @@ public class VisitEditView extends Application implements Initializable {
     DatabaseService db;
     Visit visit;
     Map<String, String> diseases;
+    Map<String, Integer> medicines;
     boolean hasZwolnienie = false;
     boolean hasSkierowanie = false;
+    boolean hasRecepta = false;
     ObservableList<Disease> selectedDiseases = FXCollections.observableArrayList();
     LocalDate zwolnienieDate = null;
     Specialization currentSpecialization = null;
+    ObservableList<Medicine> selectedMedicines = FXCollections.observableArrayList();
 
     VisitEditView(int doctorId, String name, DatabaseService db, Visit visit) {
         this.doctorId = doctorId;
@@ -83,6 +95,7 @@ public class VisitEditView extends Application implements Initializable {
         this.visit = visit;
         this.db = db;
         diseases = db.getAllDiseases();
+        medicines = db.getAllMedicines();
     }
 
 
@@ -97,11 +110,15 @@ public class VisitEditView extends Application implements Initializable {
         stage.setTitle("ePrzychodnia - edytowanie wizyty");
         hasSkierowanie = visit.hasSkierowanie();
         hasZwolnienie = visit.hasZwolnienie();
+        hasRecepta = visit.hasRecepta();
         zwolnienieLabel.setVisible(hasZwolnienie);
         zwolnienieDatePicker.setVisible(hasZwolnienie);
+        zwolnienieDatePicker.getEditor().setDisable(true);
         skierowanieLabel.setVisible(hasSkierowanie);
         skierowanieText.setVisible(hasSkierowanie);
-        skierowanieListView.setVisible(visit.hasSkierowanie());
+        skierowanieListView.setVisible(hasSkierowanie);
+        medicineListView.setVisible(hasRecepta);
+        medicineTextField.setVisible(hasRecepta);
         notatkaTextArea.setText(visit.getNote());
         if (hasSkierowanie) {
             currentSpecialization = db.getSpecialization(visit.getSpecializationId());
@@ -112,8 +129,12 @@ public class VisitEditView extends Application implements Initializable {
         } else {
             zwolnienieDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
         }
+        if(visit.hasRecepta()){
+            selectedMedicines.addAll(visit.getMedicines());
+        }
         zwolnienieCheckBox.setSelected(hasZwolnienie);
         skierowanieCheckBox.setSelected(hasSkierowanie);
+        receptaCheckBox.setSelected(hasRecepta);
         zwolnienieCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
                 zwolnienieDatePicker.setVisible(true);
@@ -146,6 +167,17 @@ public class VisitEditView extends Application implements Initializable {
                 hasSkierowanie = false;
             }
         });
+        receptaCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(t1){
+                medicineTextField.setVisible(true);
+                medicineListView.setVisible(true);
+                hasRecepta = true;
+            }else{
+                medicineTextField.setVisible(false);
+                medicineListView.setVisible(false);
+                hasRecepta = false;
+            }
+        });
 
         if (visit.getDiseases() != null) {
             for (String s : visit.getDiseases()) {
@@ -159,6 +191,13 @@ public class VisitEditView extends Application implements Initializable {
             return cell;
         });
         diseaseListView.setOnMouseClicked(mouseEvent -> {
+            if (!mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                return;
+            }
+
+            if (mouseEvent.getClickCount() != 2) {
+                return;
+            }
             if (diseaseListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
@@ -171,9 +210,56 @@ public class VisitEditView extends Application implements Initializable {
                 System.out.println(name);
                 Disease disease = new Disease();
                 disease.setIcd10Code(diseases.get(name));
+                if(disease.getIcd10Code()==null){
+                    return;
+                }
                 disease.setPrettyName(name);
                 selectedDiseases.add(disease);
                 diseaseTextField.clear();
+            }
+        });
+        medicineListView.setItems(selectedMedicines);
+        medicineListView.setCellFactory(listView -> {
+            TextFieldListCell<Medicine> cell = new TextFieldListCell<>();
+            cell.setConverter(new MedicineConverter());
+            return cell;
+        });
+        medicineListView.setOnMouseClicked(mouseEvent -> {
+            if (!mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                return;
+            }
+
+            if (mouseEvent.getClickCount() != 2) {
+                return;
+            }
+            if(medicineListView.getSelectionModel().getSelectedItems().size()==0){
+                return;
+            }
+            Medicine toDel = (Medicine) medicineListView.getSelectionModel().getSelectedItems().get(0);
+            selectedMedicines.remove(toDel);
+        });
+        medicineTextField.setOnKeyPressed(keyEvent -> {
+
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                Medicine med = new Medicine();
+                String name = String.valueOf(medicineTextField.getCharacters());
+                System.out.println(name);
+                med.setName(name);
+                med.setId(medicines.get(name));
+                if(med.getId()==null){
+                    return;
+                }
+                TextInputDialog td = new TextInputDialog();
+                td.getEditor().setText("zgodnie z ulotką");
+                Optional<String> s = td.showAndWait();
+                if(s.isPresent()){
+                    System.out.println(s);
+                    med.setInstruction(s.get());
+                }else{
+                    System.out.println(":<");
+                    return;
+                }
+                selectedMedicines.add(med);
             }
         });
         final ToggleGroup takenPlaceGroup = new ToggleGroup();
@@ -229,7 +315,17 @@ public class VisitEditView extends Application implements Initializable {
                 visit.setSkierowanieNote("TODO");
                 System.out.println("Do: " + currentSpecialization);
             }
-            visit.setHasRecepta(false);
+            visit.setHasRecepta(hasRecepta);
+            if(hasRecepta && selectedMedicines.size()==0){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("wybierz leki");
+                d.show();
+                return;
+            }
+            visit.setMedicines(selectedMedicines);
             db.updateVisit(visit);
             Application view = new LekarzView(doctorId, name, db);
             try {
@@ -255,5 +351,6 @@ public class VisitEditView extends Application implements Initializable {
         nameLabel.setText(name);
         typWizytyText.setText(visit.getSpecialization().getPrettyName());
         TextFields.bindAutoCompletion(diseaseTextField, diseases.keySet());
+        TextFields.bindAutoCompletion(medicineTextField, medicines.keySet());
     }
 }

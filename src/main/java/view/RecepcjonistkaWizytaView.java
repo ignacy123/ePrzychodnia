@@ -280,7 +280,7 @@ public class RecepcjonistkaWizytaView extends Application {
         surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
             patientsToShow.clear();
             patientsToShow.addAll(patients.keySet().stream().filter(s1 -> {
-                if (s1.contains(" " + surnameTextField.getCharacters())) {
+                if (s1.toLowerCase().contains(" " + String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
                     return true;
                 }
                 return false;

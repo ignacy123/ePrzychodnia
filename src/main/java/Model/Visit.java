@@ -24,8 +24,7 @@ public class Visit {
     Timestamp zwolnienieStart;
     Timestamp zwolnienieEnd;
     boolean hasRecepta;
-    List<Integer> medicineId;
-    List<String> instructions;
+    List<Medicine> medicines;
 
     public Integer getId() {
         return id;
@@ -164,13 +163,12 @@ public class Visit {
         this.hasRecepta = hasRecepta;
     }
 
-
-    public void setMedicineId(ArrayList<Integer> medicineId) {
-        this.medicineId = medicineId;
+    public List<Medicine> getMedicines() {
+        return medicines;
     }
 
-    public void setInstructions(ArrayList<String> instructions) {
-        this.instructions = instructions;
+    public void setMedicines(List<Medicine> medicines) {
+        this.medicines = medicines;
     }
 
     public List<String> getDiseases() {
@@ -178,21 +176,6 @@ public class Visit {
     }
 
 
-    public List<Integer> getMedicineId() {
-        return medicineId;
-    }
-
-    public void setMedicineId(List<Integer> medicineId) {
-        this.medicineId = medicineId;
-    }
-
-    public List<String> getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(List<String> instructions) {
-        this.instructions = instructions;
-    }
 
     @Override
     public String toString() {

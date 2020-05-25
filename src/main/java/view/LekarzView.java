@@ -2,6 +2,7 @@ package view;
 
 import Model.Person;
 import Model.Visit;
+import converters.OfficeConverter;
 import converters.VisitConverter;
 import db.DatabaseService;
 import javafx.application.Application;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Callback;
@@ -36,6 +38,16 @@ public class LekarzView extends Application {
     private TextField surnameTextField;
     @FXML
     private Button logOutButton;
+    @FXML
+    private Text surnameText;
+    @FXML
+    private Text nameText;
+    @FXML
+    private Text dateText;
+    @FXML
+    private Text officeText;
+    @FXML
+    private Button nextVisitEditButton;
 
     Integer id;
     String name;
@@ -59,14 +71,29 @@ public class LekarzView extends Application {
         fillPatients(patients.keySet());
         patientsListView.setItems(patientsToShow);
         datePicker.setValue(LocalDate.now());
+        datePicker.getEditor().setDisable(true);
         futureVisits.setItems(FXCollections.observableArrayList(db.getFutureVisits(id)).sorted((visit, t1) -> {
             if (t1.getStart().getTime() < visit.getStart().getTime()) {
                 return 1;
             }
             return 0;
         }));
+        Visit nextVisit = db.getNextVisit(id);
+        surnameText.setText(nextVisit.getPatient().getLastName());
+        nameText.setText(nextVisit.getPatient().getName());
+        dateText.setText(String.valueOf(nextVisit.getStart()));
+        officeText.setText(new OfficeConverter().toString(nextVisit.getOffice()));
         logOutButton.setOnAction(actionEvent -> {
             Application view = new MainViewController();
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        nextVisitEditButton.setOnAction(actionEvent -> {
+            System.out.println("I want to edit!");
+            Application view = new VisitEditView(id, name, db, nextVisit);
             try {
                 view.start(mainStage);
             } catch (Exception e) {
@@ -120,7 +147,7 @@ public class LekarzView extends Application {
         surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
             patientsToShow.clear();
             patientsToShow.addAll(patients.keySet().stream().filter(s1 -> {
-                if (s1.contains(" " + surnameTextField.getCharacters())) {
+                if (s1.toLowerCase().contains(" " + String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
                     return true;
                 }
                 return false;
@@ -134,7 +161,7 @@ public class LekarzView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            if(futureVisits.getSelectionModel().getSelectedItems().size()==0){
+            if (futureVisits.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             currentVisit = (Visit) futureVisits.getSelectionModel().getSelectedItems().get(0);
@@ -151,7 +178,7 @@ public class LekarzView extends Application {
                 }
             });
             Optional<Boolean> result = d.showAndWait();
-            if(result.isPresent()){
+            if (result.isPresent()) {
                 System.out.println("I want to edit!");
                 Application view = new VisitEditView(id, name, db, currentVisit);
                 try {
@@ -159,7 +186,7 @@ public class LekarzView extends Application {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 System.out.println("I don't want to edit!");
             }
         });

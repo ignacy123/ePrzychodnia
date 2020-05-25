@@ -22,9 +22,13 @@ public interface DatabaseService {
     List<Office> getAvailableOfficesAtTime(LocalDateTime freeFrom, LocalDateTime freeTo);
     List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo);
     Map<String, String> getAllDiseases();
+    Visit getNextVisit(Integer doctorId);
     Disease getDisease(String code);
     Specialization getSpecialization(Integer specializationId);
+    Medicine getMedicine(Integer medicineId);
     Office getOffice(Integer officeId);
     void updateVisit(Visit visit);
     void newVisit(Visit visit);
+    Map<String, Integer> getAllMedicines();
+
 }
