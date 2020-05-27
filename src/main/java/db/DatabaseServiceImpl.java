@@ -620,4 +620,53 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         return toRet;
     }
+
+    @Override
+    public List<Worker> getAllWorkers() {
+        List<Worker> toRet = new ArrayList<>();
+        String sql = "SELECT * FROM pracownicy_info";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Worker worker = new Worker();
+                worker.setId(resultSet.getInt(1));
+                worker.setName(resultSet.getString(2));
+                worker.setLastName(resultSet.getString(3));
+                worker.setPesel(resultSet.getString(4));
+                worker.setDateOfBirth(resultSet.getDate(5));
+                worker.setPhoneNumber(resultSet.getString(6));
+                worker.setEmail(resultSet.getString(7));
+                String role = resultSet.getString(8);
+                switch (role){
+                    case "LEKARZ":
+                        worker.setRole(Roles.LEKARZ);
+                        break;
+                    case "PIELEGNIARKA_ARZ":
+                        worker.setRole(Roles.PIELEGNIARKA_ARZ);
+                        break;
+                    case "ADMINISTRACJA":
+                        worker.setRole(Roles.ADMINISTRACJA);
+                        break;
+                    case "RECEPCJONISTKA_TA":
+                        worker.setRole(Roles.RECEPCJONISTKA_TA);
+                        break;
+                    case "LABORANT_KA":
+                        worker.setRole(Roles.LABORANT_KA);
+                        break;
+                    case "DYREKCJA":
+                        worker.setRole(Roles.DYREKCJA);
+                        break;
+                    default:
+                        worker.setRole(Roles.OBSŁUGA_TECHNICZNA);
+                }
+                worker.setHiredFrom(resultSet.getDate(9));
+                toRet.add(worker);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+
+    }
 }

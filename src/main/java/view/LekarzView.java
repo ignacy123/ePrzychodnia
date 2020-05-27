@@ -128,7 +128,6 @@ public class LekarzView extends Application {
             TextFieldListCell<Visit> cell = new TextFieldListCell<>();
             cell.setConverter(new VisitConverter());
             return cell;
-
         });
         futureVisits.setCellFactory(listView -> {
             TextFieldListCell<Visit> cell = new TextFieldListCell<>();

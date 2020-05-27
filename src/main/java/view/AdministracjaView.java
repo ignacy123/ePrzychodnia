@@ -1,5 +1,6 @@
 package view;
 
+import db.DatabaseService;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,14 +15,20 @@ public class AdministracjaView extends Application {
     private Label nameLabel;
     @FXML
     private Button logOutButton;
+    @FXML
+    private Button infoButton;
+    @FXML
+    private Button hireButton;
 
     Integer id;
     String name;
     Stage mainStage;
+    DatabaseService db;
 
-    AdministracjaView(int id, String name) {
+    AdministracjaView(int id, String name, DatabaseService db) {
         this.id = id;
         this.name = name;
+        this.db = db;
     }
 
     @FXML
@@ -34,6 +41,17 @@ public class AdministracjaView extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+        infoButton.setOnAction(actionEvent -> {
+            Application view = new AdministracjaInfoView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        hireButton.setOnAction(actionEvent -> {
+            //TODO
         });
     }
 

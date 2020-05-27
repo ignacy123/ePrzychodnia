@@ -30,5 +30,6 @@ public interface DatabaseService {
     void updateVisit(Visit visit);
     void newVisit(Visit visit);
     Map<String, Integer> getAllMedicines();
+    List<Worker> getAllWorkers();
 
 }
