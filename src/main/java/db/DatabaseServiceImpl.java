@@ -133,8 +133,20 @@ public class DatabaseServiceImpl implements DatabaseService {
                     visit.setDiseases(diseasesCode);
                 }
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
-                visit.setSpecializationId(resultSet.getInt(12));
-                visit.setSkierowanieNote(resultSet.getString(13));
+                array = resultSet.getArray(12);
+                Array array2 = resultSet.getArray(13);
+                if(array!=null){
+                    List<Referral> list = new ArrayList<>();
+                    List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
+                    List<String> desc = Arrays.asList((String[]) array2.getArray());
+                    for(int i = 0; i<ids.size(); i++){
+                        Referral ref = new Referral();
+                        ref.setSpecialization(getSpecialization(ids.get(i)));
+                        ref.setNote(desc.get(i));
+                        list.add(ref);
+                    }
+                    visit.setReferrals(list);
+                }
                 visit.setHasZwolnienie(resultSet.getBoolean(14));
                 visit.setZwolnienieStart(resultSet.getTimestamp(15));
                 visit.setZwolnienieEnd(resultSet.getTimestamp(16));
@@ -191,8 +203,21 @@ public class DatabaseServiceImpl implements DatabaseService {
                     visit.setDiseases(diseasesCode);
                 }
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
-                visit.setSpecializationId(resultSet.getInt(12));
-                visit.setSkierowanieNote(resultSet.getString(13));
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                array = resultSet.getArray(12);
+                Array array2 = resultSet.getArray(13);
+                if(array!=null){
+                    List<Referral> list = new ArrayList<>();
+                    List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
+                    List<String> desc = Arrays.asList((String[]) array2.getArray());
+                    for(int i = 0; i<ids.size(); i++){
+                        Referral ref = new Referral();
+                        ref.setSpecialization(getSpecialization(ids.get(i)));
+                        ref.setNote(desc.get(i));
+                        list.add(ref);
+                    }
+                    visit.setReferrals(list);
+                }
                 visit.setHasZwolnienie(resultSet.getBoolean(14));
                 visit.setZwolnienieStart(resultSet.getTimestamp(15));
                 visit.setZwolnienieEnd(resultSet.getTimestamp(16));
@@ -388,8 +413,21 @@ public class DatabaseServiceImpl implements DatabaseService {
                     visit.setDiseases(diseasesCode);
                 }
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
-                visit.setSpecializationId(resultSet.getInt(12));
-                visit.setSkierowanieNote(resultSet.getString(13));
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                array = resultSet.getArray(12);
+                Array array2 = resultSet.getArray(13);
+                if(array!=null){
+                    List<Referral> list = new ArrayList<>();
+                    List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
+                    List<String> desc = Arrays.asList((String[]) array2.getArray());
+                    for(int i = 0; i<ids.size(); i++){
+                        Referral ref = new Referral();
+                        ref.setSpecialization(getSpecialization(ids.get(i)));
+                        ref.setNote(desc.get(i));
+                        list.add(ref);
+                    }
+                    visit.setReferrals(list);
+                }
                 visit.setHasZwolnienie(resultSet.getBoolean(14));
                 visit.setZwolnienieStart(resultSet.getTimestamp(15));
                 visit.setZwolnienieEnd(resultSet.getTimestamp(16));
@@ -492,9 +530,11 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void updateVisit(Visit visit) {
         //SELECT insert_wizyta(1, true, 'test', array['A00', 'A01', 'A02'], true, 1, 'gupi jest', true, CURRENT_DATE, '2020-05-20', true, array[1, 2, 3], array['ulotka', 'ulotka', 'ulotka']);
-        String choroby = "null";
+        String choroby = "array[]::character(5)[]";
         String lekiId = "null";
         String instructions = "null";
+        String specId = "null";
+        String desc = "null";
         if(visit.getDiseases()!=null && visit.getDiseases().size()!=0){
             choroby = "array[";
             for(String s: visit.getDiseases()){
@@ -519,8 +559,20 @@ public class DatabaseServiceImpl implements DatabaseService {
             instructions = instructions.substring(0, instructions.length()-2);
             instructions += "]";
         }
-        if(visit.getSkierowanieNote()==null){
-            visit.setSkierowanieNote("");
+        if(visit.hasSkierowanie() && visit.getReferrals().size()>0){
+            specId = "array[";
+            desc = "array[";
+            for(Referral ref: visit.getReferrals()){
+                specId += ref.getSpecialization().getId()+", ";
+                if(ref.getNote()==null){
+                    ref.setNote("");
+                }
+                desc += "'"+ref.getNote()+"'"+", ";
+            }
+            specId = specId.substring(0, specId.length()-2);
+            desc = desc.substring(0, desc.length()-2);
+            specId += "]";
+            desc += "]";
         }
         if(visit.getZwolnienieStart()==null){
             visit.setZwolnienieStart(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
@@ -531,7 +583,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         if(visit.getNote()==null){
             visit.setNote("");
         }
-        String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+visit.getSpecializationId()+", '"+visit.getSkierowanieNote()+"', "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
+        String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+specId+", "+desc+", "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
         System.out.println(sql);
         try {
             statement = c.createStatement();

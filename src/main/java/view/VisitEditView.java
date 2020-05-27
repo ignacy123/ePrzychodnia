@@ -1,11 +1,9 @@
 package view;
 
-import Model.Disease;
-import Model.Medicine;
-import Model.Specialization;
-import Model.Visit;
+import Model.*;
 import converters.DiseaseConverter;
 import converters.MedicineConverter;
+import converters.ReferralConverter;
 import db.DatabaseService;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -52,19 +50,21 @@ public class VisitEditView extends Application implements Initializable {
     @FXML
     private ListView diseaseListView;
     @FXML
-    private Label zwolnienieLabel;
+    private Label zwolnienieFromLabel;
+    @FXML
+    private Label zwolnienieToLabel;
     @FXML
     private CheckBox zwolnienieCheckBox;
     @FXML
-    private DatePicker zwolnienieDatePicker;
+    private DatePicker zwolnienieToDatePicker;
+    @FXML
+    private DatePicker zwolnienieFromDatePicker;
     @FXML
     private CheckBox skierowanieCheckBox;
     @FXML
     private ListView skierowanieListView;
     @FXML
-    private Label skierowanieLabel;
-    @FXML
-    private Text skierowanieText;
+    private ListView selectedSkierowanie;
     @FXML
     private Text typWizytyText;
     @FXML
@@ -79,15 +79,16 @@ public class VisitEditView extends Application implements Initializable {
     Stage mainStage;
     DatabaseService db;
     Visit visit;
+    LocalDate zwolnienieFromDate = null;
+    LocalDate zwolnienieToDate = null;
     Map<String, String> diseases;
     Map<String, Integer> medicines;
     boolean hasZwolnienie = false;
     boolean hasSkierowanie = false;
     boolean hasRecepta = false;
     ObservableList<Disease> selectedDiseases = FXCollections.observableArrayList();
-    LocalDate zwolnienieDate = null;
-    Specialization currentSpecialization = null;
     ObservableList<Medicine> selectedMedicines = FXCollections.observableArrayList();
+    ObservableList<Referral> selectedReferrals = FXCollections.observableArrayList();
 
     VisitEditView(int doctorId, String name, DatabaseService db, Visit visit) {
         this.doctorId = doctorId;
@@ -111,38 +112,48 @@ public class VisitEditView extends Application implements Initializable {
         hasSkierowanie = visit.hasSkierowanie();
         hasZwolnienie = visit.hasZwolnienie();
         hasRecepta = visit.hasRecepta();
-        zwolnienieLabel.setVisible(hasZwolnienie);
-        zwolnienieDatePicker.setVisible(hasZwolnienie);
-        zwolnienieDatePicker.getEditor().setDisable(true);
-        skierowanieLabel.setVisible(hasSkierowanie);
-        skierowanieText.setVisible(hasSkierowanie);
+        zwolnienieToLabel.setVisible(hasZwolnienie);
+        zwolnienieFromLabel.setVisible(hasZwolnienie);
+        zwolnienieToDatePicker.setVisible(hasZwolnienie);
+        zwolnienieToDatePicker.getEditor().setDisable(true);
+        zwolnienieFromDatePicker.setVisible(hasZwolnienie);
+        zwolnienieFromDatePicker.getEditor().setDisable(true);
         skierowanieListView.setVisible(hasSkierowanie);
+        selectedSkierowanie.setVisible(hasSkierowanie);
         medicineListView.setVisible(hasRecepta);
         medicineTextField.setVisible(hasRecepta);
         notatkaTextArea.setText(visit.getNote());
         if (hasSkierowanie) {
-            currentSpecialization = db.getSpecialization(visit.getSpecializationId());
-            skierowanieText.setText(currentSpecialization.getPrettyName());
+            selectedReferrals.addAll(visit.getReferrals());
         }
-        if (visit.hasZwolnienie()) {
-            zwolnienieDatePicker.setValue(visit.getZwolnienieEnd().toLocalDateTime().toLocalDate());
+        if (hasZwolnienie) {
+            zwolnienieFromDatePicker.setValue(visit.getZwolnienieStart().toLocalDateTime().toLocalDate());
+            zwolnienieToDatePicker.setValue(visit.getZwolnienieEnd().toLocalDateTime().toLocalDate());
         } else {
-            zwolnienieDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
+            zwolnienieFromDatePicker.setValue(LocalDate.now());
+            zwolnienieToDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
         }
-        if(visit.hasRecepta()){
+        if(hasRecepta){
             selectedMedicines.addAll(visit.getMedicines());
+        }
+        if(hasSkierowanie){
+            selectedReferrals.addAll(visit.getReferrals());
         }
         zwolnienieCheckBox.setSelected(hasZwolnienie);
         skierowanieCheckBox.setSelected(hasSkierowanie);
         receptaCheckBox.setSelected(hasRecepta);
         zwolnienieCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
-                zwolnienieDatePicker.setVisible(true);
-                zwolnienieLabel.setVisible(true);
+                zwolnienieToDatePicker.setVisible(true);
+                zwolnienieFromDatePicker.setVisible(true);
+                zwolnienieToLabel.setVisible(true);
+                zwolnienieFromLabel.setVisible(true);
                 hasZwolnienie = true;
             } else {
-                zwolnienieDatePicker.setVisible(false);
-                zwolnienieLabel.setVisible(false);
+                zwolnienieToDatePicker.setVisible(false);
+                zwolnienieFromDatePicker.setVisible(false);
+                zwolnienieToLabel.setVisible(false);
+                zwolnienieFromLabel.setVisible(false);
                 hasZwolnienie = false;
             }
         });
@@ -151,19 +162,48 @@ public class VisitEditView extends Application implements Initializable {
             if (skierowanieListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
-            currentSpecialization = (Specialization) skierowanieListView.getSelectionModel().getSelectedItems().get(0);
-            skierowanieText.setText(String.valueOf(currentSpecialization));
+            Referral referral = new Referral();
+            referral.setSpecialization((Specialization) skierowanieListView.getSelectionModel().getSelectedItems().get(0));
+            TextInputDialog td = new TextInputDialog();
+            td.getEditor().setText("visitEditView.java linia koło 150");
+            Optional<String> s = td.showAndWait();
+            if(s.isPresent()){
+                System.out.println(s);
+                referral.setNote(s.get());
+            }else{
+                System.out.println(":<");
+                return;
+            }
+            selectedReferrals.add(referral);
+        });
+        selectedSkierowanie.setItems(selectedReferrals);
+        selectedSkierowanie.setCellFactory(listView -> {
+            TextFieldListCell<Referral> cell = new TextFieldListCell<>();
+            cell.setConverter(new ReferralConverter());
+            return cell;
+        });
+        selectedSkierowanie.setOnMouseClicked(mouseEvent -> {
+            if (!mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                return;
+            }
+
+            if (mouseEvent.getClickCount() != 2) {
+                return;
+            }
+            if(selectedSkierowanie.getSelectionModel().getSelectedItems().size()==0){
+                return;
+            }
+            Referral ref = (Referral) selectedSkierowanie.getSelectionModel().getSelectedItems().get(0);
+            selectedReferrals.remove(ref);
         });
         skierowanieCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
                 skierowanieListView.setVisible(true);
-                skierowanieText.setVisible(true);
-                skierowanieLabel.setVisible(true);
+                selectedSkierowanie.setVisible(true);
                 hasSkierowanie = true;
             } else {
                 skierowanieListView.setVisible(false);
-                skierowanieText.setVisible(false);
-                skierowanieLabel.setVisible(false);
+                selectedSkierowanie.setVisible(false);
                 hasSkierowanie = false;
             }
         });
@@ -239,7 +279,6 @@ public class VisitEditView extends Application implements Initializable {
             selectedMedicines.remove(toDel);
         });
         medicineTextField.setOnKeyPressed(keyEvent -> {
-
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 Medicine med = new Medicine();
                 String name = String.valueOf(medicineTextField.getCharacters());
@@ -281,7 +320,7 @@ public class VisitEditView extends Application implements Initializable {
         });
         mainStage = stage;
         saveAndExitButton.setOnAction(actionEvent -> {
-            if (hasSkierowanie && currentSpecialization == null) {
+            if (hasSkierowanie && selectedReferrals.size()==0) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -291,7 +330,8 @@ public class VisitEditView extends Application implements Initializable {
                 return;
             }
             visit.setNote(notatkaTextArea.getText());
-            zwolnienieDate = zwolnienieDatePicker.getValue();
+            zwolnienieFromDate = zwolnienieFromDatePicker.getValue();
+            zwolnienieToDate = zwolnienieToDatePicker.getValue();
             System.out.println("Here the data will be saved to db.");
             System.out.println("Odbyła się: " + visit.hasTakenPlace());
             System.out.println("Notatka: " + visit.getNote());
@@ -304,16 +344,34 @@ public class VisitEditView extends Application implements Initializable {
             visit.setDiseases(diseases);
             visit.setHasZwolnienie(hasZwolnienie);
             if (hasZwolnienie) {
-                System.out.println("Do: " + zwolnienieDate);
-                visit.setZwolnienieStart(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
-                visit.setZwolnienieEnd(Timestamp.valueOf(zwolnienieDate.atStartOfDay()));
+                System.out.println("Od: " + zwolnienieFromDate);
+                System.out.println("Do: " + zwolnienieToDate);
+                if(zwolnienieFromDate.isAfter(zwolnienieToDate)){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("zabawne (zwolnienie)");
+                    d.show();
+                    return;
+                }
+                visit.setZwolnienieStart(Timestamp.valueOf(zwolnienieFromDate.atStartOfDay()));
+                visit.setZwolnienieEnd(Timestamp.valueOf(zwolnienieToDate.atStartOfDay()));
             }
             System.out.println("Skierowanie: " + hasSkierowanie);
             visit.setHasSkierowanie(hasSkierowanie);
             if (hasSkierowanie) {
-                visit.setSpecializationId(currentSpecialization.getId());
-                visit.setSkierowanieNote("TODO");
-                System.out.println("Do: " + currentSpecialization);
+                visit.setReferrals(selectedReferrals);
+                System.out.println("Do: " + selectedReferrals);
+            }
+            if(hasSkierowanie && !visit.isTakenPlace()){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("wybierz leki");
+                d.show();
+                return;
             }
             visit.setHasRecepta(hasRecepta);
             if(hasRecepta && selectedMedicines.size()==0){

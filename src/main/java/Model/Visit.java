@@ -18,13 +18,20 @@ public class Visit {
     String note;
     List<String> diseases;
     boolean hasSkierowanie;
-    Integer specializationId;
-    String skierowanieNote;
     boolean hasZwolnienie;
     Timestamp zwolnienieStart;
     Timestamp zwolnienieEnd;
     boolean hasRecepta;
     List<Medicine> medicines;
+    List<Referral> referrals;
+
+    public List<Referral> getReferrals() {
+        return referrals;
+    }
+
+    public void setReferrals(List<Referral> referrals) {
+        this.referrals = referrals;
+    }
 
     public Integer getId() {
         return id;
@@ -115,21 +122,6 @@ public class Visit {
         this.hasSkierowanie = hasSkierowanie;
     }
 
-    public Integer getSpecializationId() {
-        return specializationId;
-    }
-
-    public void setSpecializationId(Integer specializationId) {
-        this.specializationId = specializationId;
-    }
-
-    public String getSkierowanieNote() {
-        return skierowanieNote;
-    }
-
-    public void setSkierowanieNote(String skierowanieNote) {
-        this.skierowanieNote = skierowanieNote;
-    }
 
     public boolean hasZwolnienie() {
         return hasZwolnienie;
