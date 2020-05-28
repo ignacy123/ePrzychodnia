@@ -270,6 +270,22 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public List<Specialization> getDoctorsSpecialization(Integer doctorId) {
+        List<Specialization> toRet = new ArrayList<>();
+        String sql = "SELECT * FROM lekarze_specjalizacje WHERE id_lekarza="+doctorId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet.add(getSpecialization(resultSet.getInt(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
     public List<Person> getAvailableSpecialistsAtTime(int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo) {
         List<Person> toRet = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -606,9 +622,37 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public void addSpecialization(Integer doctorId, Integer specializationId) {
+        String sql = "INSERT INTO lekarze_specjalizacje VALUES ("+doctorId+", "+specializationId+")";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public Map<String, Integer> getAllMedicines() {
         Map<String, Integer> toRet = new HashMap<>();
         String sql = "SELECT * FROM produkty;";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet.put(resultSet.getString(2), resultSet.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public Map<String, Integer> getAllSpecializations() {
+        Map<String, Integer> toRet = new HashMap<>();
+        String sql = "SELECT * FROM specjalizacje;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -661,6 +705,8 @@ public class DatabaseServiceImpl implements DatabaseService {
                         worker.setRole(Roles.OBSŁUGA_TECHNICZNA);
                 }
                 worker.setHiredFrom(resultSet.getDate(9));
+                //worker.setActive(resultSet.getBoolean(10));
+                worker.setActive(true);
                 toRet.add(worker);
             }
         } catch (SQLException e) {
@@ -668,5 +714,65 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         return toRet;
 
+    }
+
+    @Override
+    public Integer getTotalVisitCount(Integer doctorId) {
+        Integer toRet = null;
+        String sql = "SELECT COUNT(id_wizyty) FROm wizyty WHERE lekarz="+doctorId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public Integer getTotalExertionCount(Integer workerId) {
+        Integer toRet = null;
+        String sql = "SELECT count(id_zabiegu) FROM zabiegi_pielegniarskie WHERE pielegniarka_arz="+workerId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public Integer getTotalPrescriptionCount(Integer doctorId) {
+        Integer toRet = null;
+        String sql = "SELECT count(id_recepty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE lekarz="+doctorId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public void fireWorker(Integer workerId) {
+        String sql = "UPDATE pracownicy SET status_zatrudnienia=false WHERE id_pracownika="+workerId;
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

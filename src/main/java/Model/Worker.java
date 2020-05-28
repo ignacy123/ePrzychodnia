@@ -3,10 +3,12 @@ package Model;
 import enums.Roles;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Worker extends Person{
     Roles role;
     Date hiredFrom;
+    boolean active;
 
     public Roles getRole() {
         return role;
@@ -22,5 +24,13 @@ public class Worker extends Person{
 
     public void setHiredFrom(Date hiredFrom) {
         this.hiredFrom = hiredFrom;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -19,6 +19,8 @@ public class AdministracjaView extends Application {
     private Button infoButton;
     @FXML
     private Button hireButton;
+    @FXML
+    private Button statsButton;
 
     Integer id;
     String name;
@@ -44,6 +46,14 @@ public class AdministracjaView extends Application {
         });
         infoButton.setOnAction(actionEvent -> {
             Application view = new AdministracjaInfoView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        statsButton.setOnAction(actionEvent -> {
+            Application view = new AdministracjaStatsView(id, name, db);
             try {
                 view.start(mainStage);
             } catch (Exception e) {

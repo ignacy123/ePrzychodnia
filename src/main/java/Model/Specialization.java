@@ -1,14 +1,16 @@
 package Model;
 
+import java.util.Objects;
+
 public class Specialization {
-    int id;
+    Integer id;
     String prettyName;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -23,5 +25,19 @@ public class Specialization {
     @Override
     public String toString() {
         return prettyName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Specialization that = (Specialization) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(prettyName, that.prettyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, prettyName);
     }
 }
