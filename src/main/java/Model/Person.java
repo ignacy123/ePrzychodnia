@@ -10,6 +10,7 @@ public class Person {
     private String phoneNumber;
     private String email;
     private Integer id;
+    private Integer visitCount;
 
     public String getName() {
         return name;
@@ -57,6 +58,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(Integer visitCount) {
+        this.visitCount = visitCount;
     }
 
     public Integer getId() {

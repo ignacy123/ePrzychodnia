@@ -35,6 +35,10 @@ public interface DatabaseService {
 
     List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo);
 
+    List<Person> getDoctorsVisitCount(LocalDate date1, LocalDate date2);
+
+    List<Person> getNursesVisitCount(LocalDate date1, LocalDate date2);
+
     Map<String, String> getAllDiseases();
 
     Visit getNextVisit(Integer doctorId);
@@ -64,6 +68,22 @@ public interface DatabaseService {
     Integer getTotalExertionCount(Integer workerId);
 
     Integer getTotalPrescriptionCount(Integer doctorId);
+
+    Integer getVisitCount(LocalDate date1, LocalDate date2);
+
+    Integer getExertionCount(LocalDate date1, LocalDate date2);
+
+    Integer getPrescriptionCount(LocalDate date1, LocalDate date2);
+
+    Integer getZwolnienieCount(LocalDate date1, LocalDate date2);
+
+    Integer getSkierowanieCount(LocalDate date1, LocalDate date2);
+
+    Integer getLongestZwolnienie(LocalDate date1, LocalDate date2);
+
+    Office getMostUsedOffice(LocalDate date1, LocalDate date2);
+
+    Medicine getMostCommonMedicine(LocalDate date1, LocalDate date2);
 
     void fireWorker(Integer workerId);
 }
