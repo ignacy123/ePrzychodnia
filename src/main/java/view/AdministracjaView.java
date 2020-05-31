@@ -24,6 +24,8 @@ public class AdministracjaView extends Application {
     private Button hireButton;
     @FXML
     private Button statsButton;
+    @FXML
+    private Button medicineButton;
 
     Integer id;
     String name;
@@ -63,6 +65,14 @@ public class AdministracjaView extends Application {
                 e.printStackTrace();
             }
         });
+        medicineButton.setOnAction(actionEvent -> {
+            Application view = new AdministracjaMedicineView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         hireButton.setOnAction(actionEvent -> {
             TextInputDialog td = new TextInputDialog();
             td.getEditor().setText("Podaj PESEL");
@@ -70,7 +80,7 @@ public class AdministracjaView extends Application {
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
                 System.out.println(s.get());
-                if(!isCorrectPESEL(s.get())){
+                if (!isCorrectPESEL(s.get())) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -126,22 +136,22 @@ public class AdministracjaView extends Application {
     }
 
 
-    boolean isCorrectPESEL(String pesel){
-        if(pesel.length()!=11){
+    boolean isCorrectPESEL(String pesel) {
+        if (pesel.length() != 11) {
             return false;
         }
         int[] digits = new int[11];
-        for(int i=0;i<11;i++){
-            if(!Character.isDigit(pesel.charAt(i))){
+        for (int i = 0; i < 11; i++) {
+            if (!Character.isDigit(pesel.charAt(i))) {
                 System.out.println(pesel.charAt(i));
                 return false;
             }
             digits[i] = Integer.parseInt(pesel.substring(i, i + 1));
         }
-        int[] weights = {1,3,7,9,1,3,7,9,1,3};
+        int[] weights = {1, 3, 7, 9, 1, 3, 7, 9, 1, 3};
         int check = 0;
-        for(int i=0;i<10;i++){
-            check += weights[i]*digits[i];
+        for (int i = 0; i < 10; i++) {
+            check += weights[i] * digits[i];
         }
         int lastNumber = check % 10;
         int controlNumber = 10 - lastNumber;

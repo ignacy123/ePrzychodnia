@@ -1088,4 +1088,45 @@ public class DatabaseServiceImpl implements DatabaseService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void updateMedicine(Medicine medicine) {
+        String sql = "UPDATE produkty SET nazwa='"+medicine.getName()+"' WHERE id_produktu="+medicine.getId()+"";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void newMedicine(String name) {
+        String sql = "INSERT INTO produkty (nazwa) VALUES ('"+name+"')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public boolean hasMedicine(String name) {
+        String sql = "SELECT EXISTS (SELECT * FROm produkty WHERE nazwa='"+name+"')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

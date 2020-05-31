@@ -104,4 +104,10 @@ public interface DatabaseService {
     boolean isInDb(String pesel);
 
     void addRole(Integer id, Roles role);
+
+    void updateMedicine(Medicine medicine);
+
+    void newMedicine(String name);
+
+    boolean hasMedicine(String name);
 }
