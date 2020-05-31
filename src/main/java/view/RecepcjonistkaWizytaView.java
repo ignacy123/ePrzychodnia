@@ -64,6 +64,8 @@ public class RecepcjonistkaWizytaView extends Application {
     @FXML
     private Button setVisitButton;
     @FXML
+    private Button cancelButton;
+    @FXML
     private Text officeText;
     Specialization currentSpecialization = null;
 
@@ -223,7 +225,7 @@ public class RecepcjonistkaWizytaView extends Application {
                     d.show();
                     return;
                 }
-                if (currentDoctor !=null) {
+                if (currentDoctor != null) {
                     officeListView.setItems(FXCollections.observableArrayList(db.getAvailableOfficesAtTimeSortedByDoctor(currentDoctor.getId(), date1, date2)));
                 } else {
                     officeListView.setItems(FXCollections.observableArrayList(db.getAvailableOfficesAtTime(date1, date2)));
@@ -234,7 +236,7 @@ public class RecepcjonistkaWizytaView extends Application {
 
         });
         setVisitButton.setOnAction(actionEvent -> {
-            if(currentPatient==null){
+            if (currentPatient == null) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
@@ -242,7 +244,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
-            if(currentDoctor == null){
+            if (currentDoctor == null) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
@@ -250,7 +252,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
-            if(currentOffice == null){
+            if (currentOffice == null) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
@@ -259,7 +261,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 return;
             }
             System.out.println("Pacjent: " + new PersonConverter().toString(currentPatient) + " specjalizacja: " + currentSpecialization.getPrettyName() + " lekarz: "
-                    + new PersonConverter().toString(currentDoctor) + " od: " + date1 + " do: " + date2+ " gabinet: "+new OfficeConverter().toString(currentOffice));
+                    + new PersonConverter().toString(currentDoctor) + " od: " + date1 + " do: " + date2 + " gabinet: " + new OfficeConverter().toString(currentOffice));
             System.out.println("Here will be performed visit checks, and then the visit will be inserted into db.");
             Visit visit = new Visit();
             visit.setPatient(currentPatient);
@@ -269,6 +271,14 @@ public class RecepcjonistkaWizytaView extends Application {
             visit.setStart(Timestamp.valueOf(date1));
             visit.setEnd(Timestamp.valueOf(date2));
             db.newVisit(visit);
+            Application view = new RecepcjonistkaView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        cancelButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaView(id, name, db);
             try {
                 view.start(mainStage);

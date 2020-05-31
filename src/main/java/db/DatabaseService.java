@@ -55,6 +55,8 @@ public interface DatabaseService {
 
     void updateVisit(Visit visit);
 
+    void updatePerson(Person person);
+
     void newVisit(Visit visit);
 
     Integer addPerson(Person person);

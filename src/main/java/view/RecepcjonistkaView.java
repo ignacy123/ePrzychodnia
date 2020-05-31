@@ -1,30 +1,17 @@
 package view;
 
-import Model.Person;
-import Model.Specialization;
-import converters.PersonConverter;
-import converters.SpecializationConverter;
 import db.DatabaseService;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 public class RecepcjonistkaView extends Application {
     @FXML
@@ -33,6 +20,10 @@ public class RecepcjonistkaView extends Application {
     private Button newVisitButton;
     @FXML
     private Button logOutButton;
+    @FXML
+    private Button addPatientButton;
+    @FXML
+    private Button editButton;
 
     Integer id;
     String name;
@@ -71,9 +62,46 @@ public class RecepcjonistkaView extends Application {
         newVisitButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaWizytaView(id, name, db);
             try {
-                view.start(stage);
+                view.start(mainStage);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+
+        addPatientButton.setOnAction(actionEvent -> {
+            Application view = new RecepcjonistkaAddView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        editButton.setOnAction(actionEvent -> {
+            TextInputDialog td = new TextInputDialog();
+            td.getEditor().setText("Podaj PESEL");
+            td.setResizable(true);
+            Optional<String> s = td.showAndWait();
+            if (s.isPresent()) {
+                if(db.isInDb(s.get())){
+                    Application view = new RecepcjonistkaEditView(id, name, db, s.get());
+                    try {
+                        view.start(mainStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("nie ma takiego gościa");
+                    d.show();
+                    return;
+                }
+            }else{
+                System.out.println(":<");
             }
         });
     }

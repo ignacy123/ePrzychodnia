@@ -681,6 +681,18 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public void updatePerson(Person person) {
+        String sql = "UPDATE dane_osob SET imie = '"+person.getName()+"', nazwisko = '"+person.getLastName()+"', data_urodzenia = '"+person.getDateOfBirth()+"', email = '"+person.getEmail()+"', telefon = '"+person.getPhoneNumber()+"' WHERE id="+person.getId()+"";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void newVisit(Visit visit) {
         String sql = "SELECT new_wizyta(" + visit.getPatient().getId() + ", " + visit.getDoctor().getId() + ", '" + visit.getStart() + "', '" + visit.getEnd() + "', " + visit.getOffice().getId() + ", " + visit.getSpecialization().getId() + ");";
         System.out.println(sql);
@@ -694,7 +706,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Integer addPerson(Person person) {
-        String sql = "SELECT add('"+person.getName()+"', '"+person.getLastName()+"', '"+person.getPesel()+"', '"+person.getDateOfBirth()+"', '"+person.getPhoneNumber()+"', '"+person.getEmail()+"')";
+        String sql = "SELECT add('" + person.getName() + "', '" + person.getLastName() + "', '" + person.getPesel() + "', '" + person.getDateOfBirth() + "', '" + person.getPhoneNumber() + "', '" + person.getEmail() + "')";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1067,7 +1079,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void addRole(Integer id, Roles role) {
-        String sql = "INSERT INTO pracownicy (id_pracownika, etat, status_zatrudnienia) VALUES ("+id+", '"+role+"', true);\n";
+        String sql = "INSERT INTO pracownicy (id_pracownika, etat, status_zatrudnienia) VALUES (" + id + ", '" + role + "', true);\n";
         System.out.println(sql);
         try {
             statement = c.createStatement();
