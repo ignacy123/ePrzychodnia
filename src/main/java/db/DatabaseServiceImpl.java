@@ -109,6 +109,29 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public Person getPerson(String pesel) {
+        Person toReturn = new Person();
+        String sql = "SELECT * FROM dane_osob WHERE pesel='" + pesel + "'";
+        ;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toReturn.setId(resultSet.getInt(1));
+                toReturn.setName(resultSet.getString(2));
+                toReturn.setLastName(resultSet.getString(3));
+                toReturn.setPesel(resultSet.getString(4));
+                toReturn.setDateOfBirth(resultSet.getDate(5));
+                toReturn.setPhoneNumber(resultSet.getString(6));
+                toReturn.setEmail(resultSet.getString(7));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
     public List<Visit> getDayVisitsFromDoctor(Integer doctorId, LocalDate date) {
         List<Visit> toReturn = new ArrayList<>();
         String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' AND lekarz=" + doctorId;
@@ -128,18 +151,18 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setTakenPlace(resultSet.getBoolean(8));
                 visit.setNote(resultSet.getString(9));
                 Array array = resultSet.getArray(10);
-                if(array!=null){
+                if (array != null) {
                     List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
                     visit.setDiseases(diseasesCode);
                 }
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
                 array = resultSet.getArray(12);
                 Array array2 = resultSet.getArray(13);
-                if(array!=null){
+                if (array != null) {
                     List<Referral> list = new ArrayList<>();
                     List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
                     List<String> desc = Arrays.asList((String[]) array2.getArray());
-                    for(int i = 0; i<ids.size(); i++){
+                    for (int i = 0; i < ids.size(); i++) {
                         Referral ref = new Referral();
                         ref.setSpecialization(getSpecialization(ids.get(i)));
                         ref.setNote(desc.get(i));
@@ -155,15 +178,15 @@ public class DatabaseServiceImpl implements DatabaseService {
                 List<Integer> medicines = null;
                 List<String> instructions = null;
                 List<Medicine> med = new ArrayList<>();
-                if(array!=null){
+                if (array != null) {
                     medicines = Arrays.asList((Integer[]) array.getArray());
                 }
                 array = resultSet.getArray(19);
-                if(array!=null){
+                if (array != null) {
                     instructions = Arrays.asList((String[]) array.getArray());
                 }
-                if(medicines!=null){
-                    for(int i = 0; i<medicines.size(); i++){
+                if (medicines != null) {
+                    for (int i = 0; i < medicines.size(); i++) {
                         Medicine medicine = getMedicine(medicines.get(i));
                         medicine.setInstruction(instructions.get(i));
                         med.add(medicine);
@@ -198,7 +221,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setTakenPlace(resultSet.getBoolean(8));
                 visit.setNote(resultSet.getString(9));
                 Array array = resultSet.getArray(10);
-                if(array!=null){
+                if (array != null) {
                     List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
                     visit.setDiseases(diseasesCode);
                 }
@@ -206,11 +229,11 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
                 array = resultSet.getArray(12);
                 Array array2 = resultSet.getArray(13);
-                if(array!=null){
+                if (array != null) {
                     List<Referral> list = new ArrayList<>();
                     List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
                     List<String> desc = Arrays.asList((String[]) array2.getArray());
-                    for(int i = 0; i<ids.size(); i++){
+                    for (int i = 0; i < ids.size(); i++) {
                         Referral ref = new Referral();
                         ref.setSpecialization(getSpecialization(ids.get(i)));
                         ref.setNote(desc.get(i));
@@ -226,15 +249,15 @@ public class DatabaseServiceImpl implements DatabaseService {
                 List<Integer> medicines = null;
                 List<String> instructions = null;
                 List<Medicine> med = new ArrayList<>();
-                if(array!=null){
+                if (array != null) {
                     medicines = Arrays.asList((Integer[]) array.getArray());
                 }
                 array = resultSet.getArray(19);
-                if(array!=null){
+                if (array != null) {
                     instructions = Arrays.asList((String[]) array.getArray());
                 }
-                if(medicines!=null){
-                    for(int i = 0; i<medicines.size(); i++){
+                if (medicines != null) {
+                    for (int i = 0; i < medicines.size(); i++) {
                         Medicine medicine = getMedicine(medicines.get(i));
                         medicine.setInstruction(instructions.get(i));
                         med.add(medicine);
@@ -272,7 +295,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public List<Specialization> getDoctorsSpecialization(Integer doctorId) {
         List<Specialization> toRet = new ArrayList<>();
-        String sql = "SELECT * FROM lekarze_specjalizacje WHERE id_lekarza="+doctorId;
+        String sql = "SELECT * FROM lekarze_specjalizacje WHERE id_lekarza=" + doctorId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -292,7 +315,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
         String sql = "SELECT * FROM dane_osob WHERE id IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId + ") AND " +
-                "id NOT IN (SELECT lekarz FROM wizyty WHERE ("+from +"<= termin_wizyty AND "+to+" > termin.wizyty) OR "+from+" > termin_wizyty AND "+from+" < koniec_wizyty)" + "');";
+                "id NOT IN (SELECT lekarz FROM wizyty WHERE (" + from + "<= termin_wizyty AND " + to + " > termin.wizyty) OR " + from + " > termin_wizyty AND " + from + " < koniec_wizyty)" + "');";
         //SELECT lekarz FROM wizyty WHERE termin_wizyty>= '2020-05-25 12:30:00' AND koniec_wizyty<='2020-05-25 13:30:00'
         //(NEW.termin_wizyty <= termin_wizyty AND NEW.koniec_wizyty > termin_wizyty) OR
         //		(NEW.termin_wizyty > termin_wizyty AND NEW.termin_wizyty < koniec_wizyty)
@@ -328,7 +351,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql = "SELECT id_pracownika, COALESCE(count, 0) FROM pracownicy LEFT OUTER JOIN (SELECT lekarz, count(id_wizyty) FROM wizyty WHERE pacjent=" + patientId +
                 " AND lekarz IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId +
                 ") GROUP BY lekarz) AS s1 ON s1.lekarz = pracownicy.id_pracownika WHERE id_pracownika IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " +
-                specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE ('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty))" + " ORDER BY 2 DESC;";
+                specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE ('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty))" + " ORDER BY 2 DESC;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -349,7 +372,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
-        String sql = "SELECT * FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty));";
+        String sql = "SELECT * FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty));";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -372,8 +395,8 @@ public class DatabaseServiceImpl implements DatabaseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
-        String sql = "SELECT gabinety_typy.gabinet, COALESCE(s.count, 0), gabinety_typy.typ FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_wizyty) AS count FROM wizyty WHERE lekarz="+doctorId+" GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinety_typy.gabinet IN"+
-                "(SELECT gabinet FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('"+from +"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+from+"' < koniec_wizyty))) ORDER BY 2 DESC;";
+        String sql = "SELECT gabinety_typy.gabinet, COALESCE(s.count, 0), gabinety_typy.typ FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_wizyty) AS count FROM wizyty WHERE lekarz=" + doctorId + " GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinety_typy.gabinet IN" +
+                "(SELECT gabinet FROM gabinety_typy WHERE typ='LEKARSKI' AND gabinet NOT IN (SELECT gabinet FROM wizyty WHERE('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty))) ORDER BY 2 DESC;";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -396,7 +419,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql = "SELECT dane_osob.imie, dane_osob.nazwisko, COALESCE(s.count, 0) FROM dane_osob " +
                 "LEFT OUTER JOIN (SELECT id, COUNT(id_wizyty) FROM dane_osob LEFT OUTER JOIN wizyty ON wizyty.lekarz=dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='LEKARZ') " +
-                "AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"' AND termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
+                "AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' AND termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='LEKARZ') ORDER BY 3 DESC";
         try {
             statement = c.createStatement();
@@ -415,11 +438,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<Person> getNursesVisitCount(LocalDate date1, LocalDate date2) {List<Person> toRet = new ArrayList<>();
+    public List<Person> getNursesVisitCount(LocalDate date1, LocalDate date2) {
+        List<Person> toRet = new ArrayList<>();
         String sql = "SELECT dane_osob.imie, dane_osob.nazwisko, COALESCE(s.count, 0) FROM dane_osob " +
                 "LEFT OUTER JOIN (SELECT id, COUNT(id_zabiegu) FROM dane_osob LEFT OUTER JOIN zabiegi_pielegniarskie ON zabiegi_pielegniarskie.pielegniarka_arz=dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='PIELEGNIARKA_ARZ') " +
-                "AND termin_zabiegu<'"+Timestamp.valueOf(date2.atStartOfDay())+"' AND termin_zabiegu>'"+Timestamp.valueOf(date1.atStartOfDay())+"' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
+                "AND termin_zabiegu<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' AND termin_zabiegu>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='PIELEGNIARKA_ARZ') ORDER BY 3 DESC";
         try {
             statement = c.createStatement();
@@ -455,8 +479,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Visit getNextVisit(Integer doctorId) {
-        Visit  visit = new Visit();
-        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty > CURRENT_DATE AND lekarz="+doctorId+" ORDER BY 5 LIMIT 1;\n";
+        Visit visit = new Visit();
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty > CURRENT_DATE AND lekarz=" + doctorId + " ORDER BY 5 LIMIT 1;\n";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -471,7 +495,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setTakenPlace(resultSet.getBoolean(8));
                 visit.setNote(resultSet.getString(9));
                 Array array = resultSet.getArray(10);
-                if(array!=null){
+                if (array != null) {
                     List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
                     visit.setDiseases(diseasesCode);
                 }
@@ -479,11 +503,11 @@ public class DatabaseServiceImpl implements DatabaseService {
                 visit.setHasSkierowanie(resultSet.getBoolean(11));
                 array = resultSet.getArray(12);
                 Array array2 = resultSet.getArray(13);
-                if(array!=null){
+                if (array != null) {
                     List<Referral> list = new ArrayList<>();
                     List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
                     List<String> desc = Arrays.asList((String[]) array2.getArray());
-                    for(int i = 0; i<ids.size(); i++){
+                    for (int i = 0; i < ids.size(); i++) {
                         Referral ref = new Referral();
                         ref.setSpecialization(getSpecialization(ids.get(i)));
                         ref.setNote(desc.get(i));
@@ -499,15 +523,15 @@ public class DatabaseServiceImpl implements DatabaseService {
                 List<Integer> medicines = null;
                 List<String> instructions = null;
                 List<Medicine> med = new ArrayList<>();
-                if(array!=null){
+                if (array != null) {
                     medicines = Arrays.asList((Integer[]) array.getArray());
                 }
                 array = resultSet.getArray(19);
-                if(array!=null){
+                if (array != null) {
                     instructions = Arrays.asList((String[]) array.getArray());
                 }
-                if(medicines!=null){
-                    for(int i = 0; i<medicines.size(); i++){
+                if (medicines != null) {
+                    for (int i = 0; i < medicines.size(); i++) {
                         Medicine medicine = getMedicine(medicines.get(i));
                         medicine.setInstruction(instructions.get(i));
                         med.add(medicine);
@@ -524,7 +548,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Disease getDisease(String code) {
         Disease toReturn = new Disease();
-        String sql = "SELECT * FROM dolegliwosci WHERE kod_icd10='" + code+"';";
+        String sql = "SELECT * FROM dolegliwosci WHERE kod_icd10='" + code + "';";
         ;
         try {
             statement = c.createStatement();
@@ -541,7 +565,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Specialization getSpecialization(Integer specializationId) {
-       Specialization toReturn = new Specialization();
+        Specialization toReturn = new Specialization();
         String sql = "SELECT * FROM specjalizacje WHERE id_specjalizacji=" + specializationId;
         try {
             statement = c.createStatement();
@@ -598,55 +622,55 @@ public class DatabaseServiceImpl implements DatabaseService {
         String instructions = "null";
         String specId = "null";
         String desc = "null";
-        if(visit.getDiseases()!=null && visit.getDiseases().size()!=0){
+        if (visit.getDiseases() != null && visit.getDiseases().size() != 0) {
             choroby = "array[";
-            for(String s: visit.getDiseases()){
-                choroby += "'"+s+"'"+", ";
+            for (String s : visit.getDiseases()) {
+                choroby += "'" + s + "'" + ", ";
             }
-            choroby = choroby.substring(0, choroby.length()-2);
+            choroby = choroby.substring(0, choroby.length() - 2);
             choroby += "]";
         }
-        if(visit.hasRecepta() && visit.getMedicines().size()!=0){
+        if (visit.hasRecepta() && visit.getMedicines().size() != 0) {
             lekiId = "array[";
-            for(Medicine s: visit.getMedicines()){
-                lekiId += s.getId()+", ";
+            for (Medicine s : visit.getMedicines()) {
+                lekiId += s.getId() + ", ";
             }
-            lekiId = lekiId.substring(0, lekiId.length()-2);
+            lekiId = lekiId.substring(0, lekiId.length() - 2);
             lekiId += "]";
         }
-        if(visit.hasRecepta() && visit.getMedicines().size()!=0){
+        if (visit.hasRecepta() && visit.getMedicines().size() != 0) {
             instructions = "array[";
-            for(Medicine s: visit.getMedicines()){
-                instructions += "'"+s.getInstruction()+"'"+", ";
+            for (Medicine s : visit.getMedicines()) {
+                instructions += "'" + s.getInstruction() + "'" + ", ";
             }
-            instructions = instructions.substring(0, instructions.length()-2);
+            instructions = instructions.substring(0, instructions.length() - 2);
             instructions += "]";
         }
-        if(visit.hasSkierowanie() && visit.getReferrals().size()>0){
+        if (visit.hasSkierowanie() && visit.getReferrals().size() > 0) {
             specId = "array[";
             desc = "array[";
-            for(Referral ref: visit.getReferrals()){
-                specId += ref.getSpecialization().getId()+", ";
-                if(ref.getNote()==null){
+            for (Referral ref : visit.getReferrals()) {
+                specId += ref.getSpecialization().getId() + ", ";
+                if (ref.getNote() == null) {
                     ref.setNote("");
                 }
-                desc += "'"+ref.getNote()+"'"+", ";
+                desc += "'" + ref.getNote() + "'" + ", ";
             }
-            specId = specId.substring(0, specId.length()-2);
-            desc = desc.substring(0, desc.length()-2);
+            specId = specId.substring(0, specId.length() - 2);
+            desc = desc.substring(0, desc.length() - 2);
             specId += "]";
             desc += "]";
         }
-        if(visit.getZwolnienieStart()==null){
+        if (visit.getZwolnienieStart() == null) {
             visit.setZwolnienieStart(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
         }
-        if(visit.getZwolnienieEnd()==null){
+        if (visit.getZwolnienieEnd() == null) {
             visit.setZwolnienieEnd(Timestamp.valueOf(LocalDate.now().atStartOfDay()));
         }
-        if(visit.getNote()==null){
+        if (visit.getNote() == null) {
             visit.setNote("");
         }
-        String sql = "SELECT insert_wizyta("+visit.getId()+", "+visit.hasTakenPlace()+", '"+visit.getNote()+"', "+choroby+", "+visit.hasSkierowanie()+", "+specId+", "+desc+", "+visit.hasZwolnienie()+", '"+visit.getZwolnienieStart()+"', '"+visit.getZwolnienieEnd()+"', "+visit.hasRecepta()+", "+lekiId+", "+instructions+");";
+        String sql = "SELECT insert_wizyta(" + visit.getId() + ", " + visit.hasTakenPlace() + ", '" + visit.getNote() + "', " + choroby + ", " + visit.hasSkierowanie() + ", " + specId + ", " + desc + ", " + visit.hasZwolnienie() + ", '" + visit.getZwolnienieStart() + "', '" + visit.getZwolnienieEnd() + "', " + visit.hasRecepta() + ", " + lekiId + ", " + instructions + ");";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -658,7 +682,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void newVisit(Visit visit) {
-        String sql = "SELECT new_wizyta("+visit.getPatient().getId()+", "+visit.getDoctor().getId()+", '"+visit.getStart()+"', '"+visit.getEnd()+"', "+visit.getOffice().getId()+", "+visit.getSpecialization().getId()+");";
+        String sql = "SELECT new_wizyta(" + visit.getPatient().getId() + ", " + visit.getDoctor().getId() + ", '" + visit.getStart() + "', '" + visit.getEnd() + "', " + visit.getOffice().getId() + ", " + visit.getSpecialization().getId() + ");";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -669,8 +693,23 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public Integer addPerson(Person person) {
+        String sql = "SELECT add('"+person.getName()+"', '"+person.getLastName()+"', '"+person.getPesel()+"', '"+person.getDateOfBirth()+"', '"+person.getPhoneNumber()+"', '"+person.getEmail()+"')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
     public void addSpecialization(Integer doctorId, Integer specializationId) {
-        String sql = "INSERT INTO lekarze_specjalizacje VALUES ("+doctorId+", "+specializationId+")";
+        String sql = "INSERT INTO lekarze_specjalizacje VALUES (" + doctorId + ", " + specializationId + ")";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -729,7 +768,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 worker.setPhoneNumber(resultSet.getString(6));
                 worker.setEmail(resultSet.getString(7));
                 String role = resultSet.getString(8);
-                switch (role){
+                switch (role) {
                     case "LEKARZ":
                         worker.setRole(Roles.LEKARZ);
                         break;
@@ -766,7 +805,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getTotalVisitCount(Integer doctorId) {
         Integer toRet = null;
-        String sql = "SELECT COUNT(id_wizyty) FROm wizyty WHERE lekarz="+doctorId;
+        String sql = "SELECT COUNT(id_wizyty) FROm wizyty WHERE lekarz=" + doctorId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -782,7 +821,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getTotalExertionCount(Integer workerId) {
         Integer toRet = null;
-        String sql = "SELECT count(id_zabiegu) FROM zabiegi_pielegniarskie WHERE pielegniarka_arz="+workerId;
+        String sql = "SELECT count(id_zabiegu) FROM zabiegi_pielegniarskie WHERE pielegniarka_arz=" + workerId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -798,7 +837,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getTotalPrescriptionCount(Integer doctorId) {
         Integer toRet = null;
-        String sql = "SELECT count(id_recepty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE lekarz="+doctorId;
+        String sql = "SELECT count(id_recepty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE lekarz=" + doctorId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -812,11 +851,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
 
-
     @Override
     public Integer getVisitCount(LocalDate date1, LocalDate date2) {
         Integer toRet = null;
-        String sql = "SELECT count(id_wizyty) FROM wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"' AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"'";
+        String sql = "SELECT count(id_wizyty) FROM wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "'";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -832,7 +870,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getExertionCount(LocalDate date1, LocalDate date2) {
         Integer toRet = null;
-        String sql = "SELECT count(id_zabiegu) FROM zabiegi_pielegniarskie WHERE termin_zabiegu>'"+Timestamp.valueOf(date1.atStartOfDay())+"' AND termin_zabiegu<'"+Timestamp.valueOf(date2.atStartOfDay())+"'";
+        String sql = "SELECT count(id_zabiegu) FROM zabiegi_pielegniarskie WHERE termin_zabiegu>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' AND termin_zabiegu<'" + Timestamp.valueOf(date2.atStartOfDay()) + "'";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -848,7 +886,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getPrescriptionCount(LocalDate date1, LocalDate date2) {
         Integer toRet = null;
-        String sql = "SELECT COUNT(id_recepty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"'AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"'";
+        String sql = "SELECT COUNT(id_recepty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "'AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "'";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -864,7 +902,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getZwolnienieCount(LocalDate date1, LocalDate date2) {
         Integer toRet = null;
-        String sql = "SELECT COUNT(id_zwolnienia) FROM zwolnienia LEFT OUTER JOIN wizyty ON zwolnienia.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"'AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"'";
+        String sql = "SELECT COUNT(id_zwolnienia) FROM zwolnienia LEFT OUTER JOIN wizyty ON zwolnienia.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "'AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "'";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -880,7 +918,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer getSkierowanieCount(LocalDate date1, LocalDate date2) {
         Integer toRet = null;
-        String sql = "SELECT COUNT(id_skierowania) FROM skierowania LEFT OUTER JOIN wizyty ON skierowania.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"'AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"'";
+        String sql = "SELECT COUNT(id_skierowania) FROM skierowania LEFT OUTER JOIN wizyty ON skierowania.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "'AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "'";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -894,8 +932,9 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public Integer getLongestZwolnienie(LocalDate date1, LocalDate date2) {Integer toRet = null;
-        String sql = "SELECT id_zwolnienia, do_kiedy-od_kiedy FROm zwolnienia WHERE od_kiedy>'"+Timestamp.valueOf(date1.atStartOfDay())+"' AND do_kiedy<'"+Timestamp.valueOf(date2.atStartOfDay())+"' ORDER BY 2 DESC LIMIT 1";
+    public Integer getLongestZwolnienie(LocalDate date1, LocalDate date2) {
+        Integer toRet = null;
+        String sql = "SELECT id_zwolnienia, do_kiedy-od_kiedy FROm zwolnienia WHERE od_kiedy>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' AND do_kiedy<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' ORDER BY 2 DESC LIMIT 1";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -912,7 +951,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public Office getMostUsedOffice(LocalDate date1, LocalDate date2) {
         //
         Office toRet = null;
-        String sql = "SELECT gabinet, COUNT(id_wizyty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"' AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"' GROUP BY gabinet ORDER BY 2 DESC LIMIT 1";
+        String sql = "SELECT gabinet, COUNT(id_wizyty) FROM recepty LEFT OUTER JOIN wizyty ON recepty.wizyta=wizyty.id_wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' GROUP BY gabinet ORDER BY 2 DESC LIMIT 1";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -929,7 +968,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public Medicine getMostCommonMedicine(LocalDate date1, LocalDate date2) {
         //
         Medicine toRet = null;
-        String sql = "SELECT id_produktu, COUNT(id_wizyty) FROm recepty LEFT OUTER JOIN recepty_produkty_dawki ON recepty.id_recepty = recepty_produkty_dawki.id_recepty LEFT OUTER JOIN wizyty ON recepty.wizyta = wizyty.id_wizyty WHERE termin_wizyty>'"+Timestamp.valueOf(date1.atStartOfDay())+"' AND termin_wizyty<'"+Timestamp.valueOf(date2.atStartOfDay())+"' GROUP BY id_produktu ORDER BY 2 DESC LIMIT 1";
+        String sql = "SELECT id_produktu, COUNT(id_wizyty) FROm recepty LEFT OUTER JOIN recepty_produkty_dawki ON recepty.id_recepty = recepty_produkty_dawki.id_recepty LEFT OUTER JOIN wizyty ON recepty.wizyta = wizyty.id_wizyty WHERE termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' GROUP BY id_produktu ORDER BY 2 DESC LIMIT 1";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -944,7 +983,91 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void fireWorker(Integer workerId) {
-        String sql = "UPDATE pracownicy SET status_zatrudnienia=false WHERE id_pracownika="+workerId;
+        String sql = "UPDATE pracownicy SET status_zatrudnienia=false WHERE id_pracownika=" + workerId;
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isNonFiredWorker(String pesel) {
+        String sql = "SELECT EXISTS (SELECT * FROM dane_osob LEFT OUTER JOIN pracownicy ON pracownicy.id_pracownika=dane_osob.id WHERE status_zatrudnienia=true AND pesel = '" + pesel + "')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isFiredWorker(String pesel) {
+        String sql = "SELECT EXISTS (SELECT * FROM dane_osob LEFT OUTER JOIN pracownicy ON pracownicy.id_pracownika=dane_osob.id WHERE status_zatrudnienia=false AND pesel = '" + pesel + "')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public String getPrettyNameByPesel(String pesel) {
+        String sql = "SELECT imie, nazwisko FROM dane_osob WHERE pesel = '" + pesel + "'";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getString(1) + " " + resultSet.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    @Override
+    public void rehire(String pesel) {
+        String sql = "UPDATE pracownicy SET status_zatrudnienia = true WHERE id_pracownika = (SELECT id FROM dane_osob WHERE pesel = '" + pesel + "')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isInDb(String pesel) {
+        String sql = "SELECT EXISTS (SELECT * FROM dane_osob WHERE pesel='" + pesel + "')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void addRole(Integer id, Roles role) {
+        String sql = "INSERT INTO pracownicy (id_pracownika, etat, status_zatrudnienia) VALUES ("+id+", '"+role+"', true);\n";
         System.out.println(sql);
         try {
             statement = c.createStatement();

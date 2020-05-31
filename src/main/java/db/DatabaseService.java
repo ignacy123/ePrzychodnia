@@ -19,6 +19,8 @@ public interface DatabaseService {
 
     Person getPerson(Integer personId);
 
+    Person getPerson(String pesel);
+
     List<Visit> getDayVisitsFromDoctor(Integer doctorId, LocalDate date);
 
     List<Visit> getFutureVisits(Integer doctorId);
@@ -55,6 +57,8 @@ public interface DatabaseService {
 
     void newVisit(Visit visit);
 
+    Integer addPerson(Person person);
+
     void addSpecialization(Integer doctorId, Integer specializationId);
 
     Map<String, Integer> getAllMedicines();
@@ -86,4 +90,16 @@ public interface DatabaseService {
     Medicine getMostCommonMedicine(LocalDate date1, LocalDate date2);
 
     void fireWorker(Integer workerId);
+
+    boolean isNonFiredWorker(String pesel);
+
+    boolean isFiredWorker(String pesel);
+
+    String getPrettyNameByPesel(String pesel);
+
+    void rehire(String pesel);
+
+    boolean isInDb(String pesel);
+
+    void addRole(Integer id, Roles role);
 }

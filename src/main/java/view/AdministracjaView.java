@@ -5,10 +5,13 @@ import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import java.util.Optional;
 
 public class AdministracjaView extends Application {
     @FXML
@@ -61,7 +64,52 @@ public class AdministracjaView extends Application {
             }
         });
         hireButton.setOnAction(actionEvent -> {
-            //TODO
+            TextInputDialog td = new TextInputDialog();
+            td.getEditor().setText("Podaj PESEL");
+            td.setResizable(true);
+            Optional<String> s = td.showAndWait();
+            if (s.isPresent()) {
+                System.out.println(s.get());
+                if(!isCorrectPESEL(s.get())){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("podaj poprawny pesel deklu");
+                    d.show();
+                    return;
+                }
+                if (db.isNonFiredWorker(s.get())) {
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("taki ktoś już tu pracuje");
+                    d.show();
+                    return;
+                }
+                if (db.isFiredWorker(s.get())) {
+                    String prettyName = db.getPrettyNameByPesel(s.get());
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Czy na pewno chcesz jeszcze raz zatrudnić pracownika " + prettyName + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                    alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.YES) {
+                        System.out.println("rehiring: " + prettyName);
+                    }
+                    db.rehire(s.get());
+                    return;
+                }
+                Application view = new AdministracjaHireView(id, name, db, s.get());
+                try {
+                    view.start(mainStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                System.out.println(":<");
+                return;
+            }
         });
     }
 
@@ -75,5 +123,31 @@ public class AdministracjaView extends Application {
         stage.show();
         stage.setTitle("ePrzychodnia - administracja");
         mainStage = stage;
+    }
+
+
+    boolean isCorrectPESEL(String pesel){
+        if(pesel.length()!=11){
+            return false;
+        }
+        int[] digits = new int[11];
+        for(int i=0;i<11;i++){
+            if(!Character.isDigit(pesel.charAt(i))){
+                System.out.println(pesel.charAt(i));
+                return false;
+            }
+            digits[i] = Integer.parseInt(pesel.substring(i, i + 1));
+        }
+        int[] weights = {1,3,7,9,1,3,7,9,1,3};
+        int check = 0;
+        for(int i=0;i<10;i++){
+            check += weights[i]*digits[i];
+        }
+        int lastNumber = check % 10;
+        int controlNumber = 10 - lastNumber;
+        if (controlNumber == digits[10]) {
+            return true;
+        }
+        return false;
     }
 }
