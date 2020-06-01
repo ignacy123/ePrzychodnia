@@ -14,6 +14,7 @@ import javafx.stage.Window;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,6 +105,15 @@ public class RecepcjonistkaAddView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("podaj date urodzenia");
+                d.show();
+                return;
+            }
+            if(birthDate.isAfter(LocalDate.now().minus(2, ChronoUnit.DAYS))){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("coś młody ten pacjent");
                 d.show();
                 return;
             }

@@ -24,6 +24,12 @@ public class RecepcjonistkaView extends Application {
     private Button addPatientButton;
     @FXML
     private Button editButton;
+    @FXML
+    private Button cancelVisitButton;
+    @FXML
+    private Button cancelExertionButton;
+    @FXML
+    private Button newExertionButton;
 
     Integer id;
     String name;
@@ -39,26 +45,6 @@ public class RecepcjonistkaView extends Application {
     @FXML
     void initialize() {
         nameLabel.setText(name);
-        logOutButton.setOnAction(actionEvent -> {
-            Application view = new MainViewController();
-            try {
-                view.start(mainStage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("recepcjonistka.fxml"));
-        loader.setController(this);
-        Pane pane = loader.load();
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
-        stage.setTitle("ePrzychodnia - recepcjonistka");
-        mainStage = stage;
         newVisitButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaWizytaView(id, name, db);
             try {
@@ -84,14 +70,14 @@ public class RecepcjonistkaView extends Application {
             td.setResizable(true);
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
-                if(db.isInDb(s.get())){
+                if (db.isInDb(s.get())) {
                     Application view = new RecepcjonistkaEditView(id, name, db, s.get());
                     try {
                         view.start(mainStage);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -100,9 +86,37 @@ public class RecepcjonistkaView extends Application {
                     d.show();
                     return;
                 }
-            }else{
+            } else {
                 System.out.println(":<");
             }
         });
+        logOutButton.setOnAction(actionEvent -> {
+            Application view = new MainViewController();
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        cancelVisitButton.setOnAction(actionEvent -> {
+            Application view = new RecepcjonistkaCancelVisitView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("recepcjonistka.fxml"));
+        loader.setController(this);
+        Pane pane = loader.load();
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+        stage.setTitle("ePrzychodnia - recepcjonistka");
+        mainStage = stage;
     }
 }
