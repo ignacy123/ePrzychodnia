@@ -116,7 +116,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
             currentWorker = worker;
             specs.clear();
             nameLabel.setText(worker.getName());
-            lastNameLabel.setText(worker.getName());
+            lastNameLabel.setText(worker.getLastName());
             emailLabel.setText(worker.getEmail());
             peselLabel.setText(worker.getPesel());
             birthLabel.setText(String.valueOf(worker.getDateOfBirth()));

@@ -49,7 +49,24 @@ public class AdministracjaStatsView extends Application {
     private Label zwolnienieLabel;
     @FXML
     private Label longestZwolnienieLabel;
-
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label lastNameLabel;
+    @FXML
+    private Label doctorVisitLabel;
+    @FXML
+    private Label doctorPrescriptionLabel;
+    @FXML
+    private Label doctorOfficeLabel;
+    @FXML
+    private Label doctorMedicineLabel;
+    @FXML
+    private Label doctorSkierowanieLabel;
+    @FXML
+    private Label doctorZwolnienieLabel;
+    @FXML
+    private Label doctorLongestZwolnienieLabel;
 
     Stage mainStage;
     Integer id;
@@ -68,6 +85,15 @@ public class AdministracjaStatsView extends Application {
     }
 
     void countStats() {
+        nameLabel.setText("-");
+        lastNameLabel.setText("-");
+        doctorVisitLabel.setText("-");
+        doctorPrescriptionLabel.setText("-");
+        doctorOfficeLabel.setText("-");
+        doctorMedicineLabel.setText("-");
+        doctorSkierowanieLabel.setText("-");
+        doctorZwolnienieLabel.setText("-");
+        doctorLongestZwolnienieLabel.setText("-");
         doctors.clear();
         doctors.addAll(db.getDoctorsVisitCount(date1, date2));
         nurses.clear();
@@ -89,7 +115,7 @@ public class AdministracjaStatsView extends Application {
         }
         skierowanieLabel.setText(String.valueOf(db.getSkierowanieCount(date1, date2)));
         zwolnienieLabel.setText(String.valueOf(db.getZwolnienieCount(date1, date2)));
-        longestZwolnienieLabel.setText(String.valueOf(db.getLongestZwolnienie(date1, date2))+" dni");
+        longestZwolnienieLabel.setText(String.valueOf(db.getLongestZwolnienie(date1, date2)) + " dni");
     }
 
     @FXML
@@ -124,8 +150,6 @@ public class AdministracjaStatsView extends Application {
                 countStats();
             }
         });
-        doctorsListView.setSelectionModel(new NoSelectionModel());
-        nurseListView.setSelectionModel(new NoSelectionModel());
         doctorsListView.setItems(doctors);
         nurseListView.setItems(nurses);
         doctorsListView.setCellFactory(listView -> {
@@ -133,10 +157,58 @@ public class AdministracjaStatsView extends Application {
             cell.setConverter(new PersonCountConverter());
             return cell;
         });
+        doctorsListView.setOnMouseClicked(mouseEvent -> {
+            if (doctorsListView.getSelectionModel().getSelectedItems() == null) {
+                return;
+            }
+            if (date1 == null || date2 == null) {
+                return;
+            }
+            if (date1.isAfter(date2)) {
+                return;
+            }
+            Person doctor = (Person) doctorsListView.getSelectionModel().getSelectedItems().get(0);
+            nameLabel.setText(doctor.getName());
+            lastNameLabel.setText(doctor.getLastName());
+            doctorVisitLabel.setText(String.valueOf(doctor.getVisitCount()));
+            doctorPrescriptionLabel.setText(String.valueOf(db.getPrescriptionCount(date1, date2, doctor.getId())));
+            Office office = db.getMostUsedOffice(date1, date2, doctor.getId());
+            if(office!=null){
+                doctorOfficeLabel.setText(new OfficeConverter().toString(office));
+            }else{
+                doctorOfficeLabel.setText("-");
+            }
+            Medicine medicine = db.getMostCommonMedicine(date1, date2, doctor.getId());
+            if(medicine!=null){
+                doctorMedicineLabel.setText(medicine.getName());
+            }else{
+                doctorMedicineLabel.setText("-");
+            }
+            doctorSkierowanieLabel.setText(String.valueOf(db.getSkierowanieCount(date1, date2, doctor.getId())));
+            doctorZwolnienieLabel.setText(String.valueOf(db.getZwolnienieCount(date1, date2, doctor.getId())));
+            doctorLongestZwolnienieLabel.setText(db.getLongestZwolnienie(date1, date2, doctor.getId())+" dni");
+            System.out.println(doctor.getName() + " " + doctor.getLastName());
+        });
         nurseListView.setCellFactory(listView -> {
             TextFieldListCell<Person> cell = new TextFieldListCell<>();
             cell.setConverter(new PersonCountConverter());
             return cell;
+        });
+
+        nurseListView.setOnMouseClicked(mouseEvent -> {
+            if(nurseListView.getSelectionModel().getSelectedItems().size()==0){
+                return;
+            }
+            Person nurse = (Person) nurseListView.getSelectionModel().getSelectedItems().get(0);
+            nameLabel.setText(nurse.getName());
+            lastNameLabel.setText(nurse.getLastName());
+            doctorVisitLabel.setText(String.valueOf(nurse.getVisitCount()));
+            doctorPrescriptionLabel.setText("-");
+            doctorOfficeLabel.setText("-");
+            doctorMedicineLabel.setText("-");
+            doctorSkierowanieLabel.setText("-");
+            doctorZwolnienieLabel.setText("-");
+            doctorLongestZwolnienieLabel.setText("-");
         });
 
     }

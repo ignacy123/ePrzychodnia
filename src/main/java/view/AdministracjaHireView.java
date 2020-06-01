@@ -101,6 +101,18 @@ public class AdministracjaHireView extends Application {
                     return;
                 }
                 db.addRole(person.getId(), role);
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Sukces!");
+                d.show();
+                Application view = new AdministracjaView(this.id, this.name, db);
+                try {
+                    view.start(mainStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return;
             }
             String name = String.valueOf(nameTextField.getCharacters());
@@ -166,6 +178,12 @@ public class AdministracjaHireView extends Application {
             toAdd.setPhoneNumber(phoneNumber);
             Integer id = db.addPerson(toAdd);
             db.addRole(id, role);
+            Dialog d = new Dialog();
+            d.setResizable(true);
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText("Sukces!");
+            d.show();
             Application view = new AdministracjaView(this.id, this.name, db);
             try {
                 view.start(mainStage);

@@ -88,6 +88,15 @@ public class RecepcjonistkaAddView extends Application {
                 d.show();
                 return;
             }
+            if(db.isInDb(pesel)){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("PESEL nie jest unikalny");
+                d.show();
+                return;
+            }
             LocalDate birthDate = birthDatePicker.getValue();
             if (birthDate == null) {
                 Dialog d = new Dialog();
@@ -120,7 +129,13 @@ public class RecepcjonistkaAddView extends Application {
             toAdd.setEmail(email);
             toAdd.setPhoneNumber(phoneNumber);
             Integer id = db.addPerson(toAdd);
-            Application view = new RecepcjonistkaView(id, name, db);
+            Dialog d = new Dialog();
+            d.setResizable(true);
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText("Sukces!");
+            d.show();
+            Application view = new RecepcjonistkaView(this.id, this.name, db);
             try {
                 view.start(mainStage);
             } catch (Exception e) {

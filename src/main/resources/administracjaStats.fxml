@@ -29,5 +29,23 @@
       <Label fx:id="zwolnienieLabel" layoutX="557.0" layoutY="292.0" text="Label" />
       <Label layoutX="508.0" layoutY="333.0" text="Najdłuższe zwolnienie:" />
       <Label fx:id="longestZwolnienieLabel" layoutX="559.0" layoutY="370.0" text="Label" />
+      <Label layoutX="748.0" layoutY="31.0" text="Imię" />
+      <Label fx:id="nameLabel" layoutX="745.0" layoutY="59.0" text="Label" />
+      <Label fx:id="lastNameLabel" layoutX="745.0" layoutY="125.0" text="Label" />
+      <Label layoutX="733.0" layoutY="95.0" text="Nazwisko" />
+      <Label layoutX="697.0" layoutY="154.0" text="Ilość wizyt/zabiegów:" />
+      <Label fx:id="doctorVisitLabel" layoutX="745.0" layoutY="182.0" text="Label" />
+      <Label layoutX="724.0" layoutY="211.0" text="Ilość recept:" />
+      <Label fx:id="doctorPrescriptionLabel" layoutX="745.0" layoutY="241.0" text="Label" />
+      <Label layoutX="673.0" layoutY="273.0" text="Najczęściej używany gabinet:" />
+      <Label fx:id="doctorOfficeLabel" layoutX="746.0" layoutY="301.0" text="Label" />
+      <Label layoutX="680.0" layoutY="333.0" text="Najczęściej zapisywany lek:" />
+      <Label fx:id="doctorMedicineLabel" layoutX="746.0" layoutY="370.0" text="Label" />
+      <Label layoutX="715.0" layoutY="409.0" text="Ilość skierowań" />
+      <Label fx:id="doctorSkierowanieLabel" layoutX="746.0" layoutY="442.0" text="Label" />
+      <Label layoutX="717.0" layoutY="475.0" text="Ilość zwolnień:" />
+      <Label fx:id="doctorZwolnienieLabel" layoutX="745.0" layoutY="510.0" text="Label" />
+      <Label layoutX="693.0" layoutY="540.0" text="Najdłuższe zwolnienie:" />
+      <Label fx:id="doctorLongestZwolnienieLabel" layoutX="745.0" layoutY="579.0" text="Label" />
    </children>
 </Pane>

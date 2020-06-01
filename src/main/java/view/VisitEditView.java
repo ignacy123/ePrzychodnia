@@ -369,7 +369,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wybierz leki");
+                d.setContentText("wizyta ma sie odbyc jak chcesz skierowanie");
                 d.show();
                 return;
             }

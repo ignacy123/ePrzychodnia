@@ -271,6 +271,12 @@ public class RecepcjonistkaWizytaView extends Application {
             visit.setStart(Timestamp.valueOf(date1));
             visit.setEnd(Timestamp.valueOf(date2));
             db.newVisit(visit);
+            Dialog d = new Dialog();
+            d.setResizable(true);
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText("brawo, udało ci się umówić: "+visit.getPatient().getName()+" "+visit.getPatient().getLastName());
+            d.show();
             Application view = new RecepcjonistkaView(id, name, db);
             try {
                 view.start(mainStage);

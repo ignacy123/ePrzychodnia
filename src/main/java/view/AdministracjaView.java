@@ -154,7 +154,7 @@ public class AdministracjaView extends Application {
             check += weights[i] * digits[i];
         }
         int lastNumber = check % 10;
-        int controlNumber = 10 - lastNumber;
+        int controlNumber = (10 - lastNumber)%10;
         if (controlNumber == digits[10]) {
             return true;
         }

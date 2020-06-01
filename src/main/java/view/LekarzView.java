@@ -79,10 +79,14 @@ public class LekarzView extends Application {
             return 0;
         }));
         Visit nextVisit = db.getNextVisit(id);
-        surnameText.setText(nextVisit.getPatient().getLastName());
-        nameText.setText(nextVisit.getPatient().getName());
-        dateText.setText(String.valueOf(nextVisit.getStart()));
-        officeText.setText(new OfficeConverter().toString(nextVisit.getOffice()));
+        if(nextVisit.getPatient()!=null){
+            surnameText.setText(nextVisit.getPatient().getLastName());
+            nameText.setText(nextVisit.getPatient().getName());
+            dateText.setText(String.valueOf(nextVisit.getStart()));
+            officeText.setText(new OfficeConverter().toString(nextVisit.getOffice()));
+        }else{
+            nextVisitEditButton.setDisable(true);
+        }
         logOutButton.setOnAction(actionEvent -> {
             Application view = new MainViewController();
             try {
@@ -113,7 +117,7 @@ public class LekarzView extends Application {
         stage.setTitle("ePrzychodnia - lekarz");
         mainStage = stage;
         patientsListView.setOnMouseClicked(mouseEvent -> {
-            if (patientsListView.getSelectionModel().getSelectedItems() == null) {
+            if (patientsListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             Person patient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));

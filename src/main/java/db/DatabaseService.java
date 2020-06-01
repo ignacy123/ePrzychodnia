@@ -81,15 +81,27 @@ public interface DatabaseService {
 
     Integer getPrescriptionCount(LocalDate date1, LocalDate date2);
 
+    Integer getPrescriptionCount(LocalDate date1, LocalDate date2, Integer doctorId);
+
     Integer getZwolnienieCount(LocalDate date1, LocalDate date2);
+
+    Integer getZwolnienieCount(LocalDate date1, LocalDate date2, Integer doctorId);
 
     Integer getSkierowanieCount(LocalDate date1, LocalDate date2);
 
+    Integer getSkierowanieCount(LocalDate date1, LocalDate date2, Integer doctorId);
+
     Integer getLongestZwolnienie(LocalDate date1, LocalDate date2);
+
+    Integer getLongestZwolnienie(LocalDate date1, LocalDate date2, Integer doctorId);
 
     Office getMostUsedOffice(LocalDate date1, LocalDate date2);
 
+    Office getMostUsedOffice(LocalDate date1, LocalDate date2, Integer doctorId);
+
     Medicine getMostCommonMedicine(LocalDate date1, LocalDate date2);
+
+    Medicine getMostCommonMedicine(LocalDate date1, LocalDate date2, Integer doctorId);
 
     void fireWorker(Integer workerId);
 
