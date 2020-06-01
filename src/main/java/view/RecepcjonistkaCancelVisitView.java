@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecepcjonistkaCancelVisitView extends Application {
     @FXML
@@ -34,6 +37,8 @@ public class RecepcjonistkaCancelVisitView extends Application {
     private Button backButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private TextField surnameTextField;
 
 
     Integer id;
@@ -45,6 +50,7 @@ public class RecepcjonistkaCancelVisitView extends Application {
 
     LocalDate date = null;
     ObservableList<Visit> visitsByDay = FXCollections.observableArrayList();
+    List<Visit> orgVisitsByDay = new ArrayList<>();
 
     RecepcjonistkaCancelVisitView(int id, String name, DatabaseService db) {
         this.id = id;
@@ -66,7 +72,7 @@ public class RecepcjonistkaCancelVisitView extends Application {
         datePicker.setValue(LocalDate.now());
         date = LocalDate.now();
         datePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
-            if(datePicker.getValue().isBefore(LocalDate.now())){
+            if (datePicker.getValue().isBefore(LocalDate.now())) {
                 datePicker.setValue(LocalDate.now());
                 date = LocalDate.now();
                 Dialog d = new Dialog();
@@ -78,8 +84,14 @@ public class RecepcjonistkaCancelVisitView extends Application {
                 return;
             }
             date = datePicker.getValue();
+            orgVisitsByDay = db.getDayVisits(date);
             visitsByDay.clear();
-            visitsByDay.addAll(db.getDayVisits(date));
+            visitsByDay.addAll(orgVisitsByDay.stream().filter(s1 -> {
+                if (s1.getPatient().getLastName().toLowerCase().contains(String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }).collect(Collectors.toSet()));
         });
         visitsByDay.addAll(db.getDayVisits(date));
         visitListView.setItems(visitsByDay);
@@ -93,12 +105,12 @@ public class RecepcjonistkaCancelVisitView extends Application {
                 return;
             }
             visit = (Visit) visitListView.getSelectionModel().getSelectedItems().get(0);
-            doctorLabel.setText(visit.getDoctor().getName()+" "+visit.getDoctor().getLastName());
-            patientLabel.setText(visit.getPatient().getName()+" "+visit.getPatient().getLastName());
+            doctorLabel.setText(visit.getDoctor().getName() + " " + visit.getDoctor().getLastName());
+            patientLabel.setText(visit.getPatient().getName() + " " + visit.getPatient().getLastName());
             officeLabel.setText(new OfficeConverter().toString(visit.getOffice()));
         });
         cancelButton.setOnAction(actionEvent -> {
-            if(visit==null){
+            if (visit == null) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -115,8 +127,23 @@ public class RecepcjonistkaCancelVisitView extends Application {
             d.setContentText("wizyta odwołana");
             d.show();
             date = datePicker.getValue();
+            orgVisitsByDay = db.getDayVisits(date);
             visitsByDay.clear();
-            visitsByDay.addAll(db.getDayVisits(date));
+            visitsByDay.addAll(orgVisitsByDay.stream().filter(s1 -> {
+                if (s1.getPatient().getLastName().toLowerCase().contains(String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }).collect(Collectors.toSet()));
+        });
+        surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
+            visitsByDay.clear();
+            visitsByDay.addAll(orgVisitsByDay.stream().filter(s1 -> {
+                if (s1.getPatient().getLastName().toLowerCase().contains(String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }).collect(Collectors.toSet()));
         });
     }
 

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -18,5 +19,6 @@
       <Label fx:id="officeLabel" layoutX="571.0" layoutY="201.0" text="Label" />
       <Button fx:id="cancelButton" layoutX="555.0" layoutY="283.0" mnemonicParsing="false" text="Odwołaj" />
       <Button fx:id="backButton" layoutX="707.0" layoutY="523.0" mnemonicParsing="false" text="Powrót" />
+      <TextField fx:id="surnameTextField" layoutX="19.0" layoutY="283.0" promptText="Wpisz nazwisko..." />
    </children>
 </Pane>

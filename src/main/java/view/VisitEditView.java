@@ -298,6 +298,20 @@ public class VisitEditView extends Application implements Initializable {
                     System.out.println(":<");
                     return;
                 }
+                if(selectedMedicines.filtered(medicine -> {
+                    if(med.getName().equals(med.getName())){
+                        return true;
+                    }
+                    return false;
+                }).size()>0){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("już jest taki lek");
+                    d.show();
+                    return;
+                }
                 selectedMedicines.add(med);
             }
         });
