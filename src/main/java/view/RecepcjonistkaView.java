@@ -54,6 +54,15 @@ public class RecepcjonistkaView extends Application {
             }
         });
 
+        newExertionButton.setOnAction(actionEvent -> {
+            Application view = new RecepcjonistkaZabiegView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         addPatientButton.setOnAction(actionEvent -> {
             Application view = new RecepcjonistkaAddView(id, name, db);
             try {

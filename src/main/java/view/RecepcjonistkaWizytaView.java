@@ -21,7 +21,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,24 +89,6 @@ public class RecepcjonistkaWizytaView extends Application {
     @FXML
     void initialize() {
         nameLabel.setText(name);
-        patients = db.getPatients();
-        patientsToShow = FXCollections.observableArrayList();
-        patientsToShow.addAll(patients.keySet());
-        visitDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
-        specializationListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecializations()));
-        patientsListView.setItems(patientsToShow);
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("recepcjonistkawizyta.fxml"));
-        loader.setController(this);
-        Pane pane = loader.load();
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
-        stage.setTitle("ePrzychodnia - dodawanie wizyty");
-        mainStage = stage;
         specializationListView.setOnMouseClicked(mouseEvent -> {
             if (specializationListView.getSelectionModel().getSelectedItems() == null) {
                 return;
@@ -302,5 +283,23 @@ public class RecepcjonistkaWizytaView extends Application {
                 return false;
             }).collect(Collectors.toSet()));
         });
+        patients = db.getPatients();
+        patientsToShow = FXCollections.observableArrayList();
+        patientsToShow.addAll(patients.keySet());
+        visitDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
+        specializationListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecializations()));
+        patientsListView.setItems(patientsToShow);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("recepcjonistkawizyta.fxml"));
+        loader.setController(this);
+        Pane pane = loader.load();
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+        stage.setTitle("ePrzychodnia - dodawanie wizyty");
+        mainStage = stage;
     }
 }

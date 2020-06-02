@@ -35,9 +35,13 @@ public interface DatabaseService {
 
     List<Person> getAvailableSpecialistsAtTimeSortedByPatient(int patientId, int specializationId, LocalDateTime freeFrom, LocalDateTime freeTo);
 
+    List<Person> getAvailableNursesAtTimeSortedByPatient(LocalDateTime date1, LocalDateTime date2, Integer patientId);
+
     List<Office> getAvailableOfficesAtTime(LocalDateTime freeFrom, LocalDateTime freeTo);
 
     List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo);
+
+    List<Office> getAvailableOfficesAtTimeSortedByNurse(LocalDateTime freeFrom, LocalDateTime freeTo, int nurseId);
 
     List<Person> getDoctorsVisitCount(LocalDate date1, LocalDate date2);
 

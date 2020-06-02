@@ -290,6 +290,7 @@ public class VisitEditView extends Application implements Initializable {
                 }
                 TextInputDialog td = new TextInputDialog();
                 td.getEditor().setText("zgodnie z ulotką");
+                td.setResizable(true);
                 Optional<String> s = td.showAndWait();
                 if(s.isPresent()){
                     System.out.println(s);
@@ -299,7 +300,7 @@ public class VisitEditView extends Application implements Initializable {
                     return;
                 }
                 if(selectedMedicines.filtered(medicine -> {
-                    if(med.getName().equals(med.getName())){
+                    if(medicine.getName().equals(med.getName())){
                         return true;
                     }
                     return false;
