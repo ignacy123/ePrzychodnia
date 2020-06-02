@@ -205,7 +205,6 @@ public class DatabaseServiceImpl implements DatabaseService {
     public List<Visit> getDayVisits(LocalDate date) {
         List<Visit> toReturn = new ArrayList<>();
         String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' ORDER BY 5";
-        ;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -264,6 +263,30 @@ public class DatabaseServiceImpl implements DatabaseService {
                 }
                 visit.setMedicines(med);
                 toReturn.add(visit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public List<Exertion> getDayExertions(LocalDate date) {
+        List<Exertion> toReturn = new ArrayList<>();
+        String sql = "SELECT * FROm zabiegi_pielegniarskie WHERE termin_zabiegu >= '" + date + " 10:00' AND termin_zabiegu <= '" + date + " 23:59'";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Exertion exertion = new Exertion();
+                exertion.setId(resultSet.getInt(1));
+                exertion.setPatient(getPerson(resultSet.getInt(2)));
+                exertion.setNurse(getPerson(resultSet.getInt(3)));
+                exertion.setStart(resultSet.getTimestamp(4));
+                exertion.setOffice(getOffice(resultSet.getInt(5)));
+                exertion.setTakenPlace(resultSet.getBoolean(6));
+                exertion.setNote(resultSet.getString(7));
+                toReturn.add(exertion);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1270,6 +1293,18 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public void cancelExertion(Integer exertionId) {
+        String sql = "DELETE FROM zabiegi_pielegniarskie WHERE id_zabiegu=" + exertionId;
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public boolean isNonFiredWorker(String pesel) {
         String sql = "SELECT EXISTS (SELECT * FROM dane_osob LEFT OUTER JOIN pracownicy ON pracownicy.id_pracownika=dane_osob.id WHERE status_zatrudnienia=true AND pesel = '" + pesel + "')";
         System.out.println(sql);
@@ -1401,7 +1436,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId) {
         boolean one = false;
         boolean two = false;
-        String sql = "SELECT EXISTS (SELECT * FROM wizyty WHERE(('"+from+"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+to+"' < koniec_wizyty)) AND pacjent="+patientId+")";
+        String sql = "SELECT EXISTS (SELECT * FROM wizyty WHERE(('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + to + "' < koniec_wizyty)) AND pacjent=" + patientId + ")";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1411,7 +1446,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        sql = "SELECT EXISTS (SELECT * FROM zabiegi_pielegniarskie WHERE termin_zabiegu>= '"+from+"' AND termin_zabiegu < '"+to+"' AND pacjent="+patientId+")";
+        sql = "SELECT EXISTS (SELECT * FROM zabiegi_pielegniarskie WHERE termin_zabiegu>= '" + from + "' AND termin_zabiegu < '" + to + "' AND pacjent=" + patientId + ")";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1421,7 +1456,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(two || one){
+        if (two || one) {
             return false;
         }
         return true;

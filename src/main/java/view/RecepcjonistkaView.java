@@ -115,6 +115,14 @@ public class RecepcjonistkaView extends Application {
                 e.printStackTrace();
             }
         });
+        cancelExertionButton.setOnAction(actionEvent -> {
+            Application view = new RecepcjonistkaCancelExertionView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

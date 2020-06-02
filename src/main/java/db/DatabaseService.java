@@ -25,6 +25,8 @@ public interface DatabaseService {
 
     List<Visit> getDayVisits(LocalDate date);
 
+    List<Exertion> getDayExertions(LocalDate date);
+
     List<Visit> getFutureVisits(Integer doctorId);
 
     List<Specialization> getAvailableSpecializations();
@@ -116,6 +118,8 @@ public interface DatabaseService {
     void fireWorker(Integer workerId);
 
     void cancelVisit(Integer visitId);
+
+    void cancelExertion(Integer exertionId);
 
     boolean isNonFiredWorker(String pesel);
 
