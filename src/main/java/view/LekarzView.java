@@ -66,6 +66,46 @@ public class LekarzView extends Application {
 
     @FXML
     void initialize() {
+        patientsListView.setOnMouseClicked(mouseEvent -> {
+            if (patientsListView.getSelectionModel().getSelectedItems().size() == 0) {
+                return;
+            }
+            Person patient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));
+            Dialog d = new Dialog();
+            d.setResizable(true);
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText(String.valueOf(patient));
+            d.show();
+        });
+        dateVisits.setCellFactory(listView -> {
+            TextFieldListCell<Visit> cell = new TextFieldListCell<>();
+            cell.setConverter(new VisitConverter());
+            return cell;
+        });
+        futureVisits.setCellFactory(listView -> {
+            TextFieldListCell<Visit> cell = new TextFieldListCell<>();
+            cell.setConverter(new VisitConverter());
+            return cell;
+
+        });
+        datePicker.setOnAction(actionEvent -> {
+            LocalDate date = datePicker.getValue();
+            System.out.println(date);
+            List<Visit> visits = db.getDayVisitsFromDoctor(id, date);
+            dateVisits.setItems(FXCollections.observableArrayList(visits));
+        });
+        setVisitClicker(dateVisits);
+        setVisitClicker(futureVisits);
+        surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
+            patientsToShow.clear();
+            patientsToShow.addAll(patients.keySet().stream().filter(s1 -> {
+                if (s1.toLowerCase().contains(" " + String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
+                    return true;
+                }
+                return false;
+            }).collect(Collectors.toSet()));
+        });
         nameLabel.setText(name);
         patients = db.getPatients(id);
         fillPatients(patients.keySet());
@@ -116,46 +156,6 @@ public class LekarzView extends Application {
         stage.show();
         stage.setTitle("ePrzychodnia - lekarz");
         mainStage = stage;
-        patientsListView.setOnMouseClicked(mouseEvent -> {
-            if (patientsListView.getSelectionModel().getSelectedItems().size() == 0) {
-                return;
-            }
-            Person patient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));
-            Dialog d = new Dialog();
-            d.setResizable(true);
-            Window window = d.getDialogPane().getScene().getWindow();
-            window.setOnCloseRequest(e -> window.hide());
-            d.setContentText(String.valueOf(patient));
-            d.show();
-        });
-        dateVisits.setCellFactory(listView -> {
-            TextFieldListCell<Visit> cell = new TextFieldListCell<>();
-            cell.setConverter(new VisitConverter());
-            return cell;
-        });
-        futureVisits.setCellFactory(listView -> {
-            TextFieldListCell<Visit> cell = new TextFieldListCell<>();
-            cell.setConverter(new VisitConverter());
-            return cell;
-
-        });
-        datePicker.setOnAction(actionEvent -> {
-            LocalDate date = datePicker.getValue();
-            System.out.println(date);
-            List<Visit> visits = db.getDayVisitsFromDoctor(id, date);
-            dateVisits.setItems(FXCollections.observableArrayList(visits));
-        });
-        setVisitClicker(dateVisits);
-        setVisitClicker(futureVisits);
-        surnameTextField.textProperty().addListener((observableValue, s, t1) -> {
-            patientsToShow.clear();
-            patientsToShow.addAll(patients.keySet().stream().filter(s1 -> {
-                if (s1.toLowerCase().contains(" " + String.valueOf(surnameTextField.getCharacters()).toLowerCase())) {
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toSet()));
-        });
     }
 
     private void setVisitClicker(ListView futureVisits) {

@@ -39,6 +39,8 @@ public interface DatabaseService {
 
     List<Office> getAvailableOfficesAtTime(LocalDateTime freeFrom, LocalDateTime freeTo);
 
+    List<Office> getAvailableNurseOffices(LocalDateTime freeFrom, LocalDateTime freeTo);
+
     List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo);
 
     List<Office> getAvailableOfficesAtTimeSortedByNurse(LocalDateTime freeFrom, LocalDateTime freeTo, int nurseId);
@@ -64,6 +66,8 @@ public interface DatabaseService {
     void updatePerson(Person person);
 
     void newVisit(Visit visit);
+
+    void newExertion(Exertion exertion);
 
     Integer addPerson(Person person);
 
@@ -130,4 +134,6 @@ public interface DatabaseService {
     void newMedicine(String name);
 
     boolean hasMedicine(String name);
+
+    boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId);
 }

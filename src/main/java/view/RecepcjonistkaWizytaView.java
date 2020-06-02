@@ -225,6 +225,14 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
+            if(!db.isPatientFree(date1, date2, currentPatient.getId())){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("pacjent jest zajety");
+                d.show();
+                return;
+            }
             if (currentDoctor == null) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();

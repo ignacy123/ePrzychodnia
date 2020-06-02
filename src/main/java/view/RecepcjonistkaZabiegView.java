@@ -1,8 +1,7 @@
 package view;
 
-import Model.Office;
-import Model.Person;
-import Model.Referral;
+import Model.*;
+import converters.OfficeConverter;
 import converters.PersonConverter;
 import converters.ReferralConverter;
 import db.DatabaseService;
@@ -18,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -53,6 +53,12 @@ public class RecepcjonistkaZabiegView extends Application {
     private ListView officeListView;
     @FXML
     private Label officeLabel;
+    @FXML
+    private Label nurseLabel;
+    @FXML
+    private TextArea noteTextArea;
+    @FXML
+    private Button setButton;
 
     Integer id;
     String name;
@@ -103,6 +109,29 @@ public class RecepcjonistkaZabiegView extends Application {
             }
             currentPatient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));
             patientLabel.setText(currentPatient.getName() + " " + currentPatient.getLastName());
+        });
+
+        nurseListView.setOnMouseClicked(mouseEvent -> {
+            if (nurseListView.getSelectionModel().getSelectedItems().size() == 0) {
+                return;
+            }
+            currentNurse = (Person) nurseListView.getSelectionModel().getSelectedItems().get(0);
+            nurseLabel.setText(currentNurse.getName() + " " + currentNurse.getLastName());
+        });
+
+        officeListView.setCellFactory(listView -> {
+            TextFieldListCell<Office> cell = new TextFieldListCell<>();
+            cell.setConverter(new OfficeConverter());
+            return cell;
+        });
+
+        officeListView.setOnMouseClicked(mouseEvent -> {
+            if (officeListView.getSelectionModel().getSelectedItems().size() == 0) {
+                return;
+            }
+            Office office = (Office) officeListView.getSelectionModel().getSelectedItems().get(0);
+            currentOffice = office;
+            officeLabel.setText(new OfficeConverter().toString(currentOffice));
         });
 
         findNurseButton.setOnAction(actionEvent -> {
@@ -185,10 +214,64 @@ public class RecepcjonistkaZabiegView extends Application {
                 return;
             }
 
-            if(currentNurse!=null){
+            if (currentNurse != null) {
                 officeListView.setItems(FXCollections.observableArrayList(db.getAvailableOfficesAtTimeSortedByNurse(date1, date2, currentNurse.getId())));
+            } else {
+                officeListView.setItems(FXCollections.observableArrayList(db.getAvailableNurseOffices(date1, date2)));
             }
 
+        });
+        setButton.setOnAction(actionEvent -> {
+            Exertion exertion = new Exertion();
+            if (currentPatient == null) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("nie ma pacjenta");
+                d.show();
+                return;
+            }
+            if(!db.isPatientFree(date1, date2, currentPatient.getId())){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("pacjent jest zajety");
+                d.show();
+                return;
+            }
+            exertion.setPatient(currentPatient);
+            if (currentNurse == null) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("nie ma pielęgniarki");
+                d.show();
+                return;
+            }
+            if(currentOffice==null){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("gabinet");
+                d.show();
+                return;
+            }
+            exertion.setNurse(currentNurse);
+            exertion.setNote(noteTextArea.getText());
+            exertion.setStart(Timestamp.valueOf(date1));
+            exertion.setOffice(currentOffice);
+            db.newExertion(exertion);
+            Dialog d = new Dialog();
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText("sukces");
+            d.show();
+            Application view = new RecepcjonistkaView(id, name, db);
+            try {
+                view.start(mainStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

@@ -483,6 +483,28 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public List<Office> getAvailableNurseOffices(LocalDateTime freeFrom, LocalDateTime freeTo) {
+        List<Office> toRet = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String from = freeFrom.format(formatter);
+        String to = freeTo.format(formatter);
+        String sql = "SELECT * FROM gabinety_typy WHERE typ='ZABIEGOWY' AND gabinet NOT IN (SELECT gabinet FROM zabiegi_pielegniarskie WHERE('" + from + "'<= termin_zabiegu AND '" + to + "' > termin_zabiegu));";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Office office = new Office();
+                office.setId(resultSet.getInt(1));
+                office.setType(resultSet.getString(2));
+                toRet.add(office);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
     public List<Office> getAvailableOfficesAtTimeSortedByDoctor(int doctorId, LocalDateTime freeFrom, LocalDateTime freeTo) {
         //SELECT gabinety_typy.gabinet, COALESCE(s.count, 0) FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_wizyty) AS count FROM wizyty WHERE lekarz=4 GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinet IN();
         List<Office> toRet = new ArrayList<>();
@@ -514,7 +536,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String from = freeFrom.format(formatter);
         String to = freeTo.format(formatter);
         String sql = "SELECT gabinety_typy.gabinet, COALESCE(s.count, 0), gabinety_typy.typ FROM gabinety_typy LEFT OUTER JOIN (SELECt gabinet, COUNT(id_zabiegu) AS count FROM zabiegi_pielegniarskie WHERE pielegniarka_arz=" + nurseId + " GROUP BY gabinet) AS s ON s.gabinet=gabinety_typy.gabinet WHERE gabinety_typy.gabinet IN" +
-                "(SELECT gabinet FROM gabinety_typy WHERE typ='ZABIEGOWY' AND gabinet NOT IN (SELECT gabinet FROM zabiegi_pielegniarskie WHERE('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty))) ORDER BY 2 DESC;";
+                "(SELECT gabinet FROM gabinety_typy WHERE typ='ZABIEGOWY' AND gabinet NOT IN (SELECT gabinet FROM zabiegi_pielegniarskie WHERE('" + from + "'<= termin_zabiegu AND '" + to + "' > termin_zabiegu))) ORDER BY 2 DESC;";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -817,10 +839,23 @@ public class DatabaseServiceImpl implements DatabaseService {
         System.out.println(sql);
         try {
             statement = c.createStatement();
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void newExertion(Exertion exertion) {
+        String sql = "INSERT INTO zabiegi_pielegniarskie (pacjent, pielegniarka_arz, termin_zabiegu, gabinet, notatka) VALUES (" + exertion.getPatient().getId() + ", " + exertion.getNurse().getId() + ", '" + exertion.getStart() + "', " + exertion.getOffice().getId() + ", '" + exertion.getNote() + "')";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -1360,6 +1395,36 @@ public class DatabaseServiceImpl implements DatabaseService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId) {
+        boolean one = false;
+        boolean two = false;
+        String sql = "SELECT EXISTS (SELECT * FROM wizyty WHERE(('"+from+"'<= termin_wizyty AND '"+to+"' > termin_wizyty) OR ('"+from+"' > termin_wizyty AND '"+to+"' < koniec_wizyty)) AND pacjent="+patientId+")";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            one = resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        sql = "SELECT EXISTS (SELECT * FROM zabiegi_pielegniarskie WHERE termin_zabiegu>= '"+from+"' AND termin_zabiegu < '"+to+"' AND pacjent="+patientId+")";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            two = resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(two || one){
+            return false;
+        }
+        return true;
     }
 
 }

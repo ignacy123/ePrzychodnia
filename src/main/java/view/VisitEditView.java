@@ -136,9 +136,6 @@ public class VisitEditView extends Application implements Initializable {
         if(hasRecepta){
             selectedMedicines.addAll(visit.getMedicines());
         }
-        if(hasSkierowanie){
-            selectedReferrals.addAll(visit.getReferrals());
-        }
         zwolnienieCheckBox.setSelected(hasZwolnienie);
         skierowanieCheckBox.setSelected(hasSkierowanie);
         receptaCheckBox.setSelected(hasRecepta);
