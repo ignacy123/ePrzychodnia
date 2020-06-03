@@ -367,6 +367,31 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public List<Exertion> getDayExertions(Integer nurseId, LocalDate date) {
+        List<Exertion> toReturn = new ArrayList<>();
+        String sql = "SELECT * FROM zabiegi_pielegniarskie WHERE termin_zabiegu > '" + date + " 00:00' AND termin_zabiegu <= '" + date + " 23:59' AND pielegniarka_arz=" + nurseId;
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Exertion exertion = new Exertion();
+                exertion.setId(resultSet.getInt(1));
+                exertion.setPatient(getPerson(resultSet.getInt(2)));
+                exertion.setNurse(getPerson(resultSet.getInt(3)));
+                exertion.setStart(resultSet.getTimestamp(4));
+                exertion.setOffice(getOffice(resultSet.getInt(5)));
+                exertion.setTakenPlace(resultSet.getBoolean(6));
+                exertion.setNote(resultSet.getString(7));
+                toReturn.add(exertion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
     public List<Specialization> getAvailableSpecializations() {
         List<Specialization> toRet = new ArrayList<>();
         String sql = "SELECT * FROM specjalizacje WHERE id_specjalizacji IN (SELECT specjalizacje.id_specjalizacji FROM lekarze_specjalizacje LEFT OUTER JOIN specjalizacje ON specjalizacje.id_specjalizacji = lekarze_specjalizacje.id_specjalizacji GROUP BY specjalizacje.id_specjalizacji);";
@@ -857,12 +882,25 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public void updateExertion(Exertion exertion) {
+        String sql = "UPDATE zabiegi_pielegniarskie SET odbyl_sie = " + exertion.isTakenPlace() + ", notatka='" + exertion.getNote() + "' WHERE id_zabiegu=" + exertion.getId();
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     public void newVisit(Visit visit) {
         String sql = "SELECT new_wizyta(" + visit.getPatient().getId() + ", " + visit.getDoctor().getId() + ", '" + visit.getStart() + "', '" + visit.getEnd() + "', " + visit.getOffice().getId() + ", " + visit.getSpecialization().getId() + ");";
         System.out.println(sql);
         try {
             statement = c.createStatement();
-            statement.executeUpdate(sql);
+            statement.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1460,6 +1498,26 @@ public class DatabaseServiceImpl implements DatabaseService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Double getCredibility(Integer patientId) {
+        double toRet = 0.0;
+        String sql = "SELECT (CASE WHEN XX.ile_wszystkich=0 THEN 100.00\n" +
+                "        ELSE ROUND(100*XX.ile_odbytych/XX.ile_wszystkich, 2) END) AS wiarygodnosc FROM (\n" +
+                "        SELECT ds.*, COALESCE(SUM(odbyla_sie::int),0) AS ile_odbytych, COUNT(odbyla_sie) AS ile_wszystkich  " +
+                "FROM dane_osob ds LEFT JOIN wizyty w ON w.pacjent = ds.id GROUP BY id) XX WHERE XX.id=" + patientId;
+        ;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getDouble(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
     }
 
 }

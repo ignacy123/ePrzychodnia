@@ -66,6 +66,8 @@ public class RecepcjonistkaWizytaView extends Application {
     private Button cancelButton;
     @FXML
     private Text officeText;
+    @FXML
+    private Text credibilityText;
     Specialization currentSpecialization = null;
 
     Integer id;
@@ -120,6 +122,7 @@ public class RecepcjonistkaWizytaView extends Application {
             }
             currentPatient = db.getPerson(patients.get(patientsListView.getSelectionModel().getSelectedItems().get(0)));
             surnameText.setText(new PersonConverter().toString(currentPatient));
+            credibilityText.setText(String.valueOf(db.getCredibility(currentPatient.getId())));
         });
         doctorsListView.setOnMouseClicked(mouseEvent -> {
             if (doctorsListView.getSelectionModel().getSelectedItems() == null) {
@@ -225,7 +228,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
-            if(!db.isPatientFree(date1, date2, currentPatient.getId())){
+            if (!db.isPatientFree(date1, date2, currentPatient.getId())) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
@@ -264,7 +267,7 @@ public class RecepcjonistkaWizytaView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("brawo, udało ci się umówić: "+visit.getPatient().getName()+" "+visit.getPatient().getLastName());
+            d.setContentText("brawo, udało ci się umówić: " + visit.getPatient().getName() + " " + visit.getPatient().getLastName());
             d.show();
             Application view = new RecepcjonistkaView(id, name, db);
             try {

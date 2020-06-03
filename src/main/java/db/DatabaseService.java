@@ -29,6 +29,8 @@ public interface DatabaseService {
 
     List<Visit> getFutureVisits(Integer doctorId);
 
+    List<Exertion> getDayExertions(Integer nurseId, LocalDate date);
+
     List<Specialization> getAvailableSpecializations();
 
     List<Specialization> getDoctorsSpecialization(Integer doctorId);
@@ -66,6 +68,8 @@ public interface DatabaseService {
     void updateVisit(Visit visit);
 
     void updatePerson(Person person);
+
+    void updateExertion(Exertion exertion);
 
     void newVisit(Visit visit);
 
@@ -140,4 +144,6 @@ public interface DatabaseService {
     boolean hasMedicine(String name);
 
     boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId);
+
+    Double getCredibility(Integer patientId);
 }

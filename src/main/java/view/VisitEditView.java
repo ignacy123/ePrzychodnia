@@ -73,6 +73,8 @@ public class VisitEditView extends Application implements Initializable {
     private TextField medicineTextField;
     @FXML
     private ListView medicineListView;
+    @FXML
+    private Text credibilityText;
 
     String name;
     int doctorId;
@@ -133,7 +135,7 @@ public class VisitEditView extends Application implements Initializable {
             zwolnienieFromDatePicker.setValue(LocalDate.now());
             zwolnienieToDatePicker.setValue(LocalDate.now().plus(1, ChronoUnit.DAYS));
         }
-        if(hasRecepta){
+        if (hasRecepta) {
             selectedMedicines.addAll(visit.getMedicines());
         }
         zwolnienieCheckBox.setSelected(hasZwolnienie);
@@ -164,10 +166,10 @@ public class VisitEditView extends Application implements Initializable {
             TextInputDialog td = new TextInputDialog();
             td.getEditor().setText("visitEditView.java linia koło 150");
             Optional<String> s = td.showAndWait();
-            if(s.isPresent()){
+            if (s.isPresent()) {
                 System.out.println(s);
                 referral.setNote(s.get());
-            }else{
+            } else {
                 System.out.println(":<");
                 return;
             }
@@ -187,7 +189,7 @@ public class VisitEditView extends Application implements Initializable {
             if (mouseEvent.getClickCount() != 2) {
                 return;
             }
-            if(selectedSkierowanie.getSelectionModel().getSelectedItems().size()==0){
+            if (selectedSkierowanie.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             Referral ref = (Referral) selectedSkierowanie.getSelectionModel().getSelectedItems().get(0);
@@ -205,11 +207,11 @@ public class VisitEditView extends Application implements Initializable {
             }
         });
         receptaCheckBox.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if(t1){
+            if (t1) {
                 medicineTextField.setVisible(true);
                 medicineListView.setVisible(true);
                 hasRecepta = true;
-            }else{
+            } else {
                 medicineTextField.setVisible(false);
                 medicineListView.setVisible(false);
                 hasRecepta = false;
@@ -247,7 +249,7 @@ public class VisitEditView extends Application implements Initializable {
                 System.out.println(name);
                 Disease disease = new Disease();
                 disease.setIcd10Code(diseases.get(name));
-                if(disease.getIcd10Code()==null){
+                if (disease.getIcd10Code() == null) {
                     return;
                 }
                 disease.setPrettyName(name);
@@ -269,7 +271,7 @@ public class VisitEditView extends Application implements Initializable {
             if (mouseEvent.getClickCount() != 2) {
                 return;
             }
-            if(medicineListView.getSelectionModel().getSelectedItems().size()==0){
+            if (medicineListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             Medicine toDel = (Medicine) medicineListView.getSelectionModel().getSelectedItems().get(0);
@@ -282,26 +284,26 @@ public class VisitEditView extends Application implements Initializable {
                 System.out.println(name);
                 med.setName(name);
                 med.setId(medicines.get(name));
-                if(med.getId()==null){
+                if (med.getId() == null) {
                     return;
                 }
                 TextInputDialog td = new TextInputDialog();
                 td.getEditor().setText("zgodnie z ulotką");
                 td.setResizable(true);
                 Optional<String> s = td.showAndWait();
-                if(s.isPresent()){
+                if (s.isPresent()) {
                     System.out.println(s);
                     med.setInstruction(s.get());
-                }else{
+                } else {
                     System.out.println(":<");
                     return;
                 }
-                if(selectedMedicines.filtered(medicine -> {
-                    if(medicine.getName().equals(med.getName())){
+                if (selectedMedicines.filtered(medicine -> {
+                    if (medicine.getName().equals(med.getName())) {
                         return true;
                     }
                     return false;
-                }).size()>0){
+                }).size() > 0) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -332,7 +334,7 @@ public class VisitEditView extends Application implements Initializable {
         });
         mainStage = stage;
         saveAndExitButton.setOnAction(actionEvent -> {
-            if (hasSkierowanie && selectedReferrals.size()==0) {
+            if (hasSkierowanie && selectedReferrals.size() == 0) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -358,7 +360,7 @@ public class VisitEditView extends Application implements Initializable {
             if (hasZwolnienie) {
                 System.out.println("Od: " + zwolnienieFromDate);
                 System.out.println("Do: " + zwolnienieToDate);
-                if(zwolnienieFromDate.isAfter(zwolnienieToDate)){
+                if (zwolnienieFromDate.isAfter(zwolnienieToDate)) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -376,7 +378,7 @@ public class VisitEditView extends Application implements Initializable {
                 visit.setReferrals(selectedReferrals);
                 System.out.println("Do: " + selectedReferrals);
             }
-            if(hasSkierowanie && !visit.isTakenPlace()){
+            if (hasSkierowanie && !visit.isTakenPlace()) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -385,8 +387,26 @@ public class VisitEditView extends Application implements Initializable {
                 d.show();
                 return;
             }
+            if (hasZwolnienie && !visit.isTakenPlace()) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("wizyta ma sie odbyc jak chcesz zwolnienie");
+                d.show();
+                return;
+            }
+            if (hasRecepta && !visit.isTakenPlace()) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("wizyta ma sie odbyc jak chcesz zwolnienie");
+                d.show();
+                return;
+            }
             visit.setHasRecepta(hasRecepta);
-            if(hasRecepta && selectedMedicines.size()==0){
+            if (hasRecepta && selectedMedicines.size() == 0) {
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();

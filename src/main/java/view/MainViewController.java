@@ -86,7 +86,7 @@ public class MainViewController extends Application {
                 view = new AdministracjaView(names.get(name), name, db);
                 break;
             case PIELEGNIARKA_ARZ:
-                view = new PielegniarkaView(names.get(name), name);
+                view = new PielegniarkaView(names.get(name), name, db);
                 break;
             case RECEPCJONISTKA_TA:
                 view = new RecepcjonistkaView(names.get(name), name, db);
