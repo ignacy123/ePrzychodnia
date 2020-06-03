@@ -16,6 +16,7 @@ import javafx.stage.Window;
 import javax.management.relation.Role;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -145,6 +146,15 @@ public class AdministracjaHireView extends Application {
                 d.show();
                 return;
             }
+            if(birthDate.isAfter(LocalDate.now().minus(2, ChronoUnit.DAYS))){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("coś młody ten pracownik");
+                d.show();
+                return;
+            }
             String email = String.valueOf(emailTextField.getCharacters());
             String phoneNumber = String.valueOf(phoneTextField.getCharacters());
             Roles role = (Roles) etatChoiceBox.getSelectionModel().getSelectedItem();
@@ -166,6 +176,18 @@ public class AdministracjaHireView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("podaj poprawny email");
+                d.show();
+                return;
+            }
+            String ptr2 = "^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])+$";
+            Pattern pattern2 = Pattern.compile(ptr2);
+            Matcher matcher2 = pattern2.matcher(phoneNumber);
+            if(!matcher2.matches()){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("podaj poprawny nuemr telefonu");
                 d.show();
                 return;
             }

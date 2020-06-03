@@ -94,9 +94,7 @@ public class AdministracjaStatsView extends Application {
         doctorSkierowanieLabel.setText("-");
         doctorZwolnienieLabel.setText("-");
         doctorLongestZwolnienieLabel.setText("-");
-        doctors.clear();
         doctors.addAll(db.getDoctorsVisitCount(date1, date2));
-        nurses.clear();
         nurses.addAll(db.getNursesVisitCount(date1, date2));
         visitLabel.setText(String.valueOf(db.getVisitCount(date1, date2)));
         exertionsLabel.setText(String.valueOf(db.getExertionCount(date1, date2)));
@@ -131,22 +129,26 @@ public class AdministracjaStatsView extends Application {
         fromDatePicker.getEditor().setDisable(true);
         toDatePicker.getEditor().setDisable(true);
         fromDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
+            doctors.clear();
+            nurses.clear();
             date1 = fromDatePicker.getValue();
             date2 = toDatePicker.getValue();
             if (date1 == null || date2 == null) {
                 return;
             }
-            if (date2.isAfter(date1)) {
+            if (!date2.isBefore(date1)) {
                 countStats();
             }
         });
         toDatePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
+            doctors.clear();
+            nurses.clear();
             date1 = fromDatePicker.getValue();
             date2 = toDatePicker.getValue();
             if (date1 == null || date2 == null) {
                 return;
             }
-            if (date2.isAfter(date1)) {
+            if (!date2.isBefore(date1)) {
                 countStats();
             }
         });

@@ -165,12 +165,22 @@ public class VisitEditView extends Application implements Initializable {
             referral.setSpecialization((Specialization) skierowanieListView.getSelectionModel().getSelectedItems().get(0));
             TextInputDialog td = new TextInputDialog();
             td.getEditor().setText("visitEditView.java linia koło 150");
+            td.setResizable(true);
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
                 System.out.println(s);
                 referral.setNote(s.get());
             } else {
                 System.out.println(":<");
+                return;
+            }
+            if (selectedReferrals.filtered(referral1 -> {
+                if (referral1.getSpecialization().equals(referral.getSpecialization())) {
+                    return true;
+                }
+                return false;
+            }).size() > 0) {
+                skierowanieListView.getSelectionModel().clearSelection();
                 return;
             }
             selectedReferrals.add(referral);
@@ -366,6 +376,43 @@ public class VisitEditView extends Application implements Initializable {
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("zabawne (zwolnienie)");
+                    d.show();
+                    return;
+                }
+                if(zwolnienieFromDate.plus(269, ChronoUnit.DAYS).isBefore(zwolnienieToDate)){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Zwolnienie nie może być dłuższe niż 270 dni");
+                    d.show();
+                    return;
+                }
+                if(db.hasZwolnienie(zwolnienieFromDate, zwolnienieToDate, visit.getPatient().getId(), visit.getId())){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Pacjent ma już zwolnienie w tym terminie.");
+                    d.show();
+                    return;
+                }
+                if(visit.getStart().toLocalDateTime().toLocalDate().plus(4, ChronoUnit.DAYS).isBefore(zwolnienieFromDate)){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Zwolnienie zaczyna się za późno.");
+                    d.show();
+                    return;
+                }
+                if(zwolnienieFromDate.plus(2, ChronoUnit.DAYS).isBefore(visit.getStart().toLocalDateTime().toLocalDate()) && visit.getSpecialization().getId()!=65
+                && visit.getSpecialization().getId()!=66){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Zwolnienie wystawione przez lekarza niebędącego psychiatrą nie może sięgać wstecz więcej niż 3 dni.");
                     d.show();
                     return;
                 }

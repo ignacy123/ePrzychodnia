@@ -151,6 +151,30 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 Date hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(startTextField.getCharacters()));
                 Date hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(endTextField.getCharacters()));
+                if (hour.getTime() < 25200000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za wcześnie");
+                    d.show();
+                    return;
+                }
+                if (hour.getTime() >= 61200000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za późno");
+                    d.show();
+                    return;
+                }
+                if (hour2.getTime() >= 64800000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za późno");
+                    d.show();
+                    return;
+                }
                 date1 = visitDatePicker.getValue().atStartOfDay();
                 date2 = visitDatePicker.getValue().atStartOfDay();
                 date1 = date1.plus(hour.getTime(), ChronoUnit.MILLIS);
@@ -189,6 +213,30 @@ public class RecepcjonistkaWizytaView extends Application {
                 Date hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(endTextField.getCharacters()));
                 date1 = visitDatePicker.getValue().atStartOfDay();
                 date2 = visitDatePicker.getValue().atStartOfDay();
+                if (hour.getTime() < 25200000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za wcześnie");
+                    d.show();
+                    return;
+                }
+                if (hour.getTime() >= 61200000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za późno");
+                    d.show();
+                    return;
+                }
+                if (hour2.getTime() >= 64800000) {
+                    Dialog d = new Dialog();
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("trochę za późno");
+                    d.show();
+                    return;
+                }
                 date1 = date1.plus(hour.getTime(), ChronoUnit.MILLIS);
                 date1 = date1.plus(1, ChronoUnit.HOURS);
                 date2 = date2.plus(hour2.getTime(), ChronoUnit.MILLIS);

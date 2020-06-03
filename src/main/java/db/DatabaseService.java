@@ -145,5 +145,7 @@ public interface DatabaseService {
 
     boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId);
 
+    boolean hasZwolnienie(LocalDate from, LocalDate to, Integer patientId, Integer visitId);
+
     Double getCredibility(Integer patientId);
 }

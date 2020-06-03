@@ -131,6 +131,18 @@ public class RecepcjonistkaAddView extends Application {
                 d.show();
                 return;
             }
+            String ptr2 = "^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])+$";
+            Pattern pattern2 = Pattern.compile(ptr2);
+            Matcher matcher2 = pattern2.matcher(phoneNumber);
+            if(!matcher2.matches()){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("podaj poprawny nuemr telefonu");
+                d.show();
+                return;
+            }
             Person toAdd = new Person();
             toAdd.setName(name);
             toAdd.setLastName(lastName);

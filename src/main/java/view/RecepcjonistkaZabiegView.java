@@ -151,6 +151,22 @@ public class RecepcjonistkaZabiegView extends Application {
             } catch (ParseException e) {
                 System.out.println("to nie data debilu");
             }
+            if (hour.getTime() < 25200000) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("trochę za wcześnie");
+                d.show();
+                return;
+            }
+            if (hour.getTime() >= 61200000) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("trochę za późno");
+                d.show();
+                return;
+            }
             date1 = datePicker.getValue().atStartOfDay();
             date2 = datePicker.getValue().atStartOfDay();
             date1 = date1.plus(hour.getTime(), ChronoUnit.MILLIS);
@@ -190,6 +206,22 @@ public class RecepcjonistkaZabiegView extends Application {
                 hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(toTextField.getCharacters()));
             } catch (ParseException e) {
                 System.out.println("to nie data debilu");
+            }
+            if (hour.getTime() < 25200000) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("trochę za wcześnie");
+                d.show();
+                return;
+            }
+            if (hour.getTime() >= 61200000) {
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("trochę za późno");
+                d.show();
+                return;
             }
             date1 = datePicker.getValue().atStartOfDay();
             date2 = datePicker.getValue().atStartOfDay();

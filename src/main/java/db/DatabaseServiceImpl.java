@@ -32,7 +32,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public Map<String, Integer> getNames(Roles role) {
         //SELECT id, imie, nazwisko FROM dane_osob WHERE id IN (SELECT id_pracownika FROM pracownicy WHERE etat='LEKARZ');
         Map<String, Integer> toReturn = new HashMap<>();
-        String sql = "SELECT id, imie, nazwisko FROM dane_osob WHERE id IN (SELECT id_pracownika FROM pracownicy WHERE etat='" + role + "')";
+        String sql = "SELECT id, imie, nazwisko FROM dane_osob WHERE id IN (SELECT id_pracownika FROM pracownicy WHERE etat='" + role + "' AND status_zatrudnienia=true) ";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -134,7 +134,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public List<Visit> getDayVisitsFromDoctor(Integer doctorId, LocalDate date) {
         List<Visit> toReturn = new ArrayList<>();
-        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' AND lekarz=" + doctorId + " ORDER BY 4 DESC";
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= '" + date + " 00:00:00' AND termin_wizyty<='" + date + " 23:59:59' AND lekarz=" + doctorId + " ORDER BY 5";
         ;
         try {
             statement = c.createStatement();
@@ -602,12 +602,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<Person> getDoctorsVisitCount(LocalDate date1, LocalDate date2) {
+    public List<Person> getDoctorsVisitCount(LocalDate from, LocalDate to) {
         List<Person> toRet = new ArrayList<>();
         String sql = "SELECT dane_osob.imie, dane_osob.nazwisko, COALESCE(s.count, 0), dane_osob.id FROM dane_osob " +
                 "LEFT OUTER JOIN (SELECT id, COUNT(id_wizyty) FROM dane_osob LEFT OUTER JOIN wizyty ON wizyty.lekarz=dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='LEKARZ') " +
-                "AND termin_wizyty<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' AND termin_wizyty>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
+                "AND termin_wizyty<'" + to + " 23:59' AND termin_wizyty>'" + from + " 00:00' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='LEKARZ') ORDER BY 3 DESC";
         try {
             statement = c.createStatement();
@@ -627,12 +627,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<Person> getNursesVisitCount(LocalDate date1, LocalDate date2) {
+    public List<Person> getNursesVisitCount(LocalDate from, LocalDate to) {
         List<Person> toRet = new ArrayList<>();
         String sql = "SELECT dane_osob.imie, dane_osob.nazwisko, COALESCE(s.count, 0) FROM dane_osob " +
                 "LEFT OUTER JOIN (SELECT id, COUNT(id_zabiegu) FROM dane_osob LEFT OUTER JOIN zabiegi_pielegniarskie ON zabiegi_pielegniarskie.pielegniarka_arz=dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='PIELEGNIARKA_ARZ') " +
-                "AND termin_zabiegu<'" + Timestamp.valueOf(date2.atStartOfDay()) + "' AND termin_zabiegu>'" + Timestamp.valueOf(date1.atStartOfDay()) + "' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
+                "AND termin_zabiegu<'" + to + " 23:59' AND termin_zabiegu>'" + from + " 00:00' GROUP BY id, imie, nazwisko) AS s ON s.id = dane_osob.id " +
                 "WHERE dane_osob.id IN (SELECT id_pracownika FROM pracownicy WHERE etat='PIELEGNIARKA_ARZ') ORDER BY 3 DESC";
         try {
             statement = c.createStatement();
@@ -1498,6 +1498,25 @@ public class DatabaseServiceImpl implements DatabaseService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean hasZwolnienie(LocalDate from, LocalDate to, Integer patientId, Integer visitId) {
+        boolean exists = false;
+        String sql = "SELECT EXISTS ( SELECT * FROM (SELECT * FROM wizyty JOIN zwolnienia ON wizyta = id_wizyty) XX" +
+                "  WHERE XX.pacjent = "+patientId+
+                "  AND XX.id_wizyty!="+visitId+" AND ( ( '"+from+"' <= od_kiedy AND '"+to+"' > od_kiedy ) OR" +
+                "  ( '"+from+"' > od_kiedy AND '"+to+"' < do_kiedy )));";
+        System.out.println(sql);
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            exists = resultSet.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
     }
 
     @Override
