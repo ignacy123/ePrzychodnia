@@ -192,6 +192,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
             }
             db.fireWorker(currentWorker.getId());
             currentWorker.setActive(false);
+            activeLabel.setText("false");
         });
 
     }

@@ -30,6 +30,8 @@ public class RecepcjonistkaView extends Application {
     private Button cancelExertionButton;
     @FXML
     private Button newExertionButton;
+    @FXML
+    private Button patientButton;
 
     Integer id;
     String name;
@@ -123,7 +125,35 @@ public class RecepcjonistkaView extends Application {
                 e.printStackTrace();
             }
         });
+        patientButton.setOnAction(actionEvent -> {
+            TextInputDialog td = new TextInputDialog();
+            td.getEditor().setText("Podaj PESEL");
+            td.setResizable(true);
+            Optional<String> s = td.showAndWait();
+            if (s.isPresent()) {
+                if (db.isInDb(s.get())) {
+                    Application view = new RecepcjonistkaPacjentView(id, name, db, s.get());
+                    try {
+                        view.start(mainStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("nie ma takiego gościa");
+                    d.show();
+                    return;
+                }
+            } else {
+                System.out.println(":<");
+            }
+        });
     }
+
+
 
     @Override
     public void start(Stage stage) throws Exception {

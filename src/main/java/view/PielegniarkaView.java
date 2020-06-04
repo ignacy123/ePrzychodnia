@@ -113,6 +113,13 @@ public class PielegniarkaView extends Application {
             currentExertion.setTakenPlace(takenPlaceButton.isSelected());
             currentExertion.setNote(noteTextArea.getText());
             db.updateExertion(currentExertion);
+            Dialog d = new Dialog();
+            d.setResizable(true);
+            Window window = d.getDialogPane().getScene().getWindow();
+            window.setOnCloseRequest(e -> window.hide());
+            d.setContentText("Sukces!");
+            d.show();
+            return;
         });
     }
 

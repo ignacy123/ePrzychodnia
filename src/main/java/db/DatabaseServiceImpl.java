@@ -295,10 +295,202 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
+    public List<Exertion> getPastExertions(Integer patientId) {
+        List<Exertion> toReturn = new ArrayList<>();
+        String sql = "SELECT * FROm zabiegi_pielegniarskie WHERE termin_zabiegu < CURRENT_TIMESTAMP AND pacjent=" + patientId + " ORDER BY termin_zabiegu DESC";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Exertion exertion = new Exertion();
+                exertion.setId(resultSet.getInt(1));
+                exertion.setPatient(getPerson(resultSet.getInt(2)));
+                exertion.setNurse(getPerson(resultSet.getInt(3)));
+                exertion.setStart(resultSet.getTimestamp(4));
+                exertion.setOffice(getOffice(resultSet.getInt(5)));
+                exertion.setTakenPlace(resultSet.getBoolean(6));
+                exertion.setNote(resultSet.getString(7));
+                toReturn.add(exertion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public List<Exertion> getFutureExertions(Integer patientId) {
+        List<Exertion> toReturn = new ArrayList<>();
+        String sql = "SELECT * FROm zabiegi_pielegniarskie WHERE termin_zabiegu >= CURRENT_TIMESTAMP AND pacjent=" + patientId + " ORDER BY termin_zabiegu";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Exertion exertion = new Exertion();
+                exertion.setId(resultSet.getInt(1));
+                exertion.setPatient(getPerson(resultSet.getInt(2)));
+                exertion.setNurse(getPerson(resultSet.getInt(3)));
+                exertion.setStart(resultSet.getTimestamp(4));
+                exertion.setOffice(getOffice(resultSet.getInt(5)));
+                exertion.setTakenPlace(resultSet.getBoolean(6));
+                exertion.setNote(resultSet.getString(7));
+                toReturn.add(exertion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
     public List<Visit> getFutureVisits(Integer doctorId) {
         List<Visit> toReturn = new ArrayList<>();
         //String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
         String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty > CURRENT_DATE AND lekarz=" + doctorId + "ORDER BY 4 DESC";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Visit visit = new Visit();
+                visit.setId(resultSet.getInt(1));
+                visit.setPatient(getPerson(resultSet.getInt(2)));
+                visit.setSpecialization(getSpecialization(resultSet.getInt(3)));
+                visit.setDoctor(getPerson(resultSet.getInt(4)));
+                visit.setStart(resultSet.getTimestamp(5));
+                visit.setEnd(resultSet.getTimestamp(6));
+                visit.setOffice(getOffice(resultSet.getInt(7)));
+                visit.setTakenPlace(resultSet.getBoolean(8));
+                visit.setNote(resultSet.getString(9));
+                Array array = resultSet.getArray(10);
+                if (array != null) {
+                    List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
+                    visit.setDiseases(diseasesCode);
+                }
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                array = resultSet.getArray(12);
+                Array array2 = resultSet.getArray(13);
+                if (array != null) {
+                    List<Referral> list = new ArrayList<>();
+                    List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
+                    List<String> desc = Arrays.asList((String[]) array2.getArray());
+                    for (int i = 0; i < ids.size(); i++) {
+                        Referral ref = new Referral();
+                        ref.setSpecialization(getSpecialization(ids.get(i)));
+                        ref.setNote(desc.get(i));
+                        list.add(ref);
+                    }
+                    visit.setReferrals(list);
+                }
+                visit.setHasZwolnienie(resultSet.getBoolean(14));
+                visit.setZwolnienieStart(resultSet.getTimestamp(15));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(16));
+                visit.setHasRecepta(resultSet.getBoolean(17));
+                array = resultSet.getArray(18);
+                List<Integer> medicines = null;
+                List<String> instructions = null;
+                List<Medicine> med = new ArrayList<>();
+                if (array != null) {
+                    medicines = Arrays.asList((Integer[]) array.getArray());
+                }
+                array = resultSet.getArray(19);
+                if (array != null) {
+                    instructions = Arrays.asList((String[]) array.getArray());
+                }
+                if (medicines != null) {
+                    for (int i = 0; i < medicines.size(); i++) {
+                        Medicine medicine = getMedicine(medicines.get(i));
+                        medicine.setInstruction(instructions.get(i));
+                        med.add(medicine);
+                    }
+                }
+                visit.setMedicines(med);
+
+                toReturn.add(visit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public List<Visit> getFutureVisitsPatient(Integer patientId) {
+        List<Visit> toReturn = new ArrayList<>();
+        //String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty >= CURRENT_TIMESTAMP AND pacjent=" + patientId + "ORDER BY 4";
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Visit visit = new Visit();
+                visit.setId(resultSet.getInt(1));
+                visit.setPatient(getPerson(resultSet.getInt(2)));
+                visit.setSpecialization(getSpecialization(resultSet.getInt(3)));
+                visit.setDoctor(getPerson(resultSet.getInt(4)));
+                visit.setStart(resultSet.getTimestamp(5));
+                visit.setEnd(resultSet.getTimestamp(6));
+                visit.setOffice(getOffice(resultSet.getInt(7)));
+                visit.setTakenPlace(resultSet.getBoolean(8));
+                visit.setNote(resultSet.getString(9));
+                Array array = resultSet.getArray(10);
+                if (array != null) {
+                    List<String> diseasesCode = Arrays.asList((String[]) array.getArray());
+                    visit.setDiseases(diseasesCode);
+                }
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                visit.setHasSkierowanie(resultSet.getBoolean(11));
+                array = resultSet.getArray(12);
+                Array array2 = resultSet.getArray(13);
+                if (array != null) {
+                    List<Referral> list = new ArrayList<>();
+                    List<Integer> ids = Arrays.asList((Integer[]) array.getArray());
+                    List<String> desc = Arrays.asList((String[]) array2.getArray());
+                    for (int i = 0; i < ids.size(); i++) {
+                        Referral ref = new Referral();
+                        ref.setSpecialization(getSpecialization(ids.get(i)));
+                        ref.setNote(desc.get(i));
+                        list.add(ref);
+                    }
+                    visit.setReferrals(list);
+                }
+                visit.setHasZwolnienie(resultSet.getBoolean(14));
+                visit.setZwolnienieStart(resultSet.getTimestamp(15));
+                visit.setZwolnienieEnd(resultSet.getTimestamp(16));
+                visit.setHasRecepta(resultSet.getBoolean(17));
+                array = resultSet.getArray(18);
+                List<Integer> medicines = null;
+                List<String> instructions = null;
+                List<Medicine> med = new ArrayList<>();
+                if (array != null) {
+                    medicines = Arrays.asList((Integer[]) array.getArray());
+                }
+                array = resultSet.getArray(19);
+                if (array != null) {
+                    instructions = Arrays.asList((String[]) array.getArray());
+                }
+                if (medicines != null) {
+                    for (int i = 0; i < medicines.size(); i++) {
+                        Medicine medicine = getMedicine(medicines.get(i));
+                        medicine.setInstruction(instructions.get(i));
+                        med.add(medicine);
+                    }
+                }
+                visit.setMedicines(med);
+
+                toReturn.add(visit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    @Override
+    public List<Visit> getPastVisits(Integer patientId) {
+        List<Visit> toReturn = new ArrayList<>();
+        //String sql = "SELECT * FROM wizyty WHERE termin_wizyty > CURRENT_DATE AND termin_wizyty< CURRENT_TIMESTAMP + (INTERVAL '7 DAYS') AND lekarz=" + doctorId;
+        String sql = "SELECT * FROM wizyty_info WHERE termin_wizyty < CURRENT_TIMESTAMP AND pacjent=" + patientId + "ORDER BY 4 DESC ";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -469,7 +661,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql = "SELECT id_pracownika, COALESCE(count, 0) FROM pracownicy LEFT OUTER JOIN (SELECT lekarz, count(id_wizyty) FROM wizyty WHERE pacjent=" + patientId +
                 " AND lekarz IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " + specializationId +
                 ") GROUP BY lekarz) AS s1 ON s1.lekarz = pracownicy.id_pracownika WHERE id_pracownika IN (SELECT id_lekarza FROM lekarze_specjalizacje WHERE id_specjalizacji = " +
-                specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE ('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty))" + " ORDER BY 2 DESC;";
+                specializationId + ") AND id_pracownika NOT IN (SELECT lekarz FROM wizyty WHERE ('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty))" + " AND status_zatrudnienia = true ORDER BY 2 DESC;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -493,7 +685,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql = "SELECT pracownicy.id_pracownika, COALESCE(s.count, 0) FROM pracownicy LEFT OUTER JOIN zabiegi_pielegniarskie ON zabiegi_pielegniarskie.pielegniarka_arz=pracownicy.id_pracownika\n" +
                 "LEFT OUTER JOIN (SELECT id_pracownika, COUNT(id_zabiegu) AS count FROM pracownicy LEFT OUTER JOIN zabiegi_pielegniarskie ON zabiegi_pielegniarskie.pielegniarka_arz=pracownicy.id_pracownika " +
                 "WHERE etat='PIELEGNIARKA_ARZ' AND id_pracownika NOT IN (SELECT pielegniarka_arz FROM zabiegi_pielegniarskie WHERE ('" + from + "'<= termin_zabiegu AND '" + to + "' > termin_zabiegu)) AND pacjent=" + patientId + " GROUP BY id_pracownika) AS s ON s.id_pracownika = pracownicy.id_pracownika" +
-                " WHERE etat='PIELEGNIARKA_ARZ' AND pracownicy.id_pracownika NOT IN (SELECT pielegniarka_arz FROM zabiegi_pielegniarskie WHERE ('" + from + "'<= termin_zabiegu AND '" + to + "' > termin_zabiegu)) GROUP BY pracownicy.id_pracownika, s.count ORDER BY 2 DESC;";
+                " WHERE etat='PIELEGNIARKA_ARZ' AND pracownicy.id_pracownika NOT IN (SELECT pielegniarka_arz FROM zabiegi_pielegniarskie WHERE ('" + from + "'<= termin_zabiegu AND '" + to + "' > termin_zabiegu)) AND status_zatrudnienia=true GROUP BY pracownicy.id_pracownika, s.count ORDER BY 2 DESC;";
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -1018,8 +1210,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                         worker.setRole(Roles.OBSŁUGA_TECHNICZNA);
                 }
                 worker.setHiredFrom(resultSet.getDate(9));
-                //worker.setActive(resultSet.getBoolean(10));
-                worker.setActive(true);
+                worker.setActive(resultSet.getBoolean(10));
                 toRet.add(worker);
             }
         } catch (SQLException e) {
@@ -1232,6 +1423,54 @@ public class DatabaseServiceImpl implements DatabaseService {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 toRet = resultSet.getInt(2);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public Integer getReceptaId(Integer visitId) {
+        Integer toRet = null;
+        String sql = "SELECT id_recepty FROM recepty WHERE wizyta = " + visitId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public Integer getZwolnienieId(Integer visitId) {
+        Integer toRet = null;
+        String sql = "SELECT id_zwolnienia FROM zwolnienia WHERE wizyta = " + visitId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toRet;
+    }
+
+    @Override
+    public String getSkierowanieIds(Integer visitId) {
+        String toRet = "";
+        String sql = "SELECT id_skierowania FROM skierowania WHERE wizyta = " + visitId;
+        try {
+            statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                toRet += resultSet.getInt(1) + " ";
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1504,9 +1743,9 @@ public class DatabaseServiceImpl implements DatabaseService {
     public boolean hasZwolnienie(LocalDate from, LocalDate to, Integer patientId, Integer visitId) {
         boolean exists = false;
         String sql = "SELECT EXISTS ( SELECT * FROM (SELECT * FROM wizyty JOIN zwolnienia ON wizyta = id_wizyty) XX" +
-                "  WHERE XX.pacjent = "+patientId+
-                "  AND XX.id_wizyty!="+visitId+" AND ( ( '"+from+"' <= od_kiedy AND '"+to+"' > od_kiedy ) OR" +
-                "  ( '"+from+"' > od_kiedy AND '"+to+"' < do_kiedy )));";
+                "  WHERE XX.pacjent = " + patientId +
+                "  AND XX.id_wizyty!=" + visitId + " AND ( ( '" + from + "' <= od_kiedy AND '" + to + "' > od_kiedy ) OR" +
+                "  ( '" + from + "' > od_kiedy AND '" + to + "' < do_kiedy )));";
         System.out.println(sql);
         try {
             statement = c.createStatement();

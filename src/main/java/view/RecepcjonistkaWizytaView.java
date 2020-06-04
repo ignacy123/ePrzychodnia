@@ -273,6 +273,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("jakiś pacjent by się przydał");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -281,6 +282,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("pacjent jest zajety");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -289,6 +291,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("wizyta bez lekarza jest mało przydatna");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -297,6 +300,16 @@ public class RecepcjonistkaWizytaView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("pod mostem już nie ma miejsca");
+                d.setResizable(true);
+                d.show();
+                return;
+            }
+            if(currentPatient.getId().equals(currentDoctor.getId())){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Lekarz nie może mieć wizyty sam ze sobą.");
+                d.setResizable(true);
                 d.show();
                 return;
             }

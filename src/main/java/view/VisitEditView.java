@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class VisitEditView extends Application implements Initializable {
-
     @FXML
     private Label nameLabel;
     @FXML
@@ -75,6 +74,18 @@ public class VisitEditView extends Application implements Initializable {
     private ListView medicineListView;
     @FXML
     private Text credibilityText;
+    @FXML
+    private Text dataText;
+    @FXML
+    private Label patientNameLabel;
+    @FXML
+    private Label patientLastNameLabel;
+    @FXML
+    private Label dateOfBirthLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Label phoneLabel;
 
     String name;
     int doctorId;
@@ -379,7 +390,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.show();
                     return;
                 }
-                if(zwolnienieFromDate.plus(269, ChronoUnit.DAYS).isBefore(zwolnienieToDate)){
+                if (zwolnienieFromDate.plus(269, ChronoUnit.DAYS).isBefore(zwolnienieToDate)) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -388,7 +399,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.show();
                     return;
                 }
-                if(db.hasZwolnienie(zwolnienieFromDate, zwolnienieToDate, visit.getPatient().getId(), visit.getId())){
+                if (db.hasZwolnienie(zwolnienieFromDate, zwolnienieToDate, visit.getPatient().getId(), visit.getId())) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -397,7 +408,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.show();
                     return;
                 }
-                if(visit.getStart().toLocalDateTime().toLocalDate().plus(4, ChronoUnit.DAYS).isBefore(zwolnienieFromDate)){
+                if (visit.getStart().toLocalDateTime().toLocalDate().plus(4, ChronoUnit.DAYS).isBefore(zwolnienieFromDate)) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -406,8 +417,8 @@ public class VisitEditView extends Application implements Initializable {
                     d.show();
                     return;
                 }
-                if(zwolnienieFromDate.plus(2, ChronoUnit.DAYS).isBefore(visit.getStart().toLocalDateTime().toLocalDate()) && visit.getSpecialization().getId()!=65
-                && visit.getSpecialization().getId()!=66){
+                if (zwolnienieFromDate.plus(2, ChronoUnit.DAYS).isBefore(visit.getStart().toLocalDateTime().toLocalDate()) && visit.getSpecialization().getId() != 65
+                        && visit.getSpecialization().getId() != 66) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -486,7 +497,13 @@ public class VisitEditView extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nameLabel.setText(name);
+        patientNameLabel.setText(visit.getPatient().getName());
+        patientLastNameLabel.setText(visit.getPatient().getLastName());
+        dateOfBirthLabel.setText(String.valueOf(visit.getPatient().getDateOfBirth()));
+        emailLabel.setText(visit.getPatient().getEmail());
+        phoneLabel.setText(visit.getPatient().getPhoneNumber());
         typWizytyText.setText(visit.getSpecialization().getPrettyName());
+        dataText.setText(String.valueOf(visit.getStart()));
         TextFields.bindAutoCompletion(diseaseTextField, diseases.keySet());
         TextFields.bindAutoCompletion(medicineTextField, medicines.keySet());
     }

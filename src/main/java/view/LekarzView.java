@@ -87,7 +87,6 @@ public class LekarzView extends Application {
             TextFieldListCell<Visit> cell = new TextFieldListCell<>();
             cell.setConverter(new VisitConverter());
             return cell;
-
         });
         datePicker.setOnAction(actionEvent -> {
             LocalDate date = datePicker.getValue();

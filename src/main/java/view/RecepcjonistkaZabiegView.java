@@ -234,6 +234,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("czasu nie cofniesz");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -242,6 +243,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("wizyta nie może się skończyć zanim się zacznie deklu");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -260,6 +262,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("nie ma pacjenta");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -268,6 +271,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("pacjent jest zajety");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -277,6 +281,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("nie ma pielęgniarki");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -285,6 +290,16 @@ public class RecepcjonistkaZabiegView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("gabinet");
+                d.setResizable(true);
+                d.show();
+                return;
+            }
+            if(currentPatient.getId().equals(currentNurse.getId())){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Pielęgniarka nie może mieć zabiegu sama ze sobą.");
+                d.setResizable(true);
                 d.show();
                 return;
             }
@@ -297,6 +312,7 @@ public class RecepcjonistkaZabiegView extends Application {
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
             d.setContentText("sukces");
+            d.setResizable(true);
             d.show();
             Application view = new RecepcjonistkaView(id, name, db);
             try {

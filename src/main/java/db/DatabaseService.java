@@ -27,7 +27,15 @@ public interface DatabaseService {
 
     List<Exertion> getDayExertions(LocalDate date);
 
+    List<Exertion> getPastExertions(Integer patientId);
+
+    List<Exertion> getFutureExertions(Integer patientId);
+
     List<Visit> getFutureVisits(Integer doctorId);
+
+    List<Visit> getFutureVisitsPatient(Integer patientId);
+
+    List<Visit> getPastVisits(Integer patientId);
 
     List<Exertion> getDayExertions(Integer nurseId, LocalDate date);
 
@@ -110,6 +118,12 @@ public interface DatabaseService {
     Integer getLongestZwolnienie(LocalDate date1, LocalDate date2);
 
     Integer getLongestZwolnienie(LocalDate date1, LocalDate date2, Integer doctorId);
+
+    Integer getReceptaId(Integer visitId);
+
+    Integer getZwolnienieId(Integer visitId);
+
+    String getSkierowanieIds(Integer visitId);
 
     Office getMostUsedOffice(LocalDate date1, LocalDate date2);
 
