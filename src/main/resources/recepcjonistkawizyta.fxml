@@ -33,5 +33,7 @@
       <Button fx:id="cancelButton" layoutX="885.0" layoutY="603.0" mnemonicParsing="false" text="Anuluj" />
       <Label layoutX="5.0" layoutY="594.0" text="Wiarygodoność:" />
       <Text fx:id="credibilityText" layoutX="5.0" layoutY="631.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Label fx:id="hourFromLabel" layoutX="497.0" layoutY="213.0" text="Label" />
+      <Label fx:id="hourToLabel" layoutX="498.0" layoutY="261.0" text="Label" />
    </children>
 </Pane>

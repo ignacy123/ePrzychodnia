@@ -1761,11 +1761,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Double getCredibility(Integer patientId) {
         double toRet = 0.0;
-        String sql = "SELECT (CASE WHEN XX.ile_wszystkich=0 THEN 100.00\n" +
-                "        ELSE ROUND(100*XX.ile_odbytych/XX.ile_wszystkich, 2) END) AS wiarygodnosc FROM (\n" +
-                "        SELECT ds.*, COALESCE(SUM(odbyla_sie::int),0) AS ile_odbytych, COUNT(odbyla_sie) AS ile_wszystkich  " +
-                "FROM dane_osob ds LEFT JOIN wizyty w ON w.pacjent = ds.id GROUP BY id) XX WHERE XX.id=" + patientId;
-        ;
+        String sql = "SELECT (CASE WHEN XX.ile_wszystkich=0 THEN 100.00" +
+                "ELSE ROUND(100*XX.ile_odbytych/XX.ile_wszystkich, 2) END) AS wiarygodnosc FROM (" +
+                "SELECT ds.*, COALESCE(SUM(odbyla_sie::int),0) AS ile_odbytych, COUNT(odbyla_sie) AS ile_wszystkich  FROM dane_osob ds " +
+                "LEFT JOIN wizyty w ON w.pacjent = ds.id WHERE termin_wizyty::date < current_date GROUP BY id) XX WHERE XX.id=" + patientId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);

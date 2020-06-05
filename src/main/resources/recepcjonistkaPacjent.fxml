@@ -34,5 +34,9 @@
       <Label layoutX="1040.0" layoutY="741.0" text="Do:" />
       <Label fx:id="zwolnienieToLabel" layoutX="1034.0" layoutY="761.0" text="Label" />
       <Text fx:id="zabiegText" layoutX="742.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Label layoutX="693.0" layoutY="236.0" text="Lekarz/Pielęgniarka:" />
+      <Label fx:id="doctorLabel" layoutX="739.0" layoutY="292.0" text="Label" />
+      <Label layoutX="729.0" layoutY="360.0" text="Gabinet:" />
+      <Label fx:id="officeLabel" layoutX="739.0" layoutY="422.0" text="Label" />
    </children>
 </AnchorPane>

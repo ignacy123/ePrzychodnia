@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -68,6 +69,10 @@ public class RecepcjonistkaWizytaView extends Application {
     private Text officeText;
     @FXML
     private Text credibilityText;
+    @FXML
+    private Label hourFromLabel;
+    @FXML
+    private Label hourToLabel;
     Specialization currentSpecialization = null;
 
     Integer id;
@@ -200,6 +205,9 @@ public class RecepcjonistkaWizytaView extends Application {
                 if (currentSpecialization != null) {
                     //officeListView.setItems(FXCollections.observableArrayList(db.getAvailableOfficesAtTime(date1, date2)));
                     doctorsListView.setItems(FXCollections.observableArrayList(db.getAvailableSpecialistsAtTimeSortedByPatient(currentPatient.getId(), currentSpecialization.getId(), date1, date2)));
+                    DateFormat df = new SimpleDateFormat("HH:mm");
+                    hourFromLabel.setText(df.format(hour));
+                    hourToLabel.setText(df.format(hour2));
                 } else {
                     System.out.println("a specjalizacja?");
                 }
@@ -304,7 +312,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
-            if(currentPatient.getId().equals(currentDoctor.getId())){
+            if (currentPatient.getId().equals(currentDoctor.getId())) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());

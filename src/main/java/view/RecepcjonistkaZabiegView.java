@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -59,6 +60,10 @@ public class RecepcjonistkaZabiegView extends Application {
     private TextArea noteTextArea;
     @FXML
     private Button setButton;
+    @FXML
+    private Label hourFromLabel;
+    @FXML
+    private Label hourToLabel;
 
     Integer id;
     String name;
@@ -88,6 +93,11 @@ public class RecepcjonistkaZabiegView extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+        nurseListView.setCellFactory(listView -> {
+            TextFieldListCell<Person> cell = new TextFieldListCell<>();
+            cell.setConverter(new PersonConverter());
+            return cell;
         });
         patients = db.getPatients();
         patientsToShow.addAll(patients.keySet());
@@ -191,11 +201,9 @@ public class RecepcjonistkaZabiegView extends Application {
                 return;
             }
             nurseListView.setItems(FXCollections.observableArrayList(db.getAvailableNursesAtTimeSortedByPatient(date1, date2, currentPatient.getId())));
-            nurseListView.setCellFactory(listView -> {
-                TextFieldListCell<Person> cell = new TextFieldListCell<>();
-                cell.setConverter(new PersonConverter());
-                return cell;
-            });
+            DateFormat df = new SimpleDateFormat("HH:mm");
+            hourFromLabel.setText(df.format(hour));
+            hourToLabel.setText(df.format(hour2));
         });
 
         findOfficeButton.setOnAction(actionEvent -> {

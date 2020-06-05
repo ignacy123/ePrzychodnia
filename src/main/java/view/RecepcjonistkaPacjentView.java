@@ -46,6 +46,10 @@ public class RecepcjonistkaPacjentView extends Application {
     private Label zwolnienieToLabel;
     @FXML
     private Text zabiegText;
+    @FXML
+    private Label doctorLabel;
+    @FXML
+    private Label officeLabel;
 
 
     Integer id;
@@ -125,13 +129,14 @@ public class RecepcjonistkaPacjentView extends Application {
             cell.setConverter(new ReferralConverter());
             return cell;
         });
-        futureExertionListView.setSelectionModel(new NoSelectionModel());
-        futureVisitListView.setSelectionModel(new NoSelectionModel());
         pastVisitListView.setOnMouseClicked(mouseEvent -> {
             if (pastVisitListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             visit = (Visit) pastVisitListView.getSelectionModel().getSelectedItems().get(0);
+            doctorLabel.setText(visit.getDoctor().getName()+" "+visit.getDoctor().getLastName());
+            officeLabel.setText(new OfficeConverter().toString(visit.getOffice()));
+            zabiegText.setText("-");
             if (visit.hasRecepta()) {
                 receptaListView.setVisible(true);
                 receptaLabel.setText(String.valueOf(db.getReceptaId(visit.getId())));
@@ -152,8 +157,8 @@ public class RecepcjonistkaPacjentView extends Application {
             }
             if (visit.hasZwolnienie()) {
                 zwolnienieLabel.setText(String.valueOf(db.getZwolnienieId(visit.getId())));
-                zwolnienieFromLabel.setText(String.valueOf(visit.getZwolnienieEnd().toLocalDateTime().toLocalDate()));
-                zwolnienieToLabel.setText(String.valueOf(visit.getZwolnienieStart().toLocalDateTime().toLocalDate()));
+                zwolnienieFromLabel.setText(String.valueOf(visit.getZwolnienieStart().toLocalDateTime().toLocalDate()));
+                zwolnienieToLabel.setText(String.valueOf(visit.getZwolnienieEnd().toLocalDateTime().toLocalDate()));
             } else {
                 zwolnienieLabel.setText("-");
                 zwolnienieFromLabel.setText("-");
@@ -161,12 +166,54 @@ public class RecepcjonistkaPacjentView extends Application {
             }
         });
         pastExertionListView.setOnMouseClicked(mouseEvent -> {
-            if(pastExertionListView.getSelectionModel().getSelectedItems().size()==0){
+            if (pastExertionListView.getSelectionModel().getSelectedItems().size() == 0) {
                 return;
             }
             exertion = (Exertion) pastExertionListView.getSelectionModel().getSelectedItems().get(0);
+            doctorLabel.setText(exertion.getNurse().getName()+" "+exertion.getNurse().getLastName());
+            officeLabel.setText(new OfficeConverter().toString(exertion.getOffice()));
             zabiegText.setText(exertion.getNote());
+            receptaListView.setVisible(false);
+            receptaLabel.setText("-");
+            skierowanieLabel.setText("-");
+            skierowanieListView.setVisible(false);
+            zwolnienieLabel.setText("-");
+            zwolnienieFromLabel.setText("-");
+            zwolnienieToLabel.setText("-");
         });
+        futureVisitListView.setOnMouseClicked(mouseEvent -> {
+            if (futureVisitListView.getSelectionModel().getSelectedItems().size() == 0) {
+                return;
+            }
+            visit = (Visit) futureVisitListView.getSelectionModel().getSelectedItems().get(0);
+            doctorLabel.setText(visit.getDoctor().getName()+" "+visit.getDoctor().getLastName());
+            officeLabel.setText(new OfficeConverter().toString(visit.getOffice()));
+            receptaListView.setVisible(false);
+            receptaLabel.setText("-");
+            skierowanieLabel.setText("-");
+            skierowanieListView.setVisible(false);
+            zwolnienieLabel.setText("-");
+            zwolnienieFromLabel.setText("-");
+            zwolnienieToLabel.setText("-");
+            zabiegText.setText("-");
+        });
+        futureExertionListView.setOnMouseClicked(mouseEvent -> {
+            if (futureExertionListView.getSelectionModel().getSelectedItems().size() == 0) {
+                return;
+            }
+            exertion = (Exertion) futureExertionListView.getSelectionModel().getSelectedItems().get(0);
+            doctorLabel.setText(exertion.getNurse().getName()+" "+exertion.getNurse().getLastName());
+            officeLabel.setText(new OfficeConverter().toString(exertion.getOffice()));
+            zabiegText.setText(exertion.getNote());
+            receptaListView.setVisible(false);
+            receptaLabel.setText("-");
+            skierowanieLabel.setText("-");
+            skierowanieListView.setVisible(false);
+            zwolnienieLabel.setText("-");
+            zwolnienieFromLabel.setText("-");
+            zwolnienieToLabel.setText("-");
+        });
+
     }
 
     @Override
