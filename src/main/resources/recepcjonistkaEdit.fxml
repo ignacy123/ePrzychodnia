@@ -5,22 +5,27 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="454.0" prefWidth="344.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label layoutX="27.0" layoutY="24.0" text="PESEL" />
-        <Button fx:id="addButton" layoutX="519.0" layoutY="358.0" mnemonicParsing="false" text="Zatwierdź" />
-        <Button fx:id="cancelButton" layoutX="455.0" layoutY="358.0" mnemonicParsing="false" text="Anuluj" />
-        <Label layoutX="29.0" layoutY="87.0" text="Imię" />
-        <TextField fx:id="nameTextField" layoutX="27.0" layoutY="115.0" />
-        <Label layoutX="29.0" layoutY="157.0" text="Nazwisko" />
-        <TextField fx:id="lastNameTextField" layoutX="27.0" layoutY="192.0" />
-        <DatePicker fx:id="birthDatePicker" layoutX="13.0" layoutY="265.0" />
-        <Label layoutX="29.0" layoutY="236.0" text="Data urodzenia" />
-        <Label layoutX="249.0" layoutY="24.0" text="Telefon" />
-        <TextField fx:id="phoneTextField" layoutX="219.0" layoutY="53.0" />
-        <Label layoutX="255.0" layoutY="106.0" text="Email" />
-        <TextField fx:id="emailTextField" layoutX="219.0" layoutY="138.0" />
-      <Label fx:id="peselLabel" layoutX="26.0" layoutY="58.0" text="Label" />
+        <Button fx:id="addButton" layoutX="160.0" layoutY="389.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="170.0" text="Zatwierdź i zapisz" />
+        <Button fx:id="cancelButton" layoutX="14.0" layoutY="389.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="102.0" text="Anuluj" />
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="258.0" prefWidth="318.0" spacing="10.0">
+         <children>
+              <Label text="Numer PESEL" />
+            <Label fx:id="peselLabel" text="-" />
+              <Label text="Imię" />
+              <TextField fx:id="nameTextField" promptText="Wpisz imię..." />
+              <Label text="Nazwisko" />
+              <TextField fx:id="lastNameTextField" promptText="Wpisz nazwisko..." />
+              <Label text="Data urodzenia" />
+              <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="329.0" promptText="Wybierz datę..." />
+              <Label text="Numer telefonu" />
+              <TextField fx:id="phoneTextField" promptText="Wpisz numer telefonu..." />
+              <Label text="Email" />
+              <TextField fx:id="emailTextField" promptText="Wpisz email..." />
+         </children>
+      </VBox>
     </children>
 </Pane>
