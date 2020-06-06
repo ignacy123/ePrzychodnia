@@ -65,7 +65,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj imie");
+                d.setContentText("Błąd: nie podano imienia.");
                 d.show();
                 return;
             }
@@ -75,7 +75,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj nazwisko");
+                d.setContentText("Błąd: nie podano nazwiska.");
                 d.show();
                 return;
             }
@@ -85,7 +85,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("niepoprawny PESEL");
+                d.setContentText("Błąd: niepoprawny numer PESEL.");
                 d.show();
                 return;
             }
@@ -94,7 +94,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("PESEL nie jest unikalny");
+                d.setContentText("Błąd: pacjent o tym numerze PESEL jest już zapisany.");
                 d.show();
                 return;
             }
@@ -104,7 +104,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj date urodzenia");
+                d.setContentText("Błąd: nie podano daty urodzenia.");
                 d.show();
                 return;
             }
@@ -113,7 +113,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("coś młody ten pacjent");
+                d.setContentText("Błąd: nieprawidłowa data urodzenia.");
                 d.show();
                 return;
             }
@@ -127,7 +127,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj poprawny email");
+                d.setContentText("Błąd: nieprawidłowy adres email.");
                 d.show();
                 return;
             }
@@ -139,7 +139,7 @@ public class RecepcjonistkaAddView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj poprawny nuemr telefonu");
+                d.setContentText("Błąd: nieprawidłowy numer telefonu.");
                 d.show();
                 return;
             }
@@ -155,7 +155,7 @@ public class RecepcjonistkaAddView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("Sukces!");
+            d.setContentText("Sukces. Dodano Pacjenta.");
             d.show();
             Application view = new RecepcjonistkaView(this.id, this.name, db);
             try {

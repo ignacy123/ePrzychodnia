@@ -85,7 +85,7 @@ public class AdministracjaView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("podaj poprawny pesel deklu");
+                    d.setContentText("Podany PESEL jest nieprawidłowy.");
                     d.show();
                     return;
                 }
@@ -94,13 +94,13 @@ public class AdministracjaView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("taki ktoś już tu pracuje");
+                    d.setContentText("Osoba o tym numerze PESEL już tu pracuje.");
                     d.show();
                     return;
                 }
                 if (db.isFiredWorker(s.get())) {
                     String prettyName = db.getPrettyNameByPesel(s.get());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Czy na pewno chcesz jeszcze raz zatrudnić pracownika " + prettyName + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Czy na pewno chcesz ponownie zatrudnić uprzednio zwolnionego pracownika " + prettyName + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.YES) {

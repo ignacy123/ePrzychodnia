@@ -9,14 +9,14 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ListView fx:id="medicineListView" layoutX="14.0" layoutY="116.0" prefHeight="374.0" prefWidth="214.0" />
-      <Label layoutX="267.0" layoutY="116.0" text="Nazwa" />
-      <TextField fx:id="medicineTextField" layoutX="26.0" layoutY="39.0" promptText="Wpisz nazwę leku..." />
-      <TextField fx:id="nameTextField" layoutX="251.0" layoutY="146.0" />
-      <Button fx:id="editButton" layoutX="258.0" layoutY="210.0" mnemonicParsing="false" text="Edytuj" />
-      <Button fx:id="returnButton" layoutX="678.0" layoutY="470.0" mnemonicParsing="false" text="Powrót" />
-      <CheckBox fx:id="newCheckBox" layoutX="487.0" layoutY="44.0" mnemonicParsing="false" text="Nowy lek?" />
-      <TextField fx:id="newTextField" layoutX="449.0" layoutY="88.0" promptText="Może mefedron?" />
-      <Button fx:id="addButton" layoutX="500.0" layoutY="134.0" mnemonicParsing="false" text="Dodaj" />
+      <ListView fx:id="medicineListView" layoutX="14.0" layoutY="44.0" prefHeight="453.0" prefWidth="362.0" />
+      <Label layoutX="394.0" layoutY="44.0" text="Zmień nazwę leku" />
+      <TextField fx:id="medicineTextField" layoutX="14.0" layoutY="14.0" prefHeight="26.0" prefWidth="362.0" promptText="Wyszukaj lek..." />
+      <TextField fx:id="nameTextField" layoutX="394.0" layoutY="77.0" prefHeight="26.0" prefWidth="333.0" promptText="Nowa nazwa..." />
+      <Button fx:id="editButton" layoutX="394.0" layoutY="120.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="131.0" text="Zapisz zmiany" />
+      <Button fx:id="returnButton" layoutX="607.0" layoutY="453.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="131.0" text="Powrót" />
+      <CheckBox fx:id="newCheckBox" layoutX="394.0" layoutY="247.0" mnemonicParsing="false" text="Dodaj nowy lek" />
+      <TextField fx:id="newTextField" layoutX="394.0" layoutY="296.0" prefHeight="26.0" prefWidth="333.0" promptText="Nazwa nowego leku..." />
+      <Button fx:id="addButton" layoutX="394.0" layoutY="345.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="131.0" text="Dodaj lek" />
    </children>
 </Pane>

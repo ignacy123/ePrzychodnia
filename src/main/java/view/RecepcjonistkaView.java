@@ -93,7 +93,7 @@ public class RecepcjonistkaView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("nie ma takiego gościa");
+                    d.setContentText("Nie ma takiej osoby w bazie.");
                     d.show();
                     return;
                 }
@@ -143,7 +143,7 @@ public class RecepcjonistkaView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("nie ma takiego gościa");
+                    d.setContentText("Nie ma takiej osoby w bazie.");
                     d.show();
                     return;
                 }

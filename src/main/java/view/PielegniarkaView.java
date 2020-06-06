@@ -106,7 +106,7 @@ public class PielegniarkaView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wybierz zabieg");
+                d.setContentText("Błąd: nie wybrano zabiegu.");
                 d.show();
                 return;
             }
@@ -117,7 +117,7 @@ public class PielegniarkaView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("Sukces!");
+            d.setContentText("Sukces! Zapisano zmiany.");
             d.show();
             return;
         });

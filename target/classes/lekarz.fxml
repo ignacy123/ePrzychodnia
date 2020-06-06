@@ -6,20 +6,21 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0" prefWidth="1123.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="nameLabel" layoutX="14.0" layoutY="14.0" />
-      <ListView fx:id="patientsListView" layoutX="14.0" layoutY="134.0" prefHeight="602.0" prefWidth="200.0" />
-      <DatePicker fx:id="datePicker" layoutX="913.0" layoutY="104.0" />
+      <Label fx:id="nameLabel" layoutX="207.0" layoutY="14.0" text="-" />
+      <ListView fx:id="patientsListView" layoutX="14.0" layoutY="134.0" prefHeight="602.0" prefWidth="213.0" />
+      <DatePicker fx:id="datePicker" layoutX="913.0" layoutY="104.0" promptText="Wybierz datę..." />
       <ListView fx:id="dateVisits" layoutX="716.0" layoutY="134.0" prefHeight="602.0" prefWidth="393.0" />
-      <ListView fx:id="futureVisits" layoutX="279.0" layoutY="344.0" prefHeight="392.0" prefWidth="393.0" />
-      <TextField fx:id="surnameTextField" layoutX="14.0" layoutY="94.0" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska" />
-      <Button fx:id="logOutButton" layoutX="191.0" layoutY="9.0" mnemonicParsing="false" text="Wyloguj" />
+      <ListView fx:id="futureVisits" layoutX="279.0" layoutY="296.0" prefHeight="440.0" prefWidth="393.0" />
+      <TextField fx:id="surnameTextField" layoutX="14.0" layoutY="94.0" prefHeight="28.0" prefWidth="213.0" promptText="Wpisz początek nazwiska..." />
+      <Button fx:id="logOutButton" layoutX="1008.0" layoutY="14.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="101.0" text="Wyloguj" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="279.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kolejne wizyty:">
+      <Text layoutX="279.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kolejne wizyty:">
          <font>
             <Font size="17.0" />
          </font>
@@ -29,24 +30,33 @@
             <Font size="17.0" />
          </font>
       </Text>
-      <Text layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wyszukaj pacjenta:">
+      <Text layoutX="14.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Twoi pacjenci:">
          <font>
             <Font size="17.0" />
          </font>
       </Text>
-      <Text layoutX="279.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Następna wizyta:">
+      <Text layoutX="279.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Następna wizyta:">
          <font>
             <Font size="17.0" />
          </font>
       </Text>
-      <Text fx:id="surnameText" layoutX="483.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text fx:id="nameText" layoutX="483.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text fx:id="dateText" layoutX="483.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text fx:id="officeText" layoutX="483.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Label layoutX="279.0" layoutY="162.0" text="Nazwisko:" />
-      <Label layoutX="280.0" layoutY="184.0" text="Imię:" />
-      <Label layoutX="279.0" layoutY="208.0" text="Data:" />
-      <Label layoutX="279.0" layoutY="232.0" text="Gabinet:" />
-      <Button fx:id="nextVisitEditButton" layoutX="532.0" layoutY="284.0" mnemonicParsing="false" text="Edytuj" />
+      <Button fx:id="nextVisitEditButton" layoutX="281.0" layoutY="209.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="183.0" text="Edytuj dane wizyty" />
+      <Label layoutX="14.0" layoutY="14.0" text="Jesteś zalogowany/a jako:" />
+      <VBox layoutX="279.0" layoutY="94.0" prefHeight="115.0" prefWidth="128.0" spacing="12.0">
+         <children>
+            <Label text="Nazwisko:" />
+            <Label text="Imię:" />
+            <Label text="Data:" />
+            <Label text="Gabinet:" />
+         </children>
+      </VBox>
+      <VBox layoutX="432.0" layoutY="94.0" prefHeight="115.0" prefWidth="264.0" spacing="12.0">
+         <children>
+            <Text fx:id="surnameText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+            <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+            <Text fx:id="dateText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+            <Text fx:id="officeText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+         </children>
+      </VBox>
    </children>
 </Pane>

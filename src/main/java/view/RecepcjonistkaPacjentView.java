@@ -224,7 +224,7 @@ public class RecepcjonistkaPacjentView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
-        stage.setTitle("ePrzychodnia - recepcjonistka - info o pacjencie");
+        stage.setTitle("ePrzychodnia - recepcjonistka - informacje o pacjencie");
         mainStage = stage;
     }
 }

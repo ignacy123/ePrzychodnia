@@ -6,14 +6,15 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="nameLabel" layoutX="14.0" layoutY="14.0" />
-      <Button fx:id="newVisitButton" layoutX="55.0" layoutY="70.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Umów na wizytę" />
-      <Button fx:id="logOutButton" layoutX="143.0" layoutY="18.0" mnemonicParsing="false" text="Wyloguj" />
-      <Button fx:id="addPatientButton" layoutX="318.0" layoutY="70.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Dodaj pacjenta" />
-      <Button fx:id="editButton" layoutX="318.0" layoutY="215.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Edytuj dane" />
+        <Label fx:id="nameLabel" layoutX="218.0" layoutY="15.0" text="-" />
+      <Button fx:id="newVisitButton" layoutX="59.0" layoutY="70.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Umów na wizytę" />
+      <Button fx:id="logOutButton" layoutX="482.0" layoutY="10.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="119.0" text="Wyloguj" />
+      <Button fx:id="addPatientButton" layoutX="187.0" layoutY="500.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Dodaj nowego pacjenta" />
+      <Button fx:id="editButton" layoutX="318.0" layoutY="357.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Edytuj dane pacjenta" />
       <Button fx:id="newExertionButton" layoutX="59.0" layoutY="215.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Umów na zabieg" />
-      <Button fx:id="cancelVisitButton" layoutX="59.0" layoutY="357.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Odwołaj wizytę" />
-      <Button fx:id="cancelExertionButton" layoutX="318.0" layoutY="357.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Odwołaj zabieg" />
-      <Button fx:id="patientButton" layoutX="185.0" layoutY="502.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Info o pacjencie" />
+      <Button fx:id="cancelVisitButton" layoutX="318.0" layoutY="70.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Odwołaj wizytę" />
+      <Button fx:id="cancelExertionButton" layoutX="318.0" layoutY="215.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Odwołaj zabieg" />
+      <Button fx:id="patientButton" layoutX="59.0" layoutY="357.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Informacje o pacjencie" />
+      <Label layoutX="14.0" layoutY="15.0" text="Jesteś zalogowany/a jako:" />
     </children>
 </Pane>

@@ -68,7 +68,7 @@ public class AdministracjaMedicineView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj nazwe dla mefedronu");
+                d.setContentText("Błąd: Nie podano nazwy leku.");
                 d.show();
                 return;
             } else {
@@ -77,7 +77,7 @@ public class AdministracjaMedicineView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("już jest taki lek");
+                    d.setContentText("Błąd: już jest taki lek.");
                     d.show();
                     return;
                 }
