@@ -78,6 +78,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Imię: "+name+"\n"+"Nazwisko: "+lastName+"\n"+"Pesel: "+pesel+"\n"+"Data urodzenia: "+dateOfBirth+"\n"+"Numer telefonu: "+phoneNumber+"\n"+"Email: "+email+"\n";
+        return "Imię: "+name+"\n"+"Nazwisko: "+lastName+"\n"+"Pesel: "+pesel+"\n"+"Data urodzenia: "+dateOfBirth+"\n"+"Numer telefonu: "+(phoneNumber==null ? "-":phoneNumber)+"\n"+"Email: "+(email==null ? "-":email)+"\n";
     }
 }

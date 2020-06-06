@@ -171,6 +171,6 @@ public class Visit {
 
     @Override
     public String toString() {
-        return "Pacjent: " + patient.getName() + " " + patient.getLastName() + " " + "\nLekarz: " + doctor.getName() + " " + doctor.getLastName() + "\nData: " + start + "\nGabinet: " + new OfficeConverter().toString(office) + "\nOdbył się: " + takenPlace + "\nNotatka: " + note;
+        return "Pacjent: " + patient.getName() + " " + patient.getLastName() + " " + "\nLekarz: " + doctor.getName() + " " + doctor.getLastName() + "\nData: " + start + "\nGabinet: " + new OfficeConverter().toString(office) + "\nOdbyła się: " + (takenPlace ?"tak":"nie")+ "\nNotatka: " + (note==null?"-":note);
     }
 }

@@ -21,7 +21,7 @@
               <TextField fx:id="lastNameTextField" promptText="Podaj nazwisko..." />
               <Label text="Data urodzenia" />
               <DatePicker fx:id="birthDatePicker" promptText="Wybierz datę..." />
-              <Label text="Numer telefinu" />
+              <Label text="Numer telefonu" />
               <TextField fx:id="phoneTextField" promptText="Podaj numer telefonu..." />
               <Label text="Email" />
               <TextField fx:id="emailTextField" promptText="Podaj email..." />

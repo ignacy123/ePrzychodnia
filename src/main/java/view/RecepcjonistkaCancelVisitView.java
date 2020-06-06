@@ -92,6 +92,10 @@ public class RecepcjonistkaCancelVisitView extends Application {
                 }
                 return false;
             }).collect(Collectors.toSet()));
+            visit = null;
+            patientLabel.setText("-");
+            doctorLabel.setText("-");
+            officeLabel.setText("-");
         });
         visitsByDay.addAll(db.getDayVisits(date));
         visitListView.setItems(visitsByDay);
@@ -120,6 +124,10 @@ public class RecepcjonistkaCancelVisitView extends Application {
                 return;
             }
             db.cancelVisit(visit.getId());
+            visit = null;
+            patientLabel.setText("-");
+            doctorLabel.setText("-");
+            officeLabel.setText("-");
             Dialog d = new Dialog();
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();

@@ -90,6 +90,10 @@ public class RecepcjonistkaCancelExertionView extends Application {
                 }
                 return false;
             }).collect(Collectors.toSet()));
+            exertion = null;
+            patientLabel.setText("-");
+            officeLabel.setText("-");
+            nurseLabel.setText("-");
         });
         exertionsByDay.addAll(db.getDayExertions(date));
         exertionListView.setItems(exertionsByDay);
@@ -119,6 +123,10 @@ public class RecepcjonistkaCancelExertionView extends Application {
                 return;
             }
             db.cancelExertion(exertion.getId());
+            exertion = null;
+            patientLabel.setText("-");
+            officeLabel.setText("-");
+            nurseLabel.setText("-");
             Dialog d = new Dialog();
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
