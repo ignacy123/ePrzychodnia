@@ -1,8 +1,10 @@
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/MedicineConverter.java
+/home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/RecepcjonistkaPacjentView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/VisitConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/MainViewController.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/db/DatabaseService.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/NoSelectionModel.java
+/home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/RecepcjonistkaCancelExertionView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/PersonCountConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/RecepcjonistkaCancelVisitView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/Model/Disease.java
@@ -17,11 +19,13 @@
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/AdministracjaStatsView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/Model/Specialization.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/Model/Visit.java
+/home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/ExertionConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/OfficeConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/Model/Office.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/WorkerConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/RecepcjonistkaView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/VisitCancelConverter.java
+/home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/ExertionCancelConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/view/AdministracjaView.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/PersonConverter.java
 /home/ignacy/IdeaProjects/ePrzychodnia/src/main/java/converters/DiseaseConverter.java

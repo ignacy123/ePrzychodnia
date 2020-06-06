@@ -6,19 +6,24 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="633.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ListView fx:id="visitListView" layoutX="234.0" layoutY="14.0" prefHeight="537.0" prefWidth="236.0" />
-      <DatePicker fx:id="datePicker" layoutX="6.0" layoutY="28.0" />
-      <Label layoutX="563.0" layoutY="28.0" text="Pacjent:" />
-      <Label fx:id="patientLabel" layoutX="571.0" layoutY="62.0" text="Label" />
-      <Label layoutX="567.0" layoutY="101.0" text="Lekarz" />
-      <Label fx:id="doctorLabel" layoutX="571.0" layoutY="132.0" text="label" />
-      <Label layoutX="561.0" layoutY="168.0" text="Gabinet" />
-      <Label fx:id="officeLabel" layoutX="571.0" layoutY="201.0" text="Label" />
-      <Button fx:id="cancelButton" layoutX="555.0" layoutY="283.0" mnemonicParsing="false" text="Odwołaj" />
-      <Button fx:id="backButton" layoutX="707.0" layoutY="523.0" mnemonicParsing="false" text="Powrót" />
-      <TextField fx:id="surnameTextField" layoutX="19.0" layoutY="283.0" promptText="Wpisz nazwisko..." />
+      <ListView fx:id="visitListView" layoutX="19.0" layoutY="96.0" prefHeight="467.0" prefWidth="418.0" />
+      <DatePicker fx:id="datePicker" layoutX="19.0" layoutY="15.0" prefHeight="26.0" prefWidth="221.0" promptText="Wybierz datę..." />
+      <Button fx:id="backButton" layoutX="459.0" layoutY="500.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="156.0" text="Powrót" />
+      <TextField fx:id="surnameTextField" layoutX="19.0" layoutY="57.0" prefHeight="26.0" prefWidth="221.0" promptText="Wpisz nazwisko pacjenta..." />
+      <VBox layoutX="459.0" layoutY="96.0" prefHeight="271.0" prefWidth="167.0" spacing="12.0">
+         <children>
+            <Label text="Pacjent:" />
+            <Label fx:id="patientLabel" text="-" />
+            <Label text="Lekarz:" />
+            <Label fx:id="doctorLabel" text="-" />
+            <Label text="Gabinet:" />
+            <Label fx:id="officeLabel" text="-" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" prefHeight="63.0" prefWidth="156.0" text="Odwołaj wizytę" />
+         </children>
+      </VBox>
    </children>
 </Pane>

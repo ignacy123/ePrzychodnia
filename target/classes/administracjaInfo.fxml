@@ -5,35 +5,45 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="965.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ListView fx:id="workersListView" layoutX="14.0" layoutY="14.0" prefHeight="376.0" prefWidth="210.0" />
-      <Button fx:id="returnButton" layoutX="877.0" layoutY="613.0" mnemonicParsing="false" text="Powrót" />
-      <Label layoutX="284.0" layoutY="28.0" text="Imię" />
-      <Label layoutX="281.0" layoutY="72.0" text="Nazwisko" />
-      <Label layoutX="281.0" layoutY="119.0" text="Email" />
-      <Label layoutX="281.0" layoutY="170.0" text="Pesel" />
-      <Label layoutX="281.0" layoutY="217.0" text="Data urodzenia" />
-      <Label layoutX="281.0" layoutY="262.0" text="Telefon" />
-      <Label layoutX="281.0" layoutY="310.0" text="Etat" />
-      <Label layoutX="281.0" layoutY="363.0" text="Zatrudniony" />
-      <Label fx:id="visitCountNameLabel" layoutX="505.0" layoutY="28.0" text="Ilość wizyt/zabiegów" />
-      <Label fx:id="prescriptionNameLabel" layoutX="514.0" layoutY="81.0" text="Ilość recept" />
-      <Label fx:id="nameLabel" layoutX="281.0" layoutY="54.0" text="Label" />
-      <Label fx:id="lastNameLabel" layoutX="281.0" layoutY="90.0" text="Label" />
-      <Label fx:id="emailLabel" layoutX="281.0" layoutY="144.0" text="Label" />
-      <Label fx:id="peselLabel" layoutX="281.0" layoutY="193.0" text="Label" />
-      <Label fx:id="birthLabel" layoutX="281.0" layoutY="244.0" text="Label" />
-      <Label fx:id="numberLabel" layoutX="281.0" layoutY="280.0" text="Label" />
-      <Label fx:id="etatLabel" layoutX="281.0" layoutY="335.0" text="Label" />
-      <Label fx:id="zatrudnionyLabel" layoutX="281.0" layoutY="390.0" text="Label" />
-      <Label fx:id="visitCountLabel" layoutX="514.0" layoutY="54.0" text="Label" />
-      <Label fx:id="prescriptionLabel" layoutX="514.0" layoutY="110.0" text="Label" />
-      <ListView fx:id="specializationListView" layoutX="484.0" layoutY="210.0" prefHeight="200.0" prefWidth="200.0" />
-      <TextField fx:id="specializationTextField" layoutX="483.0" layoutY="156.0" promptText="Dodaj specjalizację..." />
-      <Label layoutX="281.0" layoutY="418.0" text="Aktywny" />
-      <Label fx:id="activeLabel" layoutX="281.0" layoutY="449.0" text="Label" />
-      <Button fx:id="fireButton" layoutX="684.0" layoutY="520.0" mnemonicParsing="false" text="ZWOLNIJ" />
+      <ListView fx:id="workersListView" layoutX="14.0" layoutY="13.0" prefHeight="628.0" prefWidth="375.0" />
+      <Button fx:id="returnButton" layoutX="958.0" layoutY="591.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Powrót" />
+      <VBox layoutX="408.0" layoutY="13.0" prefHeight="324.0" prefWidth="133.0" spacing="12.0">
+         <children>
+            <Label text="Imię" />
+            <Label text="Nazwisko" />
+            <Label text="Pesel" />
+            <Label text="Data urodzenia" />
+            <Label text="Email" />
+            <Label text="Telefon" />
+            <Label text="Etat" />
+            <Label text="Zatrudniony" />
+            <Label lineSpacing="1.0" text="Status zatrudnienia" />
+            <Label fx:id="visitCountNameLabel" text="Ilość wizyt/zabiegów" />
+            <Label fx:id="prescriptionNameLabel" text="Ilość recept" />
+         </children>
+      </VBox>
+      <VBox layoutX="563.0" layoutY="13.0" prefHeight="324.0" prefWidth="152.0" spacing="12.0">
+         <children>
+            <Label fx:id="nameLabel" text="-" />
+            <Label fx:id="lastNameLabel" text="-" />
+            <Label fx:id="peselLabel" text="-" />
+            <Label fx:id="birthLabel" text="-" />
+            <Label fx:id="emailLabel" text="-" />
+            <Label fx:id="numberLabel" text="-" />
+            <Label fx:id="etatLabel" text="-" />
+            <Label fx:id="zatrudnionyLabel" text="-" />
+            <Label fx:id="activeLabel" text="-" />
+            <Label fx:id="visitCountLabel" text="-" />
+            <Label fx:id="prescriptionLabel" text="-" />
+         </children>
+      </VBox>
+      <ListView fx:id="specializationListView" layoutX="746.0" layoutY="32.0" prefHeight="294.0" prefWidth="296.0" />
+      <TextField fx:id="specializationTextField" layoutX="746.0" layoutY="337.0" prefHeight="26.0" prefWidth="296.0" promptText="Dodaj nową specjalizację..." />
+      <Button fx:id="fireButton" layoutX="408.0" layoutY="337.0" mnemonicParsing="false" text=" ZWOLNIJ PRACOWNIKA" />
+      <Label layoutX="746.0" layoutY="16.0" text="Specjalizacje" />
    </children>
 </Pane>
