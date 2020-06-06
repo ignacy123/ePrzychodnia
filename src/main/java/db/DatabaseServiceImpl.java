@@ -1713,7 +1713,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public boolean isPatientFree(LocalDateTime from, LocalDateTime to, Integer patientId) {
         boolean one = false;
         boolean two = false;
-        String sql = "SELECT EXISTS (SELECT * FROM wizyty WHERE(('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + to + "' < koniec_wizyty)) AND pacjent=" + patientId + ")";
+        String sql = "SELECT EXISTS (SELECT * FROM wizyty WHERE(('" + from + "'<= termin_wizyty AND '" + to + "' > termin_wizyty) OR ('" + from + "' > termin_wizyty AND '" + from + "' < koniec_wizyty)) AND pacjent=" + patientId + ")";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1745,7 +1745,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql = "SELECT EXISTS ( SELECT * FROM (SELECT * FROM wizyty JOIN zwolnienia ON wizyta = id_wizyty) XX" +
                 "  WHERE XX.pacjent = " + patientId +
                 "  AND XX.id_wizyty!=" + visitId + " AND ( ( '" + from + "' <= od_kiedy AND '" + to + "' > od_kiedy ) OR" +
-                "  ( '" + from + "' > od_kiedy AND '" + to + "' < do_kiedy )));";
+                "  ( '" + from + "' > od_kiedy AND '" + from + "' < do_kiedy )));";
         System.out.println(sql);
         try {
             statement = c.createStatement();
