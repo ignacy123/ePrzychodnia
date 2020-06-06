@@ -24,7 +24,7 @@ public class MainViewController extends Application {
     ChoiceBox roleChoiceBox;
     @FXML
     ListView nameListView;
-    
+
     DatabaseService db;
 
     Map<String, Integer> names;
@@ -33,7 +33,7 @@ public class MainViewController extends Application {
 
 
     @FXML
-    void initialize(){
+    void initialize() {
         roleChoiceBox.setItems(FXCollections.observableArrayList(Roles.LEKARZ, Roles.ADMINISTRACJA, Roles.PIELEGNIARKA_ARZ, Roles.RECEPCJONISTKA_TA));
         roleChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -43,19 +43,32 @@ public class MainViewController extends Application {
                 fillListView(role);
             }
         });
-        
+
         nameListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(nameListView.getSelectionModel().getSelectedItems().size()==0){
+                if (nameListView.getSelectionModel().getSelectedItems().size() == 0) {
                     return;
                 }
-                System.out.println("clicked: "+nameListView.getSelectionModel().getSelectedItems());
+                System.out.println("clicked: " + nameListView.getSelectionModel().getSelectedItems());
                 logInto((String) nameListView.getSelectionModel().getSelectedItems().get(0));
             }
         });
     }
-    
+
+    static String user;
+    static String pswd;
+
+    public static void main(String[] args) {
+        if(args.length<2){
+            System.out.println("not enough args");
+            System.exit(0);
+        }
+        user = args[0];
+        pswd = args[1];
+        Application.launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("main.fxml"));
@@ -66,19 +79,21 @@ public class MainViewController extends Application {
         stage.show();
         stage.setTitle("ePrzychodnia - logowanie");
         db = new DatabaseServiceImpl();
-        db.start();
+        db.start(user, pswd);
         mainStage = stage;
+        System.out.println(user);
+        System.out.println(pswd);
     }
-    
-    private void fillListView(Roles role){
+
+    private void fillListView(Roles role) {
         names = db.getNames(role);
         nameListView.setItems(FXCollections.observableArrayList(names.keySet()));
     }
 
-    private void logInto(String name){
+    private void logInto(String name) {
         Roles role = (Roles) roleChoiceBox.getSelectionModel().getSelectedItem();
         Application view = null;
-        switch (role){
+        switch (role) {
             case LEKARZ:
                 view = new LekarzView(names.get(name), name, db);
                 break;
@@ -98,5 +113,5 @@ public class MainViewController extends Application {
             e.printStackTrace();
         }
     }
-    
+
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface DatabaseService {
-    void start();
+    void start(String user, String pswd);
 
     Map<String, Integer> getNames(Roles role);
 

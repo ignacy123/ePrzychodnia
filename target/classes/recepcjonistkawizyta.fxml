@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="646.0" prefWidth="959.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="nameLabel" layoutX="14.0" layoutY="14.0" />
+      <ListView fx:id="specializationListView" layoutX="205.0" layoutY="32.0" prefHeight="327.0" prefWidth="200.0" />
+      <Label layoutX="205.0" layoutY="367.0" text="Wybrana specjalizacja:" />
+      <Text fx:id="specializationText" layoutX="205.0" layoutY="397.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="200.0" />
+      <TextField fx:id="startTextField" layoutX="434.0" layoutY="116.0" promptText="Godzina:minuty" />
+      <TextField fx:id="endTextField" layoutX="433.0" layoutY="168.0" promptText="Godzina:minuty" />
+      <Button fx:id="findDoctorsButton" layoutX="462.0" layoutY="309.0" mnemonicParsing="false" text="Znajdź lekarza" />
+      <DatePicker fx:id="visitDatePicker" layoutX="420.0" layoutY="61.0" />
+      <ListView fx:id="doctorsListView" layoutX="415.0" layoutY="360.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="patientsListView" layoutX="5.0" layoutY="61.0" prefHeight="482.0" prefWidth="200.0" />
+      <TextField fx:id="surnameTextField" layoutX="5.0" layoutY="32.0" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska..." />
+      <Label layoutX="5.0" layoutY="543.0" text="Wybrany pacjent:" />
+      <Text fx:id="surnameText" layoutX="5.0" layoutY="575.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Button fx:id="setVisitButton" layoutX="734.0" layoutY="61.0" mnemonicParsing="false" text="Umów na wizytę" />
+      <Label layoutX="417.0" layoutY="570.0" text="Wybrany lekarz:" />
+      <Text fx:id="doctorText" layoutX="415.0" layoutY="608.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="200.0" />
+      <ListView fx:id="officeListView" layoutX="634.0" layoutY="360.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label layoutX="634.0" layoutY="570.0" text="Wybrany gabinet" />
+      <Text fx:id="officeText" layoutX="634.0" layoutY="608.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Button fx:id="findOfficeButton" layoutX="680.0" layoutY="309.0" mnemonicParsing="false" text="Znajdź gabinet" />
+      <Button fx:id="cancelButton" layoutX="885.0" layoutY="603.0" mnemonicParsing="false" text="Anuluj" />
+      <Label layoutX="5.0" layoutY="594.0" text="Wiarygodoność:" />
+      <Text fx:id="credibilityText" layoutX="5.0" layoutY="631.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Label fx:id="hourFromLabel" layoutX="497.0" layoutY="213.0" text="Label" />
+      <Label fx:id="hourToLabel" layoutX="498.0" layoutY="261.0" text="Label" />
+   </children>
+</Pane>

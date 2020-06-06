@@ -14,14 +14,13 @@ public class DatabaseServiceImpl implements DatabaseService {
     Connection c = null;
     Statement statement = null;
 
-    public void start() {
+    public void start(String user, String pswd) {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/ignacy",
-                            "ignacy", "root");
+                    .getConnection("jdbc:postgresql://localhost:5432/"+user,
+                            user, pswd);
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
