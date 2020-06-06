@@ -171,7 +171,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
                         d.setResizable(true);
                         Window window = d.getDialogPane().getScene().getWindow();
                         window.setOnCloseRequest(e -> window.hide());
-                        d.setContentText("ten lekarz ma już tą specjalizację");
+                        d.setContentText("Błąd: wybrany lekarz ma już tą specjalizację.");
                         d.show();
                         return;
                     }
@@ -186,7 +186,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("nie można kogoś wylać dwa razy");
+                d.setContentText("Uwaga: wybrany pracownik już tu nie pracuje.");
                 d.show();
                 return;
             }

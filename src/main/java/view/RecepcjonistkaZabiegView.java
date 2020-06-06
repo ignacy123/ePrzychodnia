@@ -149,7 +149,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("dodaj pacjenta to się posortuje hehe");
+                d.setContentText("Musisz wybrać pacjenta.");
                 d.show();
                 return;
             }
@@ -159,13 +159,13 @@ public class RecepcjonistkaZabiegView extends Application {
                 hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(fromTextField.getCharacters()));
                 hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(toTextField.getCharacters()));
             } catch (ParseException e) {
-                System.out.println("to nie data debilu");
+                System.out.println("Nieprawidłowa data.");
             }
             if (hour.getTime() < 25200000) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("trochę za wcześnie");
+                d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta od 08:00.");
                 d.show();
                 return;
             }
@@ -173,7 +173,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("trochę za późno");
+                d.setContentText("Nieprawidłowa godzina. Gabinety zabiegowe są czynne do 18:00.");
                 d.show();
                 return;
             }
@@ -188,7 +188,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("czasu nie cofniesz");
+                d.setContentText("Błąd: wybrano datę w przeszłości.");
                 d.show();
                 return;
             }
@@ -196,7 +196,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wizyta nie może się skończyć zanim się zacznie deklu");
+                d.setContentText("Nieprawidłowe godziny - upewnij się, że godzina zakończenia jest późniejsza niż godzina rozpoczęcia.");
                 d.show();
                 return;
             }
@@ -213,13 +213,13 @@ public class RecepcjonistkaZabiegView extends Application {
                 hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(fromTextField.getCharacters()));
                 hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(toTextField.getCharacters()));
             } catch (ParseException e) {
-                System.out.println("to nie data debilu");
+                System.out.println("Nieprawidłowa data.");
             }
             if (hour.getTime() < 25200000) {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("trochę za wcześnie");
+                d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta od 08:00.");
                 d.show();
                 return;
             }
@@ -227,7 +227,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("trochę za późno");
+                d.setContentText("Nieprawidłowa godzina. Gabinety zabiegowe są czynne do 18:00.");
                 d.show();
                 return;
             }
@@ -241,7 +241,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("czasu nie cofniesz");
+                d.setContentText("Błąd: wybrano datę w przeszłości.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -250,7 +250,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wizyta nie może się skończyć zanim się zacznie deklu");
+                d.setContentText("Nieprawidłowe godziny - upewnij się, że godzina zakończenia jest późniejsza niż godzina rozpoczęcia.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -269,7 +269,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("nie ma pacjenta");
+                d.setContentText("Nie wybrano pacjenta.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -278,7 +278,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("pacjent jest zajety");
+                d.setContentText("Pacjent ma w wybranym terminie umówioną wizytę lub inny zabieg.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -288,7 +288,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("nie ma pielęgniarki");
+                d.setContentText("Nie wybrano pracownika.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -297,7 +297,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("gabinet");
+                d.setContentText("Nie wybrano gabinetu.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -306,7 +306,7 @@ public class RecepcjonistkaZabiegView extends Application {
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("Pielęgniarka nie może mieć zabiegu sama ze sobą.");
+                d.setContentText("Pracownik nie może mieć zabiegu sam ze sobą.");
                 d.setResizable(true);
                 d.show();
                 return;
@@ -319,7 +319,7 @@ public class RecepcjonistkaZabiegView extends Application {
             Dialog d = new Dialog();
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("sukces");
+            d.setContentText("Sukces: umówiono zabieg.");
             d.setResizable(true);
             d.show();
             Application view = new RecepcjonistkaView(id, name, db);
@@ -339,7 +339,7 @@ public class RecepcjonistkaZabiegView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
-        stage.setTitle("ePrzychodnia - dodawanie wizyty");
+        stage.setTitle("ePrzychodnia - dodawanie zabiegu");
         mainStage = stage;
 
     }

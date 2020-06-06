@@ -73,7 +73,7 @@ public class RecepcjonistkaEditView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj imie");
+                d.setContentText("Błąd: nie podano imienia.");
                 d.show();
                 return;
             }
@@ -83,7 +83,7 @@ public class RecepcjonistkaEditView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj nazwisko");
+                d.setContentText("Błąd: nie podano nazwiska.");
                 d.show();
                 return;
             }
@@ -93,7 +93,7 @@ public class RecepcjonistkaEditView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj date urodzenia");
+                d.setContentText("Błąd: nie podano daty urodzenia.");
                 d.show();
                 return;
             }
@@ -107,7 +107,7 @@ public class RecepcjonistkaEditView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj poprawny email");
+                d.setContentText("Błąd: niepoprawny adres email.");
                 d.show();
                 return;
             }

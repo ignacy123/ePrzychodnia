@@ -97,7 +97,7 @@ public class AdministracjaHireView extends Application {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("wybierz etat");
+                    d.setContentText("Błąd: nie wybrano etatu.");
                     d.show();
                     return;
                 }
@@ -106,7 +106,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("Sukces!");
+                d.setContentText("Sukces! Zatrudniono pracownika.");
                 d.show();
                 Application view = new AdministracjaView(this.id, this.name, db);
                 try {
@@ -122,7 +122,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj imie");
+                d.setContentText("Błąd: nie podano imienia.");
                 d.show();
                 return;
             }
@@ -132,7 +132,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj nazwisko");
+                d.setContentText("Błąd: nie podano nazwiska.");
                 d.show();
                 return;
             }
@@ -142,7 +142,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj date urodzenia");
+                d.setContentText("Błąd: nie podano daty urodzenia.");
                 d.show();
                 return;
             }
@@ -151,7 +151,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("coś młody ten pracownik");
+                d.setContentText("Błąd: nieprawidłowa data urodzenia.");
                 d.show();
                 return;
             }
@@ -163,7 +163,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wybierz etat");
+                d.setContentText("Błąd: nie wybrano etatu.");
                 d.show();
                 return;
             }
@@ -175,7 +175,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj poprawny email");
+                d.setContentText("Błąd: nie podano poprawnego adresu email.");
                 d.show();
                 return;
             }
@@ -187,7 +187,7 @@ public class AdministracjaHireView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("podaj poprawny nuemr telefonu");
+                d.setContentText("Błąd: nie podano poprawnego numeru telefonu.");
                 d.show();
                 return;
             }
@@ -204,7 +204,7 @@ public class AdministracjaHireView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("Sukces!");
+            d.setContentText("Sukces! Zatrudniono pracownika.");
             d.show();
             Application view = new AdministracjaView(this.id, this.name, db);
             try {

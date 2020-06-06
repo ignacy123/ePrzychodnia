@@ -14,7 +14,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="nameLabel" layoutX="204.0" layoutY="14.0" prefHeight="16.0" prefWidth="10.0" text="-" />
+        <Label fx:id="nameLabel" layoutX="204.0" layoutY="14.0" prefHeight="16.0" prefWidth="168.0" text="-" />
       <Button fx:id="saveAndExitButton" layoutX="855.0" layoutY="563.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="191.0" text="Zapisz i wyjdź" />
       <Button fx:id="exitButton" layoutX="855.0" layoutY="631.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="191.0" text="Wyjdź bez zapisywania" />
       <TextArea fx:id="notatkaTextArea" layoutX="14.0" layoutY="354.0" prefHeight="100.0" prefWidth="353.0" />
@@ -49,10 +49,10 @@
       </VBox>
       <Label layoutX="14.0" layoutY="14.0" text="Jesteś zalogowany/a jako:" />
       <Label layoutX="14.0" layoutY="467.0" text="Rozpoznania:" />
-      <VBox layoutX="376.0" layoutY="40.0" prefHeight="653.0" prefWidth="236.0" spacing="10.0">
+      <VBox layoutX="387.0" layoutY="13.0" prefHeight="682.0" prefWidth="236.0" spacing="10.0">
          <children>
             <CheckBox fx:id="skierowanieCheckBox" mnemonicParsing="false" text="Wystaw skierowanie" />
-            <ListView fx:id="skierowanieListView" prefHeight="454.0" prefWidth="236.0" />
+            <ListView fx:id="skierowanieListView" prefHeight="481.0" prefWidth="236.0" />
             <ListView fx:id="selectedSkierowanie" prefHeight="161.0" prefWidth="236.0" />
          </children>
       </VBox>

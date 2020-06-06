@@ -175,7 +175,7 @@ public class VisitEditView extends Application implements Initializable {
             Referral referral = new Referral();
             referral.setSpecialization((Specialization) skierowanieListView.getSelectionModel().getSelectedItems().get(0));
             TextInputDialog td = new TextInputDialog();
-            td.getEditor().setText("visitEditView.java linia koło 150");
+            td.getEditor().setText("Notatka...");
             td.setResizable(true);
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
@@ -309,7 +309,7 @@ public class VisitEditView extends Application implements Initializable {
                     return;
                 }
                 TextInputDialog td = new TextInputDialog();
-                td.getEditor().setText("zgodnie z ulotką");
+                td.getEditor().setText("Zgodnie z ulotką");
                 td.setResizable(true);
                 Optional<String> s = td.showAndWait();
                 if (s.isPresent()) {
@@ -329,7 +329,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("już jest taki lek");
+                    d.setContentText("Taki lek znajduje się już w bazie");
                     d.show();
                     return;
                 }
@@ -347,10 +347,10 @@ public class VisitEditView extends Application implements Initializable {
         takenPlaceGroup.selectedToggleProperty().addListener((observableValue, toggle, t1) -> {
             if (t1 == takenPlaceButton) {
                 visit.setTakenPlace(true);
-                System.out.println("odbyła się");
+                System.out.println("Odbyła się");
             } else {
                 visit.setTakenPlace(false);
-                System.out.println("nie odbyła się");
+                System.out.println("Nie odbyła się");
             }
         });
         mainStage = stage;
@@ -360,7 +360,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("nie ma specjalisty");
+                d.setContentText("Brak specjalisty");
                 d.show();
                 return;
             }
@@ -386,7 +386,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("zabawne (zwolnienie)");
+                    d.setContentText("Nieprawidłowe zwolnienie.");
                     d.show();
                     return;
                 }
@@ -395,7 +395,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("Zwolnienie nie może być dłuższe niż 270 dni");
+                    d.setContentText("Zwolnienie nie może być dłuższe niż 270 dni.");
                     d.show();
                     return;
                 }
@@ -441,7 +441,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wizyta ma sie odbyc jak chcesz skierowanie");
+                d.setContentText("Skierowanie nie może być wystawione na wizycie, która się nie odbyła.");
                 d.show();
                 return;
             }
@@ -450,7 +450,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wizyta ma sie odbyc jak chcesz zwolnienie");
+                d.setContentText("Zwolnienie nie może być wystawione na wizycie, która się nie odbyła.");
                 d.show();
                 return;
             }
@@ -459,7 +459,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wizyta ma sie odbyc jak chcesz zwolnienie");
+                d.setContentText("Recepta nie może być wystawiona na wizycie, która się nie odbyła.");
                 d.show();
                 return;
             }
@@ -469,7 +469,7 @@ public class VisitEditView extends Application implements Initializable {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wybierz leki");
+                d.setContentText("Recepta nie może być pusta.");
                 d.show();
                 return;
             }

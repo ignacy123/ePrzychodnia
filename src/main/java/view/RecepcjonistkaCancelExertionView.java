@@ -77,7 +77,7 @@ public class RecepcjonistkaCancelExertionView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("tak się nie bedziemy bawić");
+                d.setContentText("Błąd.");
                 d.show();
                 return;
             }
@@ -114,7 +114,7 @@ public class RecepcjonistkaCancelExertionView extends Application {
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
-                d.setContentText("wybierz zabieg");
+                d.setContentText("Błąd: nie wybrano zabiegu.");
                 d.show();
                 return;
             }
@@ -123,7 +123,7 @@ public class RecepcjonistkaCancelExertionView extends Application {
             d.setResizable(true);
             Window window = d.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(e -> window.hide());
-            d.setContentText("zabieg odwołany");
+            d.setContentText("Zabieg został odwołany.");
             d.show();
             date = datePicker.getValue();
             orgExertionsByDay = db.getDayExertions(date);
@@ -156,7 +156,7 @@ public class RecepcjonistkaCancelExertionView extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
-        stage.setTitle("ePrzychodnia - recepcjonistka");
+        stage.setTitle("ePrzychodnia - recepcjonistka - odwoływanie zabiegu");
         mainStage = stage;
 
     }
