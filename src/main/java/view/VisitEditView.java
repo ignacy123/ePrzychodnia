@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class VisitEditView extends Application implements Initializable {
     @FXML
@@ -192,6 +193,12 @@ public class VisitEditView extends Application implements Initializable {
                 return false;
             }).size() > 0) {
                 skierowanieListView.getSelectionModel().clearSelection();
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Skierowanie do tego specjalisty już jest wystawione.");
+                d.show();
                 return;
             }
             selectedReferrals.add(referral);
@@ -274,6 +281,15 @@ public class VisitEditView extends Application implements Initializable {
                     return;
                 }
                 disease.setPrettyName(name);
+                if(selectedDiseases.stream().map(disease1 -> disease1.getPrettyName()).collect(Collectors.toSet()).contains(disease.getPrettyName())){
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Ta choroba już została wybrana.");
+                    d.show();
+                    return;
+                }
                 selectedDiseases.add(disease);
                 diseaseTextField.clear();
             }
@@ -334,6 +350,7 @@ public class VisitEditView extends Application implements Initializable {
                     return;
                 }
                 selectedMedicines.add(med);
+                medicineTextField.clear();
             }
         });
         final ToggleGroup takenPlaceGroup = new ToggleGroup();
