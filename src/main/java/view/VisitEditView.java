@@ -180,10 +180,8 @@ public class VisitEditView extends Application implements Initializable {
             td.setResizable(true);
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
-                System.out.println(s);
                 referral.setNote(s.get());
             } else {
-                System.out.println(":<");
                 return;
             }
             if (selectedReferrals.filtered(referral1 -> {
@@ -274,7 +272,6 @@ public class VisitEditView extends Application implements Initializable {
         diseaseTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 String name = String.valueOf(diseaseTextField.getCharacters());
-                System.out.println(name);
                 Disease disease = new Disease();
                 disease.setIcd10Code(diseases.get(name));
                 if (disease.getIcd10Code() == null) {
@@ -318,7 +315,6 @@ public class VisitEditView extends Application implements Initializable {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 Medicine med = new Medicine();
                 String name = String.valueOf(medicineTextField.getCharacters());
-                System.out.println(name);
                 med.setName(name);
                 med.setId(medicines.get(name));
                 if (med.getId() == null) {
@@ -329,10 +325,8 @@ public class VisitEditView extends Application implements Initializable {
                 td.setResizable(true);
                 Optional<String> s = td.showAndWait();
                 if (s.isPresent()) {
-                    System.out.println(s);
                     med.setInstruction(s.get());
                 } else {
-                    System.out.println(":<");
                     return;
                 }
                 if (selectedMedicines.filtered(medicine -> {
@@ -364,10 +358,8 @@ public class VisitEditView extends Application implements Initializable {
         takenPlaceGroup.selectedToggleProperty().addListener((observableValue, toggle, t1) -> {
             if (t1 == takenPlaceButton) {
                 visit.setTakenPlace(true);
-                System.out.println("Odbyła się");
             } else {
                 visit.setTakenPlace(false);
-                System.out.println("Nie odbyła się");
             }
         });
         mainStage = stage;
@@ -384,11 +376,6 @@ public class VisitEditView extends Application implements Initializable {
             visit.setNote(notatkaTextArea.getText());
             zwolnienieFromDate = zwolnienieFromDatePicker.getValue();
             zwolnienieToDate = zwolnienieToDatePicker.getValue();
-            System.out.println("Here the data will be saved to db.");
-            System.out.println("Odbyła się: " + visit.hasTakenPlace());
-            System.out.println("Notatka: " + visit.getNote());
-            System.out.println("Choroby: " + selectedDiseases);
-            System.out.println("Zwolnienie: " + hasZwolnienie);
             ArrayList<String> diseases = new ArrayList<>();
             for (Disease disease : selectedDiseases) {
                 diseases.add(disease.getIcd10Code());
@@ -396,8 +383,6 @@ public class VisitEditView extends Application implements Initializable {
             visit.setDiseases(diseases);
             visit.setHasZwolnienie(hasZwolnienie);
             if (hasZwolnienie) {
-                System.out.println("Od: " + zwolnienieFromDate);
-                System.out.println("Do: " + zwolnienieToDate);
                 if (zwolnienieFromDate.isAfter(zwolnienieToDate)) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
@@ -447,11 +432,9 @@ public class VisitEditView extends Application implements Initializable {
                 visit.setZwolnienieStart(Timestamp.valueOf(zwolnienieFromDate.atStartOfDay()));
                 visit.setZwolnienieEnd(Timestamp.valueOf(zwolnienieToDate.atStartOfDay()));
             }
-            System.out.println("Skierowanie: " + hasSkierowanie);
             visit.setHasSkierowanie(hasSkierowanie);
             if (hasSkierowanie) {
                 visit.setReferrals(selectedReferrals);
-                System.out.println("Do: " + selectedReferrals);
             }
             if (hasSkierowanie && !visit.isTakenPlace()) {
                 Dialog d = new Dialog();
@@ -500,7 +483,6 @@ public class VisitEditView extends Application implements Initializable {
             }
         });
         exitButton.setOnAction(actionEvent -> {
-            System.out.println("The data will not be saved to db.");
             Application view = new LekarzView(doctorId, name, db);
             try {
                 view.start(mainStage);

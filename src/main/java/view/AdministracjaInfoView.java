@@ -154,7 +154,6 @@ public class AdministracjaInfoView extends Application implements Initializable 
         specializationTextField.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 String name = String.valueOf(specializationTextField.getCharacters());
-                System.out.println(name);
                 Specialization specialization = new Specialization();
                 specialization.setPrettyName(name);
                 specialization.setId(specializations.get(name));
@@ -165,7 +164,6 @@ public class AdministracjaInfoView extends Application implements Initializable 
                 alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES) {
-                    System.out.println(specialization.getPrettyName());
                     if(specs.contains(specialization)){
                         Dialog d = new Dialog();
                         d.setResizable(true);

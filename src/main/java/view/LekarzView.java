@@ -90,7 +90,6 @@ public class LekarzView extends Application {
         });
         datePicker.setOnAction(actionEvent -> {
             LocalDate date = datePicker.getValue();
-            System.out.println(date);
             List<Visit> visits = db.getDayVisitsFromDoctor(id, date);
             dateVisits.setItems(FXCollections.observableArrayList(visits));
         });
@@ -135,7 +134,6 @@ public class LekarzView extends Application {
             }
         });
         nextVisitEditButton.setOnAction(actionEvent -> {
-            System.out.println("I want to edit!");
             Application view = new VisitEditView(id, name, db, nextVisit);
             try {
                 view.start(mainStage);
@@ -181,7 +179,6 @@ public class LekarzView extends Application {
             });
             Optional<Boolean> result = d.showAndWait();
             if (result.isPresent()) {
-                System.out.println("I want to edit!");
                 Application view = new VisitEditView(id, name, db, currentVisit);
                 try {
                     view.start(mainStage);
@@ -189,7 +186,6 @@ public class LekarzView extends Application {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("I don't want to edit!");
             }
         });
     }

@@ -79,7 +79,6 @@ public class AdministracjaView extends Application {
             td.setResizable(true);
             Optional<String> s = td.showAndWait();
             if (s.isPresent()) {
-                System.out.println(s.get());
                 if (!isCorrectPESEL(s.get())) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
@@ -104,9 +103,8 @@ public class AdministracjaView extends Application {
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.YES) {
-                        System.out.println("rehiring: " + prettyName);
+                        db.rehire(s.get());
                     }
-                    db.rehire(s.get());
                     return;
                 }
                 Application view = new AdministracjaHireView(id, name, db, s.get());
@@ -117,7 +115,6 @@ public class AdministracjaView extends Application {
                 }
 
             } else {
-                System.out.println(":<");
                 return;
             }
         });
@@ -143,7 +140,6 @@ public class AdministracjaView extends Application {
         int[] digits = new int[11];
         for (int i = 0; i < 11; i++) {
             if (!Character.isDigit(pesel.charAt(i))) {
-                System.out.println(pesel.charAt(i));
                 return false;
             }
             digits[i] = Integer.parseInt(pesel.substring(i, i + 1));

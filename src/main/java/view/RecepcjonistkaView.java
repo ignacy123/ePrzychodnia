@@ -98,7 +98,6 @@ public class RecepcjonistkaView extends Application {
                     return;
                 }
             } else {
-                System.out.println(":<");
             }
         });
         logOutButton.setOnAction(actionEvent -> {
@@ -148,7 +147,6 @@ public class RecepcjonistkaView extends Application {
                     return;
                 }
             } else {
-                System.out.println(":<");
             }
         });
     }

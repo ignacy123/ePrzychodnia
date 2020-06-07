@@ -39,7 +39,6 @@ public class MainViewController extends Application {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 Roles role = (Roles) roleChoiceBox.getItems().get((Integer) t1);
-                System.out.println(role);
                 fillListView(role);
             }
         });
@@ -50,7 +49,6 @@ public class MainViewController extends Application {
                 if (nameListView.getSelectionModel().getSelectedItems().size() == 0) {
                     return;
                 }
-                System.out.println("clicked: " + nameListView.getSelectionModel().getSelectedItems());
                 logInto((String) nameListView.getSelectionModel().getSelectedItems().get(0));
             }
         });
@@ -81,8 +79,6 @@ public class MainViewController extends Application {
         db = new DatabaseServiceImpl();
         db.start(user, pswd);
         mainStage = stage;
-        System.out.println(user);
-        System.out.println(pswd);
     }
 
     private void fillListView(Roles role) {

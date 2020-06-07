@@ -63,7 +63,6 @@ public class AdministracjaHireView extends Application {
         etatChoiceBox.setItems(FXCollections.observableArrayList(Roles.PIELEGNIARKA_ARZ, Roles.LEKARZ, Roles.ADMINISTRACJA, Roles.RECEPCJONISTKA_TA, Roles.DYREKCJA, Roles.LABORANT_KA, Roles.OBSŁUGA_TECHNICZNA));
         peselLabel.setText(pesel);
         if (db.isInDb(pesel)) {
-            System.out.println("in db");
             inDb = true;
             person = db.getPerson(pesel);
             nameTextField.setDisable(true);
@@ -77,7 +76,6 @@ public class AdministracjaHireView extends Application {
             birthDatePicker.setDisable(true);
             birthDatePicker.setValue(person.getDateOfBirth().toLocalDate());
         } else {
-            System.out.println("not in db");
             inDb = false;
         }
         cancelButton.setOnAction(actionEvent -> {
@@ -89,7 +87,6 @@ public class AdministracjaHireView extends Application {
             }
         });
         hireButton.setOnAction(actionEvent -> {
-            System.out.println("hiring");
             if (inDb) {
                 Roles role = (Roles) etatChoiceBox.getSelectionModel().getSelectedItem();
                 if (role == null) {

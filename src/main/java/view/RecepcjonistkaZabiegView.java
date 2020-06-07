@@ -159,8 +159,14 @@ public class RecepcjonistkaZabiegView extends Application {
             try {
                 hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(fromTextField.getCharacters()));
                 hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(toTextField.getCharacters()));
-            } catch (ParseException e) {
-                System.out.println("Nieprawidłowa data.");
+            } catch (ParseException ex) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nieprawidłowa godzina.");
+                d.show();
+                return;
             }
             if (hour.getTime() < 25200000) {
                 Dialog d = new Dialog();
@@ -217,8 +223,14 @@ public class RecepcjonistkaZabiegView extends Application {
             try {
                 hour = new SimpleDateFormat("HH:mm").parse(String.valueOf(fromTextField.getCharacters()));
                 hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(toTextField.getCharacters()));
-            } catch (ParseException e) {
-                System.out.println("Nieprawidłowa data.");
+            } catch (ParseException ex) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nieprawidłowa data.");
+                d.show();
+                return;
             }
             if (hour.getTime() < 25200000) {
                 Dialog d = new Dialog();

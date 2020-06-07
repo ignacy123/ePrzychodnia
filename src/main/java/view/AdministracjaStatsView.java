@@ -199,7 +199,6 @@ public class AdministracjaStatsView extends Application {
             }else{
                 doctorLongestZwolnienieLabel.setText("-");
             }
-            System.out.println(doctor.getName() + " " + doctor.getLastName());
         });
         nurseListView.setCellFactory(listView -> {
             TextFieldListCell<Person> cell = new TextFieldListCell<>();

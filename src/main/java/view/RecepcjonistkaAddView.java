@@ -222,7 +222,6 @@ public class RecepcjonistkaAddView extends Application {
         int[] digits = new int[11];
         for(int i=0;i<11;i++){
             if(!Character.isDigit(pesel.charAt(i))){
-                System.out.println(pesel.charAt(i));
                 return false;
             }
             digits[i] = Integer.parseInt(pesel.substring(i, i + 1));

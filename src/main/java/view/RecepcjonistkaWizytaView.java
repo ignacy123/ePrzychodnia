@@ -293,8 +293,14 @@ public class RecepcjonistkaWizytaView extends Application {
                 } else {
                     officeListView.setItems(FXCollections.observableArrayList(db.getAvailableOfficesAtTime(date1, date2)));
                 }
-            } catch (ParseException e) {
-                System.out.println("Nieprawidłowa data.");
+            } catch (ParseException ex) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nieprawidłowa godzina.");
+                d.show();
+                return;
             }
 
         });
@@ -344,9 +350,6 @@ public class RecepcjonistkaWizytaView extends Application {
                 d.show();
                 return;
             }
-            System.out.println("Pacjent: " + new PersonConverter().toString(currentPatient) + " specjalizacja: " + currentSpecialization.getPrettyName() + " lekarz: "
-                    + new PersonConverter().toString(currentDoctor) + " od: " + date1 + " do: " + date2 + " gabinet: " + new OfficeConverter().toString(currentOffice));
-            System.out.println("Here will be performed visit checks, and then the visit will be inserted into db.");
             Visit visit = new Visit();
             visit.setPatient(currentPatient);
             visit.setDoctor(currentDoctor);
