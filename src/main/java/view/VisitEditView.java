@@ -419,7 +419,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.show();
                     return;
                 }
-                if (zwolnienieFromDate.plus(2, ChronoUnit.DAYS).isBefore(visit.getStart().toLocalDateTime().toLocalDate()) && visit.getSpecialization().getId() != 65
+                if (zwolnienieFromDate.plus(3, ChronoUnit.DAYS).isBefore(visit.getStart().toLocalDateTime().toLocalDate()) && visit.getSpecialization().getId() != 65
                         && visit.getSpecialization().getId() != 66) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
