@@ -20,7 +20,7 @@
               <Label text="Nazwisko" />
               <TextField fx:id="lastNameTextField" promptText="Podaj nazwisko..." />
               <Label text="Data urodzenia" />
-              <DatePicker fx:id="birthDatePicker" promptText="Wybierz datę..." />
+              <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="365.0" promptText="Wybierz datę..." />
               <Label text="Numer telefonu" />
               <TextField fx:id="phoneTextField" promptText="Podaj numer telefonu..." />
               <Label text="Email" />

@@ -11,19 +11,19 @@
    <children>
       <Label layoutX="27.0" layoutY="24.0" text="Numer PESEL" />
       <Label fx:id="peselLabel" layoutX="29.0" layoutY="58.0" text="Label" />
-      <Button fx:id="hireButton" layoutX="519.0" layoutY="358.0" mnemonicParsing="false" text="Zatrudnij" />
-      <Button fx:id="cancelButton" layoutX="455.0" layoutY="358.0" mnemonicParsing="false" text="Anuluj" />
+      <Button fx:id="hireButton" layoutX="494.0" layoutY="344.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="102.0" text="Zatrudnij" />
+      <Button fx:id="cancelButton" layoutX="385.0" layoutY="344.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="102.0" text="Anuluj" />
       <Label layoutX="26.0" layoutY="90.0" text="Imię" />
-      <TextField fx:id="nameTextField" layoutX="26.0" layoutY="125.0" promptText="Podaj imię..." />
+      <TextField fx:id="nameTextField" layoutX="26.0" layoutY="125.0" prefHeight="26.0" prefWidth="197.0" promptText="Podaj imię..." />
       <Label layoutX="33.0" layoutY="167.0" text="Nazwisko" />
-      <TextField fx:id="lastNameTextField" layoutX="26.0" layoutY="200.0" promptText="Podaj nazwisko..." />
-      <DatePicker fx:id="birthDatePicker" layoutX="26.0" layoutY="279.0" />
+      <TextField fx:id="lastNameTextField" layoutX="26.0" layoutY="200.0" prefHeight="26.0" prefWidth="197.0" promptText="Podaj nazwisko..." />
+      <DatePicker fx:id="birthDatePicker" layoutX="26.0" layoutY="279.0" prefHeight="26.0" prefWidth="197.0" />
       <Label layoutX="29.0" layoutY="248.0" text="Data urodzenia" />
       <Label layoutX="324.0" layoutY="24.0" text="Numer telefonu" />
-      <TextField fx:id="phoneTextField" layoutX="324.0" layoutY="53.0" promptText="Podaj telefon..." />
+      <TextField fx:id="phoneTextField" layoutX="324.0" layoutY="53.0" prefHeight="26.0" prefWidth="197.0" promptText="Podaj telefon..." />
       <Label layoutX="324.0" layoutY="90.0" text="Email" />
-      <TextField fx:id="emailTextField" layoutX="324.0" layoutY="125.0" promptText="Podaj email..." />
-      <ChoiceBox fx:id="etatChoiceBox" layoutX="324.0" layoutY="200.0" prefWidth="150.0" />
+      <TextField fx:id="emailTextField" layoutX="324.0" layoutY="125.0" prefHeight="26.0" prefWidth="197.0" promptText="Podaj email..." />
+      <ChoiceBox fx:id="etatChoiceBox" layoutX="324.0" layoutY="200.0" prefHeight="26.0" prefWidth="197.0" />
       <Label layoutX="329.0" layoutY="167.0" text="Etat" />
    </children>
 </Pane>

@@ -6,7 +6,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="nameLabel" layoutX="218.0" layoutY="15.0" text="-" />
+        <Label fx:id="nameLabel" layoutX="200.0" layoutY="15.0" prefHeight="16.0" prefWidth="269.0" text="-" />
       <Button fx:id="newVisitButton" layoutX="59.0" layoutY="70.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Umów na wizytę" />
       <Button fx:id="logOutButton" layoutX="482.0" layoutY="10.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="119.0" text="Wyloguj" />
       <Button fx:id="addPatientButton" layoutX="187.0" layoutY="500.0" mnemonicParsing="false" prefHeight="119.0" prefWidth="236.0" text="Dodaj nowego pacjenta" />

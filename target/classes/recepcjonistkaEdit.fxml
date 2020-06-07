@@ -14,7 +14,7 @@
       <VBox layoutX="14.0" layoutY="14.0" prefHeight="258.0" prefWidth="318.0" spacing="10.0">
          <children>
               <Label text="Numer PESEL" />
-            <Label fx:id="peselLabel" text="-" />
+            <Label fx:id="peselLabel" prefHeight="16.0" prefWidth="429.0" text="-" />
               <Label text="Imię" />
               <TextField fx:id="nameTextField" promptText="Wpisz imię..." />
               <Label text="Nazwisko" />

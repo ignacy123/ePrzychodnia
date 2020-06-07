@@ -9,38 +9,38 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="1116.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="backButton" layoutX="536.0" layoutY="604.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="188.0" text="Wróc bez zapisywania" />
-      <TextArea fx:id="noteTextArea" layoutX="489.0" layoutY="40.0" prefHeight="400.0" prefWidth="235.0" promptText="Notatka..." />
-      <Button fx:id="setButton" layoutX="536.0" layoutY="529.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="188.0" text="Umów zabieg" />
-      <VBox layoutX="14.0" layoutY="14.0" prefHeight="651.0" prefWidth="200.0" spacing="10.0">
+      <Button fx:id="backButton" layoutX="914.0" layoutY="604.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="188.0" text="Wróc bez zapisywania" />
+      <TextArea fx:id="noteTextArea" layoutX="776.0" layoutY="47.0" prefHeight="473.0" prefWidth="320.0" promptText="Notatka..." />
+      <Button fx:id="setButton" layoutX="914.0" layoutY="535.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="188.0" text="Umów zabieg" />
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="651.0" prefWidth="320.0" spacing="10.0">
          <children>
             <TextField fx:id="surnameTextField" prefHeight="32.0" prefWidth="204.0" promptText="Wpisz początek nazwiska..." />
             <Label text="Wybrany pacjent:" />
-            <Label fx:id="patientLabel" text="-" />
-            <ListView fx:id="patientsListView" prefHeight="627.0" prefWidth="200.0" />
+            <Label fx:id="patientLabel" prefHeight="16.0" prefWidth="328.0" text="-" />
+            <ListView fx:id="patientsListView" prefHeight="563.0" prefWidth="251.0" />
          </children>
       </VBox>
-      <VBox layoutX="234.0" layoutY="14.0" prefHeight="651.0" prefWidth="235.0" spacing="10.0">
+      <VBox layoutX="398.0" layoutY="15.0" prefHeight="651.0" prefWidth="320.0" spacing="10.0">
          <children>
-            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="253.0" promptText="Wybierz datę zabiegu:" />
+            <DatePicker fx:id="datePicker" prefHeight="26.0" prefWidth="344.0" promptText="Wybierz datę zabiegu:" />
             <Label text="Godzina rozpoczęcia:" />
-            <Label fx:id="hourFromLabel" text="-" />
+            <Label fx:id="hourFromLabel" prefHeight="16.0" prefWidth="536.0" text="-" />
             <TextField fx:id="fromTextField" promptText="hh:mm" />
             <Label text="Szacowana godzina zakończenia:" />
-            <Label fx:id="hourToLabel" text="-" />
+            <Label fx:id="hourToLabel" prefHeight="16.0" prefWidth="554.0" text="-" />
             <TextField fx:id="toTextField" promptText="hh:mm" />
-            <Button fx:id="findNurseButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="235.0" text="Znajdź dostępną pielęgniarkę" />
+            <Button fx:id="findNurseButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="336.0" text="Znajdź dostępną pielęgniarkę" />
             <Label text="Wybrana pielęgniarka:" />
-            <Label fx:id="nurseLabel" text="-" />
+            <Label fx:id="nurseLabel" prefHeight="16.0" prefWidth="418.0" text="-" />
             <ListView fx:id="nurseListView" prefHeight="200.0" prefWidth="200.0" />
-            <Button fx:id="findOfficeButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="235.0" text="Znajdź wolny gabinet" />
+            <Button fx:id="findOfficeButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="346.0" text="Znajdź wolny gabinet" />
             <Label text="Wybrany gabinet:" />
-            <Label fx:id="officeLabel" text="-" />
+            <Label fx:id="officeLabel" prefHeight="16.0" prefWidth="438.0" text="-" />
             <ListView fx:id="officeListView" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <Label layoutX="489.0" layoutY="14.0" text="Notatka do zabiegu:" />
+      <Label layoutX="776.0" layoutY="21.0" text="Notatka do zabiegu:" />
    </children>
 </Pane>
