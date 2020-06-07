@@ -69,6 +69,15 @@ public class RecepcjonistkaAddView extends Application {
                 d.show();
                 return;
             }
+            if(name.length()>=40){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: za długie imię. Maks to 40 znaków");
+                d.show();
+                return;
+            }
             String lastName = String.valueOf(lastNameTextField.getCharacters());
             if (lastName.equals("")) {
                 Dialog d = new Dialog();
@@ -76,6 +85,15 @@ public class RecepcjonistkaAddView extends Application {
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("Błąd: nie podano nazwiska.");
+                d.show();
+                return;
+            }
+            if(lastName.length()>=40){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: za długie nazwisko. Maks to 40 znaków");
                 d.show();
                 return;
             }
@@ -122,7 +140,7 @@ public class RecepcjonistkaAddView extends Application {
             String ptr = "^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
             Pattern pattern = Pattern.compile(ptr);
             Matcher matcher = pattern.matcher(email);
-            if(!matcher.matches()){
+            if(!matcher.matches() && !email.equals("")){
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
@@ -131,15 +149,33 @@ public class RecepcjonistkaAddView extends Application {
                 d.show();
                 return;
             }
+            if(email.length()>=100){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: za długi email. Maks to 100 znaków");
+                d.show();
+                return;
+            }
             String ptr2 = "^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])+$";
             Pattern pattern2 = Pattern.compile(ptr2);
             Matcher matcher2 = pattern2.matcher(phoneNumber);
-            if(!matcher2.matches()){
+            if(!matcher2.matches() && !phoneNumber.equals("")){
                 Dialog d = new Dialog();
                 d.setResizable(true);
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
                 d.setContentText("Błąd: nieprawidłowy numer telefonu.");
+                d.show();
+                return;
+            }
+            if(phoneNumber.length()>=25){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: za długi numer telefonu. Maks to 25 znaków");
                 d.show();
                 return;
             }

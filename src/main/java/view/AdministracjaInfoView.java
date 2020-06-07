@@ -123,7 +123,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
             numberLabel.setText(worker.getPhoneNumber());
             etatLabel.setText(String.valueOf(worker.getRole()));
             zatrudnionyLabel.setText(String.valueOf(worker.getHiredFrom()));
-            activeLabel.setText(String.valueOf(worker.isActive()));
+            activeLabel.setText(worker.isActive()?"tak":"nie");
             if (worker.getRole() == Roles.LEKARZ) {
                 visitCountLabel.setVisible(true);
                 prescriptionLabel.setVisible(true);
@@ -193,7 +193,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
             }
             db.fireWorker(currentWorker.getId());
             currentWorker.setActive(false);
-            activeLabel.setText("false");
+            activeLabel.setText("nie");
         });
 
     }

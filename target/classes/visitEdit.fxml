@@ -20,28 +20,28 @@
       <TextArea fx:id="notatkaTextArea" layoutX="14.0" layoutY="354.0" prefHeight="100.0" prefWidth="394.0" />
       <TextField fx:id="diseaseTextField" layoutX="14.0" layoutY="494.0" prefHeight="28.0" prefWidth="394.0" promptText="Dodaj chorobę..." />
       <ListView fx:id="diseaseListView" layoutX="14.0" layoutY="532.0" prefHeight="162.0" prefWidth="394.0" />
-      <VBox layoutX="14.0" layoutY="39.0" prefHeight="302.0" prefWidth="198.0" spacing="10.0">
+      <VBox layoutX="14.0" layoutY="39.0" prefHeight="302.0" prefWidth="394.0" spacing="10.0">
          <children>
             <Label text="Dane pacjenta:" />
             <Label text="Imię" />
-            <Label fx:id="patientNameLabel" text="-" />
+            <Label fx:id="patientNameLabel" prefHeight="16.0" prefWidth="187.0" text="-" />
             <Label text="Nazwisko" />
-            <Label fx:id="patientLastNameLabel" text="-" />
+            <Label fx:id="patientLastNameLabel" prefHeight="16.0" prefWidth="190.0" text="-" />
             <Label text="Data urodzenia" />
-            <Label fx:id="dateOfBirthLabel" text="-" />
+            <Label fx:id="dateOfBirthLabel" prefHeight="16.0" prefWidth="186.0" text="-" />
             <Label text="Numer telefonu" />
-            <Label fx:id="phoneLabel" text="-" />
+            <Label fx:id="phoneLabel" prefHeight="16.0" prefWidth="180.0" text="-" />
             <Label text="Email" />
-            <Label fx:id="emailLabel" text="-" />
+            <Label fx:id="emailLabel" prefHeight="16.0" prefWidth="396.0" text="-" />
             <Label text="Notatka do wizyty:" />
          </children>
       </VBox>
-      <VBox layoutX="222.0" layoutY="39.0" prefHeight="200.0" prefWidth="266.0" spacing="10.0">
+      <VBox layoutX="212.0" layoutY="39.0" prefHeight="200.0" prefWidth="248.0" spacing="10.0">
          <children>
             <Label text="Typ wizyty:" />
-            <Text fx:id="typWizytyText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="267.13000106811523" />
+            <Text fx:id="typWizytyText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="250.13000106811523" />
             <Label text="Data wizyty:" />
-            <Text fx:id="dataText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="264.69091796875" />
+            <Text fx:id="dataText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="251.69091796875" />
             <Label text="Czy wizyta się odbyła:" />
             <RadioButton fx:id="takenPlaceButton" mnemonicParsing="false" text="TAK" />
             <RadioButton fx:id="notTakenPlaceButton" mnemonicParsing="false" text="NIE" />

@@ -71,8 +71,16 @@ public class AdministracjaMedicineView extends Application {
                 d.setContentText("Błąd: Nie podano nazwy leku.");
                 d.show();
                 return;
+            } else if (name.length() >= 110) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: Za długa nazwa leku. Maks to 110 znaków");
+                d.show();
+                return;
             } else {
-                if(db.hasMedicine(name)){
+                if (db.hasMedicine(name)) {
                     Dialog d = new Dialog();
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
@@ -92,7 +100,9 @@ public class AdministracjaMedicineView extends Application {
                 }).collect(Collectors.toSet()));
             }
         });
-        returnButton.setOnAction(actionEvent -> {
+        returnButton.setOnAction(actionEvent ->
+
+        {
             Application view = new AdministracjaView(id, name, db);
             try {
                 view.start(mainStage);
@@ -127,6 +137,15 @@ public class AdministracjaMedicineView extends Application {
                 return;
             }
             String name = String.valueOf(nameTextField.getCharacters());
+            if(name.length()>=110){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Błąd: Za długa nazwa leku. Maks to 110 znaków");
+                d.show();
+                return;
+            }
             currMedicine.setName(name);
             db.updateMedicine(currMedicine);
             medicines = db.getAllMedicines();

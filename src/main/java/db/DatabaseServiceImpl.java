@@ -18,7 +18,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/"+user,
+                    .getConnection("jdbc:postgresql://localhost:5432/" + user,
                             user, pswd);
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -1063,7 +1063,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void updatePerson(Person person) {
-        String sql = "UPDATE dane_osob SET imie = '" + person.getName() + "', nazwisko = '" + person.getLastName() + "', data_urodzenia = '" + person.getDateOfBirth() + "', email = '" + person.getEmail() + "', telefon = '" + person.getPhoneNumber() + "' WHERE id=" + person.getId() + "";
+        String sql = "UPDATE dane_osob SET imie = '" + person.getName() + "', nazwisko = '" + person.getLastName() + "', data_urodzenia = '" + person.getDateOfBirth() + "', email = "+(person.getEmail().equals("")? "null":"'" + person.getEmail() + "'")+", telefon = "+(person.getPhoneNumber().equals("")?"null":"'" + person.getPhoneNumber() + "'")+" WHERE id=" + person.getId() + "";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1113,7 +1113,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Integer addPerson(Person person) {
-        String sql = "SELECT add('" + person.getName() + "', '" + person.getLastName() + "', '" + person.getPesel() + "', '" + person.getDateOfBirth() + "', '" + person.getPhoneNumber() + "', '" + person.getEmail() + "')";
+        String sql = "SELECT add('" + person.getName() + "', '" + person.getLastName() + "', '" + person.getPesel() + "', '" + person.getDateOfBirth() + "'," + (person.getPhoneNumber().equals("") ? "null" : "'" + person.getPhoneNumber() + "'") + ", " + (person.getEmail().equals("") ? "null" : "'" + person.getEmail() + "'") + ")";
         System.out.println(sql);
         try {
             statement = c.createStatement();
@@ -1761,10 +1761,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Double getCredibility(Integer patientId) {
         double toRet = 0.0;
-        String sql = "SELECT (CASE WHEN XX.ile_wszystkich=0 THEN 100.00" +
+        String sql = "SELECT (CASE WHEN COALESCE(XX.ile_wszystkich,0)=0 THEN 100.00" +
                 "ELSE ROUND(100*XX.ile_odbytych/XX.ile_wszystkich, 2) END) AS wiarygodnosc FROM (" +
-                "SELECT ds.*, COALESCE(SUM(odbyla_sie::int),0) AS ile_odbytych, COUNT(odbyla_sie) AS ile_wszystkich  FROM dane_osob ds " +
-                "LEFT JOIN wizyty w ON w.pacjent = ds.id WHERE termin_wizyty::date < current_date GROUP BY id) XX WHERE XX.id=" + patientId;
+                "SELECT ds.*, COALESCE(SUM(odbyla_sie::int),0) AS ile_odbytych, COUNT(odbyla_sie) AS ile_wszystkich " +
+                "FROM dane_osob ds LEFT JOIN wizyty w ON w.pacjent = ds.id WHERE termin_wizyty::date < current_date GROUP BY id) XX WHERE XX.id=" + patientId;
         try {
             statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
