@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1151.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ListView fx:id="workersListView" layoutX="14.0" layoutY="13.0" prefHeight="628.0" prefWidth="375.0" />
-      <Button fx:id="returnButton" layoutX="958.0" layoutY="591.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Powrót" />
+      <Button fx:id="returnButton" layoutX="1053.0" layoutY="599.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="84.0" text="Powrót" />
       <VBox layoutX="408.0" layoutY="13.0" prefHeight="324.0" prefWidth="133.0" spacing="12.0">
          <children>
             <Label text="Imię" />
@@ -26,24 +26,24 @@
             <Label fx:id="prescriptionNameLabel" text="Ilość recept" />
          </children>
       </VBox>
-      <VBox layoutX="563.0" layoutY="13.0" prefHeight="324.0" prefWidth="152.0" spacing="12.0">
+      <VBox layoutX="563.0" layoutY="13.0" prefHeight="324.0" prefWidth="260.0" spacing="12.0">
          <children>
-            <Label fx:id="nameLabel" text="-" />
-            <Label fx:id="lastNameLabel" text="-" />
-            <Label fx:id="peselLabel" text="-" />
-            <Label fx:id="birthLabel" text="-" />
-            <Label fx:id="emailLabel" text="-" />
-            <Label fx:id="numberLabel" text="-" />
-            <Label fx:id="etatLabel" text="-" />
-            <Label fx:id="zatrudnionyLabel" text="-" />
-            <Label fx:id="activeLabel" text="-" />
-            <Label fx:id="visitCountLabel" text="-" />
-            <Label fx:id="prescriptionLabel" text="-" />
+            <Label fx:id="nameLabel" prefHeight="16.0" prefWidth="297.0" text="-" />
+            <Label fx:id="lastNameLabel" prefHeight="16.0" prefWidth="303.0" text="-" />
+            <Label fx:id="peselLabel" prefHeight="16.0" prefWidth="304.0" text="-" />
+            <Label fx:id="birthLabel" prefHeight="16.0" prefWidth="315.0" text="-" />
+            <Label fx:id="emailLabel" prefHeight="16.0" prefWidth="298.0" text="-" />
+            <Label fx:id="numberLabel" prefHeight="16.0" prefWidth="291.0" text="-" />
+            <Label fx:id="etatLabel" prefHeight="16.0" prefWidth="360.0" text="-" />
+            <Label fx:id="zatrudnionyLabel" prefHeight="16.0" prefWidth="317.0" text="-" />
+            <Label fx:id="activeLabel" prefHeight="16.0" prefWidth="367.0" text="-" />
+            <Label fx:id="visitCountLabel" prefHeight="16.0" prefWidth="415.0" text="-" />
+            <Label fx:id="prescriptionLabel" prefHeight="16.0" prefWidth="477.0" text="-" />
          </children>
       </VBox>
-      <ListView fx:id="specializationListView" layoutX="746.0" layoutY="32.0" prefHeight="294.0" prefWidth="296.0" />
-      <TextField fx:id="specializationTextField" layoutX="746.0" layoutY="337.0" prefHeight="26.0" prefWidth="296.0" promptText="Dodaj nową specjalizację..." />
-      <Button fx:id="fireButton" layoutX="408.0" layoutY="337.0" mnemonicParsing="false" text=" ZWOLNIJ PRACOWNIKA" />
-      <Label layoutX="746.0" layoutY="16.0" text="Specjalizacje" />
+      <ListView fx:id="specializationListView" layoutX="841.0" layoutY="32.0" prefHeight="294.0" prefWidth="296.0" />
+      <TextField fx:id="specializationTextField" layoutX="841.0" layoutY="337.0" prefHeight="26.0" prefWidth="296.0" promptText="Dodaj nową specjalizację..." />
+      <Button fx:id="fireButton" layoutX="408.0" layoutY="337.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="188.0" text=" ZWOLNIJ PRACOWNIKA" />
+      <Label layoutX="841.0" layoutY="14.0" text="Specjalizacje" />
    </children>
 </Pane>

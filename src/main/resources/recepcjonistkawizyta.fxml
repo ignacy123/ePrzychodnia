@@ -9,50 +9,50 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="728.0" prefWidth="867.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="728.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="nameLabel" layoutX="205.0" layoutY="14.0" prefHeight="9.0" prefWidth="35.0" text="-" />
-      <Button fx:id="setVisitButton" layoutX="683.0" layoutY="572.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="168.0" text="Umów na wizytę" />
-      <Button fx:id="cancelButton" layoutX="683.0" layoutY="649.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="168.0" text="Wróć bez zapisywania" />
+      <Label fx:id="nameLabel" layoutX="205.0" layoutY="14.0" prefHeight="16.0" prefWidth="1042.0" text="-" />
+      <Button fx:id="setVisitButton" layoutX="1097.0" layoutY="579.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="168.0" text="Umów na wizytę" />
+      <Button fx:id="cancelButton" layoutX="1097.0" layoutY="650.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="168.0" text="Wróć bez zapisywania" />
       <VBox layoutX="14.0" layoutY="51.0" prefHeight="662.0" prefWidth="200.0" spacing="10.0">
          <children>
             <TextField fx:id="surnameTextField" prefHeight="28.0" prefWidth="200.0" promptText="Wpisz początek nazwiska..." />
             <Label text="Wybrany pacjent:" />
-            <Text fx:id="surnameText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+            <Text fx:id="surnameText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="270.69091796875" />
             <Label text="Wiarygodoność:" />
-            <Text fx:id="credibilityText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
+            <Text fx:id="credibilityText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="268.69091796875" />
             <ListView fx:id="patientsListView" prefHeight="552.0" prefWidth="200.0" />
          </children>
       </VBox>
       <Label layoutX="14.0" layoutY="14.0" text="Jesteś zalogowany/a jako:" />
-      <VBox layoutX="240.0" layoutY="51.0" prefHeight="662.0" prefWidth="200.0" spacing="10.0">
+      <VBox layoutX="382.0" layoutY="51.0" prefHeight="662.0" prefWidth="271.0" spacing="10.0">
          <children>
-            <DatePicker fx:id="visitDatePicker" prefHeight="26.0" prefWidth="200.0" promptText="Wybierz datę wizyty..." />
+            <DatePicker fx:id="visitDatePicker" prefHeight="26.0" prefWidth="279.0" promptText="Wybierz datę wizyty..." />
             <Label text="Godzina rozpoczęcia:" />
-            <Label fx:id="hourFromLabel" text="-" />
+            <Label fx:id="hourFromLabel" prefHeight="16.0" prefWidth="279.0" text="-" />
             <TextField fx:id="startTextField" promptText="hh:mm" />
             <Label text="Godzina zakończenia:" />
-            <Label fx:id="hourToLabel" text="-" />
+            <Label fx:id="hourToLabel" prefHeight="16.0" prefWidth="272.0" text="-" />
             <TextField fx:id="endTextField" promptText="hh:mm" />
             <Label text="Wybrana specjalizacja:" />
-            <Text fx:id="specializationText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="200.0" />
+            <Text fx:id="specializationText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="270.0" />
             <ListView fx:id="specializationListView" prefHeight="413.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <VBox layoutX="471.0" layoutY="51.0" prefHeight="327.0" prefWidth="200.0" spacing="10.0">
+      <VBox layoutX="744.0" layoutY="51.0" prefHeight="327.0" prefWidth="269.0" spacing="10.0">
          <children>
-            <Button fx:id="findDoctorsButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" text="Znajdź dostępnego lekarza" />
+            <Button fx:id="findDoctorsButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="275.0" text="Znajdź dostępnego lekarza" />
             <Label text="Wybrany lekarz:" />
-            <Text fx:id="doctorText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="200.0" />
+            <Text fx:id="doctorText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="269.0" />
             <ListView fx:id="doctorsListView" prefHeight="251.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <VBox layoutX="471.0" layoutY="395.0" prefHeight="327.0" prefWidth="200.0" spacing="10.0">
+      <VBox layoutX="743.0" layoutY="387.0" prefHeight="327.0" prefWidth="271.0" spacing="10.0">
          <children>
-            <Button fx:id="findOfficeButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="224.0" text="Znajdź wolny gabinet" />
+            <Button fx:id="findOfficeButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="277.0" text="Znajdź wolny gabinet" />
             <Label text="Wybrany gabinet:" />
-            <Text fx:id="officeText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
-            <ListView fx:id="officeListView" prefHeight="231.0" prefWidth="200.0" />
+            <Text fx:id="officeText" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="269.69091796875" />
+            <ListView fx:id="officeListView" prefHeight="242.0" prefWidth="271.0" />
          </children>
       </VBox>
    </children>
