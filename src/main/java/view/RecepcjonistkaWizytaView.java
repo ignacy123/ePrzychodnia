@@ -148,6 +148,7 @@ public class RecepcjonistkaWizytaView extends Application {
             try {
                 if (currentPatient == null) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Błąd: nie wybrano pacjenta.");
@@ -158,6 +159,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 Date hour2 = new SimpleDateFormat("HH:mm").parse(String.valueOf(endTextField.getCharacters()));
                 if (hour.getTime() < 25200000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta od 08:00.");
@@ -166,6 +168,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (hour.getTime() >= 61200000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta do 19:00.");
@@ -174,6 +177,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (hour2.getTime() >= 64800000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta do 19:00.");
@@ -188,6 +192,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 date2 = date2.plus(1, ChronoUnit.HOURS);
                 if (date1.isBefore(LocalDateTime.now())) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Błąd: wybrano datę w przeszłości.");
@@ -196,6 +201,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (!date1.isBefore(date2)) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowe godziny - upewnij się, że godzina zakończenia jest późniejsza niż godzina rozpoczęcia.");
@@ -209,10 +215,22 @@ public class RecepcjonistkaWizytaView extends Application {
                     hourFromLabel.setText(df.format(hour));
                     hourToLabel.setText(df.format(hour2));
                 } else {
-                    System.out.println("Błąd: nie wybrano spacjalizacji.");
+                    Dialog d = new Dialog();
+                    d.setResizable(true);
+                    Window window = d.getDialogPane().getScene().getWindow();
+                    window.setOnCloseRequest(e -> window.hide());
+                    d.setContentText("Błąd: nie wybrano spacjalizacji.");
+                    d.show();
+                    return;
                 }
-            } catch (ParseException e) {
-                System.out.println("Nieprawidłowa data.");
+            } catch (ParseException ex) {
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nieprawdiłowa data");
+                d.show();
+                return;
             }
         });
         findOfficeButton.setOnAction(actionEvent -> {
@@ -223,6 +241,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 date2 = visitDatePicker.getValue().atStartOfDay();
                 if (hour.getTime() < 25200000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta od 08:00.");
@@ -231,6 +250,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (hour.getTime() >= 61200000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta do 19:00.");
@@ -239,6 +259,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (hour2.getTime() >= 64800000) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowa godzina. Przychodnia jest otwarta do 19:00.");
@@ -251,6 +272,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 date2 = date2.plus(1, ChronoUnit.HOURS);
                 if (date1.isBefore(LocalDateTime.now())) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Błąd: wybrano datę w przeszłości.");
@@ -259,6 +281,7 @@ public class RecepcjonistkaWizytaView extends Application {
                 }
                 if (!date1.isBefore(date2)) {
                     Dialog d = new Dialog();
+                    d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
                     d.setContentText("Nieprawidłowe godziny - upewnij się, że godzina zakończenia jest późniejsza niż godzina rozpoczęcia.");
