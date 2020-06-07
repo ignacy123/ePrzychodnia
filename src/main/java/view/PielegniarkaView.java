@@ -110,6 +110,15 @@ public class PielegniarkaView extends Application {
                 d.show();
                 return;
             }
+            if(noteTextArea.getText().length()>=200){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Za długa notatka. Maks to 200 znaków");
+                d.setResizable(true);
+                d.show();
+                return;
+            }
             currentExertion.setTakenPlace(takenPlaceButton.isSelected());
             currentExertion.setNote(noteTextArea.getText());
             db.updateExertion(currentExertion);

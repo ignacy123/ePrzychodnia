@@ -311,6 +311,15 @@ public class RecepcjonistkaZabiegView extends Application {
                 d.show();
                 return;
             }
+            if(noteTextArea.getText().length()>=200){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Za długa notatka. Maks to 200 znaków");
+                d.setResizable(true);
+                d.show();
+                return;
+            }
             exertion.setNurse(currentNurse);
             exertion.setNote(noteTextArea.getText());
             exertion.setStart(Timestamp.valueOf(date1));
