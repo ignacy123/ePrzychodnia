@@ -110,7 +110,7 @@ public class PielegniarkaView extends Application {
                 d.show();
                 return;
             }
-            if(noteTextArea.getText().length()>=200){
+            if(noteTextArea.getText()!= null && noteTextArea.getText().length()>=200){
                 Dialog d = new Dialog();
                 Window window = d.getDialogPane().getScene().getWindow();
                 window.setOnCloseRequest(e -> window.hide());
