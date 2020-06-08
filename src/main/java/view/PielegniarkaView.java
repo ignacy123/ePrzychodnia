@@ -119,6 +119,15 @@ public class PielegniarkaView extends Application {
                 d.show();
                 return;
             }
+            if(date.isBefore(LocalDate.now())){
+                Dialog d = new Dialog();
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nie można edytować przeszłych zabiegów.");
+                d.setResizable(true);
+                d.show();
+                return;
+            }
             currentExertion.setTakenPlace(takenPlaceButton.isSelected());
             currentExertion.setNote(noteTextArea.getText());
             db.updateExertion(currentExertion);

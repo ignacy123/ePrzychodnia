@@ -123,6 +123,9 @@ public class VisitEditView extends Application implements Initializable {
         stage.setScene(scene);
         stage.show();
         stage.setTitle("ePrzychodnia - edytowanie wizyty");
+        if(visit.getStart().toLocalDateTime().toLocalDate().isBefore(LocalDate.now())){
+            saveAndExitButton.setDisable(true);
+        }
         hasSkierowanie = visit.hasSkierowanie();
         hasZwolnienie = visit.hasZwolnienie();
         hasRecepta = visit.hasRecepta();
