@@ -101,6 +101,8 @@ public class AdministracjaView extends Application {
                     String prettyName = db.getPrettyNameByPesel(s.get());
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Czy na pewno chcesz ponownie zatrudnić uprzednio zwolnionego pracownika " + prettyName + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                     alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+                    alert.setResizable(true);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.YES) {
                         db.rehire(s.get());

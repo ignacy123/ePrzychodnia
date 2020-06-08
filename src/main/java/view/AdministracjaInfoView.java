@@ -175,6 +175,7 @@ public class AdministracjaInfoView extends Application implements Initializable 
                     }
                     db.addSpecialization(currentWorker.getId(), specialization.getId());
                     specs.add(specialization);
+                    specializationTextField.clear();
                 }
             }
         });

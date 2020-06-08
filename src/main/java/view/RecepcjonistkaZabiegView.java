@@ -215,6 +215,9 @@ public class RecepcjonistkaZabiegView extends Application {
             DateFormat df = new SimpleDateFormat("HH:mm");
             hourFromLabel.setText(df.format(hour));
             hourToLabel.setText(df.format(hour2));
+            currentOffice = null;
+            officeListView.getSelectionModel().clearSelection();
+            officeLabel.setText("");
         });
 
         findOfficeButton.setOnAction(actionEvent -> {
