@@ -342,7 +342,7 @@ public class VisitEditView extends Application implements Initializable {
                     d.setResizable(true);
                     Window window = d.getDialogPane().getScene().getWindow();
                     window.setOnCloseRequest(e -> window.hide());
-                    d.setContentText("Taki lek znajduje się już w bazie");
+                    d.setContentText("Taki lek znajduje się już w recepcie.");
                     d.show();
                     return;
                 }
@@ -384,6 +384,15 @@ public class VisitEditView extends Application implements Initializable {
                 diseases.add(disease.getIcd10Code());
             }
             visit.setDiseases(diseases);
+            if(diseases.size()>0 && !visit.hasTakenPlace()){
+                Dialog d = new Dialog();
+                d.setResizable(true);
+                Window window = d.getDialogPane().getScene().getWindow();
+                window.setOnCloseRequest(e -> window.hide());
+                d.setContentText("Nie można stwierdzić chorób na wizycie, która się nie odbyła.");
+                d.show();
+                return;
+            }
             visit.setHasZwolnienie(hasZwolnienie);
             if (hasZwolnienie) {
                 if (zwolnienieFromDate.isAfter(zwolnienieToDate)) {
